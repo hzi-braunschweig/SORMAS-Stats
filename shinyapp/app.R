@@ -1,7 +1,36 @@
+# load shiny packages
+library(shiny)
+library(shinythemes)
+library(shinydashboard)
+library(shinyWidgets)
 
-## ui
-#############
-shinyUI(bootstrapPage(
+# load app-specific packages
+library(dplyr)
+library(ggplot2)
+library(RColorBrewer)
+library(plotly)
+library(rpart)
+library(visNetwork)
+library(extrafont)
+
+
+# Load data
+# - use tryCatch lateron
+# - Try (1) PSQL connection, (2) Load from mounted "last-data", (3) fallback to "demo-data"
+load(file.path("./demo-data", "contRegionDist.RData")) 
+load(file.path("./demo-data", "nodeLineList.RData"))
+load(file.path("./demo-data", "elist.RData"))
+load(file.path("./demo-data", "siDat.RData"))
+
+# load binary files
+load(file.path("./utils", "dateTimeToDate.R"))
+load(file.path("./utils", "import.multiple.csv.files.R"))
+load(file.path("./utils", "importDataFrontEnd.R"))
+load(file.path("./utils", "plotNet.R"))
+
+
+# Define UI for dataset viewer app ----
+ui <- shinyUI(bootstrapPage(
    #tags$head(includeHTML("gtag.html")),
    navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
               "Contacts Statistics", id="nav",
@@ -213,11 +242,139 @@ shinyUI(bootstrapPage(
                        "Published by ", tags$a(href="https://github.com/hzi-braunschweig", 
                                                " SORMAS-Open Project, Helmholtz Centre for Infection Research, Braunschweig, Germany.")
               )
-              
-              
-
-              
    )          
 ))
 
+
+# Define server logic to summarize and view selected dataset ----
+server <- function(input, output,session) {
+  # d render contact table based on region district time and disease
+  d = reactive({ 
+    if(input$regionUi == "All regions")
+    {
+      contRegionDist[((contRegionDist$disease == input$diseaseUi) & (contRegionDist$reportdatetime >= (min(input$reportdateUi))) & (contRegionDist$reportdatetime <= (max(input$reportdateUi)) )), ] 
+    } else{
+      contRegionDist[((contRegionDist$region_name == input$regionUi) & (contRegionDist$disease == input$diseaseUi) & (contRegionDist$reportdatetime >= (min(input$reportdateUi) )  ) & (contRegionDist$reportdatetime <= (max(input$reportdateUi) ))),]
+    }
+    
+  })
+
+  ## Bar plot
+    output$plot <- renderPlot({ 
+      if(nrow(d( ) ) == 0)
+      { 
+        plot(NULL, xlim=c(0,1), ylim=c(0,1), ylab="Number of contacts", xlab=" ",
+             main = "No data exist based on your selection, please choose another selection for which data exist")
+      }else{
+        if(input$regionUi == "All regions" )
+        {
+          par(las=2, mar=c(7,4,4,2)) # make label text perpendicular to axis
+          barplot (table(as.factor(d( )$region_name)), ylab = "Number of contacts",main = "Bar plot for number of contacts")
+        } else {
+          par(las=2, mar=c(7,4,4,2)) # make label text perpendicular to axis
+          barplot (table(as.factor(d( )$district_name)), ylab = "Number of contacts",main = "Bar plot for number of contacts")
+        }
+      }
+      }, height=700)
+    
+  ## Contacts per case
+    p = reactive({ 
+      data.frame(as.table(summary(as.factor(d()$caze_id), maxsum = 5000000)))
+      })
+    minLim = reactive({
+      c( min(p()$Freq), max(p()$Freq)+20)
+    })
+    
+    output$plotContPerCase <- renderPlot({ 
+      if(nrow(d( ) ) == 0)
+      { 
+        plot(NULL, xlim=c(0,1), ylim=c(0,1), ylab="Number of contacts", xlab=" ",
+             main = "No data exist based on your selection, please choose another selection for which data exist")
+      }else{
+        #summary(p$Freq)
+        par(mar=c(5,4,4,1), mfrow = c(1,2))
+        hist(p()$Freq, breaks = 50,  xlim = minLim(), col = "grey", main = "Histogram of number of contacts per case", xlab = "Number of contacts per case")
+        plot(sort(p()$Freq), col="black", cex=1, pch=16, xlab = "Case index", ylab = "Number of contacts",
+             main = "Number of contacts per case")
+      }
+    }, height=700)
+    
+    ## serial interval
+    #selecting siDat baed on disease, time; regiion and district just as in d 
+    siD = reactive({ 
+      if(input$regionUi == "All regions")
+      {
+        siDat[((siDat$disease == input$diseaseUi) & (siDat$reportdatetime >= (min(input$reportdateUi))) & (siDat$reportdatetime <= (max(input$reportdateUi)) )), ] 
+      } else{
+        siDat[((siDat$region_name == input$regionUi) & (siDat$disease == input$diseaseUi) & (siDat$reportdatetime >= (min(input$reportdateUi) )  ) & (siDat$reportdatetime <= (max(input$reportdateUi) ))),]
+      }
+    })
+    
+    output$siHist <- renderPlot({
+      if(nrow(siD( ) ) == 0)
+      { 
+        plot(NULL, xlim=c(0,1), ylim=c(0,1), xlab="Time to secondary onset (days)", ylab="Frequency",
+             main = "No data exist based on your selection, please choose another selection for which data exist")
+      }else{
+        par(las=1, mar=c(7,4,4,2)) # make label text perpendicular to axis
+        hist(siD()$si, col = "grey", border = "white", nclass = 30, xlab = "Time to secondary onset (days)", 
+             main = "Distribution of the serial interval")
+      }}, height=700)
+    
+    output$si <- renderPrint({
+      if(nrow(siD( ) ) == 0)
+      { 
+        print("No data exist based on your selection, please choose another selection for which data exist")
+      }else{ 
+        
+        summary(siD()$si)
+      }
+      })
+    
+    # Trasmission chain
+    ## defining reaxtivne functions for noted and edges
+    elistSel <- reactive({ 
+      elist[elist$id %in% d()$id, ]
+      
+      })
+    
+    nodedUniqueSel = reactive({
+      unique(c(d()$person_id, d()$person_idCase ))
+    })
+    
+    nodeLineListSel <- reactive({ 
+      nodeLineList[nodeLineList$id %in% nodedUniqueSel() , ]  
+      
+    })
+      output$transChain <- renderVisNetwork({ 
+       if(nrow(d( ) ) != 0)
+       { 
+        plotNet(nodeLineList= nodeLineListSel(), elist = elistSel() )
+    
+      }
+    
+     })
+   ############################### 
+  # Generate a summary of the data ----
+     output$tableCount <- renderPrint({
+    #summary(as.factor(d( )) )
+       if(input$regionUi == "All regions")
+       { 
+          as.table(summary(apply( d( )[, colnames(d( )) %in% c("contactproximity","contactclassification", "caseclassificationCase", "region_name", "outcomeCase")], 2, as.factor ),  maxsum = 50000 ) )
+       } else{
+         as.table(summary(apply( d( )[, colnames(d( )) %in% c("contactproximity","contactclassification", "caseclassificationCase", "region_name", "district_name", "outcomeCase")], 2, as.factor ), maxsum = 500000 ) )
+       }
+  })
+  # exporting raw data 
+  rawDat = reactive({
+    data.frame(contactReportDate =as.character( d()$reportdatetime),  caseID= d()$caze_id, contactID =  d()$id, contactProximity = d()$contactproximity, contactClassification = d()$contactclassification,
+               caseClassification = d()$caseclassificationCase, disease = d()$disease, caseOutcome = d()$outcomeCase, contactRegion = d()$region_name,
+               contactDistrict = d()$district_name) 
+  })  
+  output$rawData <- renderTable({rawDat() })
+  
+}
+
+# Create Shiny app ----
+shinyApp(ui, server)
 
