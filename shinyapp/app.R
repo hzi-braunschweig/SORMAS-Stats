@@ -30,7 +30,7 @@ load(file.path("./utils", "plotNet.R"))
 
 
 # Define UI for dataset viewer app ----
-ui <- shinyUI(bootstrapPage(
+shinyUI(bootstrapPage(
    #tags$head(includeHTML("gtag.html")),
    navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
               "Contacts Statistics", id="nav",
@@ -143,7 +143,11 @@ ui <- shinyUI(bootstrapPage(
                        mainPanel( width=12,
                              dashboardPage(
                                dashboardHeader(title = "Contact KPI"),
-                               dashboardSidebar( ),
+                               dashboardSidebar(
+                                pickerInput("conPerson", "Contact entity type", choices = c("Contact", "Contact person"), # option to view contact or contact person
+                                               selected = c("Contact"),
+                                               multiple = FALSE)
+                               ),
                                dashboardBody(
                                  ##################################""
                                  # infoBoxes with fill=FALSE
@@ -172,29 +176,37 @@ ui <- shinyUI(bootstrapPage(
                                  #  column(12 , valueBox(5*8, "contacts converted to case" ))
                                  #  ),
                                  fluidRow(width=12,
-                                   column(2, wellPanel(p(" ")),  valueBox(55*8+78*8, "All contacts", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Unconfirmed", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Confirmed", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Not a contact", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(78*8, "Symptomatic", width = 12))),
+                                   column(3, wellPanel(p(" ")),  valueBox(textOutput("allCont"), "All contacts", width = 12)),
+                                   column(3, wellPanel(p(" ")), valueBox(textOutput("contUnconfirmed"), "Unconfirmed", width = 12)),
+                                   column(3, wellPanel(p(" ")), valueBox(textOutput("contConfirmed"), "Confirmed", width = 12)),
+                                   column(3, wellPanel(p(" ")), valueBox(textOutput("contNot"), "Not a contact", width = 12))),
+                                  # column(2, wellPanel(p(" ")), valueBox(440, "Symptomatic", width = 12))),
                                  fluidRow(width=12,
-                                   column(2, wellPanel(p(" ")),  valueBox(55*8+78*8, "Overdue followup", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Lost to FU", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Completed FU", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Dropped", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(78*8, "Converted to case", width = 12))),
+                                          column(3, wellPanel(p(" ")), valueBox(textOutput("activeCont"), "Active", width = 12)),
+                                          column(3, wellPanel(p(" ")), valueBox(textOutput("convertedToCase"), "Converted to case", width = 12)),
+                                          column(3, wellPanel(p(" ")), valueBox(textOutput("notConvertedToCase"), "Not-converted to case", width = 12)),
+                                          column(3, wellPanel(p(" ")), valueBox(textOutput("dropped"), "Dropped", width = 12))),
                                  fluidRow(width=12,
-                                   column(2, wellPanel(p(" ")),  valueBox(55*8+78*8, "Under followup", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Not FU yesterday", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Not FU in 2-3 days", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Not FU in 4-6 days", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(78*8, "Not FU in >= 7 days", width = 12))),
+                                          column(3, wellPanel(p(" ")),  valueBox(textOutput("underFU"), "Under FU", width = 12)),
+                                          column(3, wellPanel(p(" ")), valueBox(textOutput("overdueFU"), "Overdue FU", width = 12)),
+                                          column(3, wellPanel(p(" ")),  valueBox(textOutput("canceledFU"), "Canceled FU", width = 12)),
+                                          column(3, wellPanel(p(" ")), valueBox(textOutput("lostToFU"), "Lost to FU", width = 12))),
+                                 # fluidRow(width=12,
+                                 #          column(3, wellPanel(p(" ")),  valueBox(textOutput("overdueFU"), "Overdue FU", width = 12)),
+                                 #          column(3, wellPanel(p(" ")), valueBox(55*8, "Visited on last day", width = 12)),
+                                 #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 1-2 days", width = 12)),
+                                 #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 3-6 days", width = 12)),
+                                 #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in >= 7 days", width = 12))),
+                                 # fluidRow(width=12,
+                                 #   column(3, wellPanel(p(" ")),  valueBox(55*8+78*8, "Under followup", width = 12)),
+                                 #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 1-2 days", width = 12)),
+                                 #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 3-6 days", width = 12)),
+                                 #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in >= 7 days", width = 12))),
                                  fluidRow(width=12,
-                                   column(2, wellPanel(p(" ")),  valueBox(55*8+78*8, " All Transmission chain", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Chains with new cases", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Under followup", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(55*8, "Max contacts per case", width = 12)),
-                                   column(2, wellPanel(p(" ")), valueBox(78*8, "Min contact per case", width = 12)))
+                                   column(3, wellPanel(p(" ")),  valueBox("not done", " All Transmission chains", width = 12)),
+                                   column(3, wellPanel(p(" ")), valueBox("not done", "Chains with new cases", width = 12)),
+                                   column(3, wellPanel(p(" ")), valueBox(textOutput("maxConPerCase"), "Max contacts per case", width = 12)),
+                                   column(3, wellPanel(p(" ")), valueBox(textOutput("medianConPerCase"), "Median contact per case", width = 12)))
                             
                                )))),
 
@@ -242,6 +254,10 @@ ui <- shinyUI(bootstrapPage(
                        "Published by ", tags$a(href="https://github.com/hzi-braunschweig", 
                                                " SORMAS-Open Project, Helmholtz Centre for Infection Research, Braunschweig, Germany.")
               )
+              
+              
+
+              
    )          
 ))
 
@@ -258,7 +274,7 @@ server <- function(input, output,session) {
     }
     
   })
-
+  
   ## Bar plot
     output$plot <- renderPlot({ 
       if(nrow(d( ) ) == 0)
@@ -277,7 +293,74 @@ server <- function(input, output,session) {
       }
       }, height=700)
     
-  ## Contacts per case
+  ### Begining of  KPI ###########
+    #Row 1,  All contacts, used d
+    output$allCont = renderText({ nrow(d( )) }) 
+    # confrimed contacts
+    output$contConfirmed = renderText({ 
+      temp = d()
+      temp = temp[temp$contactclassification == "CONFIRMED" ,]
+      nrow(temp)
+      }) 
+    # Uncofirmed contacts
+    output$contUnconfirmed = renderText({ 
+      nrow( d()[d()$contactclassification == "UNCONFIRMED" ,] )
+    }) 
+    # Not a contact contacts
+    output$contNot = renderText({ 
+      nrow( d()[d()$contactclassification == "NO_CONTACT" ,] )
+    }) 
+    
+    #### Row 2  contact status ####
+    ## Active contacts
+    output$activeCont = renderText({ 
+      nrow( d()[d()$contactstatus == "ACTIVE" ,] )
+    }) 
+    ## converted to case
+    output$convertedToCase = renderText({ 
+      nrow( d()[d()$contactstatus == "CONVERTED" ,] )
+    })
+    ## not converted to case
+    output$notConvertedToCase = renderText({ 
+      nrow( d()[d()$contactstatus == "NOT_CONVERTED" ,] )
+    })
+    ## dropped contacts
+    output$dropped = renderText({ 
+      nrow( d()[d()$contactstatus == "DROPPED" ,] )
+    })
+    
+    #### Row 3 contact followup status ####
+    
+    ## under FU
+    output$underFU = renderText({ 
+      nrow( d()[d()$followupstatus == "FOLLOW_UP" ,] )
+    }) 
+    ## canceled FU
+    output$canceledFU = renderText({ 
+      nrow( d()[d()$followupstatus == "CANCELED_FOLLOW_UP" ,] )
+    }) 
+    ## lost to followup
+    output$lostToFU = renderText({ 
+      nrow( d()[d()$followupstatus == "LOST" ,] )
+    })
+    ## not converted to case
+    output$overdueFU = renderText({ 
+      nrow( d()[d()$followupstatus == "NO_FOLLOW_UP" ,] ) # will later add the category of overdue fillow up and delete no_followup.
+    })
+
+    ### Row 4, number of contacts per case and transmission tree
+    # Use p()$Freq
+    ## max contacte per case
+    output$maxConPerCase = renderText({ 
+      max(p()$Freq) 
+    })
+    ## min contacte per case
+    output$medianConPerCase = renderText({ 
+      median(p()$Freq) 
+    })
+    
+##########  end of KPI #################""    
+ ### Contacts per case
     p = reactive({ 
       data.frame(as.table(summary(as.factor(d()$caze_id), maxsum = 5000000)))
       })
@@ -360,9 +443,9 @@ server <- function(input, output,session) {
     #summary(as.factor(d( )) )
        if(input$regionUi == "All regions")
        { 
-          as.table(summary(apply( d( )[, colnames(d( )) %in% c("contactproximity","contactclassification", "caseclassificationCase", "region_name", "outcomeCase")], 2, as.factor ),  maxsum = 50000 ) )
+          as.table(summary(apply( d( )[, colnames(d( )) %in% c("contactstatus","followupstatus", "contactproximity","contactclassification", "caseclassificationCase", "region_name", "outcomeCase")], 2, as.factor ),  maxsum = 50000 ) )
        } else{
-         as.table(summary(apply( d( )[, colnames(d( )) %in% c("contactproximity","contactclassification", "caseclassificationCase", "region_name", "district_name", "outcomeCase")], 2, as.factor ), maxsum = 500000 ) )
+         as.table(summary(apply( d( )[, colnames(d( )) %in% c("contactstatus","followupstatus","contactproximity","contactclassification", "caseclassificationCase", "region_name", "district_name", "outcomeCase")], 2, as.factor ), maxsum = 500000 ) )
        }
   })
   # exporting raw data 
@@ -374,7 +457,5 @@ server <- function(input, output,session) {
   output$rawData <- renderTable({rawDat() })
   
 }
-
 # Create Shiny app ----
 shinyApp(ui, server)
-
