@@ -30,7 +30,7 @@ load(file.path("./utils", "plotNet.R"))
 
 
 # Define UI for dataset viewer app ----
-shinyUI(bootstrapPage(
+ui <- shinyUI(bootstrapPage(
    #tags$head(includeHTML("gtag.html")),
    navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
               "Contacts Statistics", id="nav",
