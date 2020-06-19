@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# update git
+git pull
+
 # stop all containers
 docker ps -q | xargs -L1 docker stop
 # delete all stopped containers
 docker rm -vf $(docker ps -a -q)
 # delete unused networks
-docker network prune
+docker network prune -f
 # delete all images
 docker rmi -f $(docker images | grep "sormas-stats" | awk '{print $3}')
 
