@@ -93,9 +93,16 @@ and add
 
 ```
 {
-  "default-address-pools":[ {"base":"10.199.0.0/16","size":24} ]
+  "default-address-pools":[ {"base":"172.17.252.192/27","size":28} ]
 }
 ```
+
+run 
+
+```bash
+service docker restart
+```
+
 
 
 ## Download the repo
