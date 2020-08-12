@@ -29,7 +29,7 @@ docker-compose up
 setwd("SORMAS-Stats/shinyapp")
 ```
 
-(2) Run app using the command `runApp()`
+(2) Run app using the command `shiny::runApp()`
 
 
 # Installation for VMs hosted by HZI RZ
