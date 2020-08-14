@@ -50,6 +50,26 @@ load(file.path("./utils", "import.multiple.csv.files.R"))
 load(file.path("./utils", "importDataFrontEnd.R"))
 load(file.path("./utils", "plotNet.R"))
 
+# functions for contact data analysis
+load(file.path("./utils","importingData.R"))
+load(file.path("./utils","dateTimeToDate.R"))
+load(file.path("./utils","import.multiple.csv.files.R"))
+load(file.path("./utils","plotNet.R"))
+load(file.path("./utils","mergingData.R"))
+load(file.path("./utils","contIdsForSingleChain.R"))
+
+## Functions for case data analysis
+load(file.path("./utils","pyramidPlotFunction.R"))
+load(file.path("./utils","timeSeriesPlotDay.R"))
+load(file.path("./utils","timeSeriesPlotWeek.R"))
+load(file.path("./utils","timeSeriesPlotMonth.R"))
+load(file.path("./utils","timeSeriesPlotDayRegion.R"))
+load(file.path("./utils","epicurveDate.R"))
+load(file.path("./utils","epicurveMonth.R"))
+load(file.path("./utils","regionMapPlot.R"))
+load(file.path("./utils","districtMapPlot.R"))
+load(file.path("./utils","RtPlot.R"))
+
 
 # Define UI for dataset viewer app ----
 ui <- shinyUI(bootstrapPage(
