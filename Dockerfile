@@ -25,14 +25,6 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
 	BiocManager \
   && rm -rf /tmp/downloaded_packages
 #----------------------------------------------
-# installing dependencies for tmap package
-# add a repository that ships the latest version of R:
-RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable\
-&& apt-get update\
-&& apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev
-# update the repositories so the software can be found:
-
-
 # ---------------------------------------------
 # Install missing debian/ubuntu packages
 RUN apt-get update \
