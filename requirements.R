@@ -27,6 +27,8 @@ install.packages('EpiEstim', version='2.2-3', repos='http://cran.us.r-project.or
 install.packages('incidence', version='1.7.2', repos='http://cran.us.r-project.org')
 install.packages('tidyr', version='1.1.1', repos='http://cran.us.r-project.org')
 devtools::install_github("mtennekes/tmaptools")  #dependency of tmap
+devtools::install_github("r-spatial/sf")  # dependency of tmap 
+devtools::install_github("rspatial/raster")  # dependency of tmap 
 install.packages('rgdal', version='1.5-12', repos='http://cran.us.r-project.org')
 install.packages('maps', version='3.3.0', repos='http://cran.us.r-project.org')
 install.packages('maptools', version='1.0-1', repos='http://cran.us.r-project.org')
