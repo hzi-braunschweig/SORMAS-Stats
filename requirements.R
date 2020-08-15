@@ -7,6 +7,7 @@ install.packages('shinyjs', version='1.1', repos='http://cran.us.r-project.org')
 #install.packages('V8', version='3.0.2', repos='http://cran.us.r-project.org')
 
 # Install required R packages for the program
+install.packages("devtools", version='2.3.1', repos='http://cran.us.r-project.org')
 install.packages('dplyr', version='0.0.5', repos='http://cran.us.r-project.org')
 install.packages('ggplot2', version='3.3.2', repos='http://cran.us.r-project.org')
 install.packages('RColorBrewer', version='1.1-2', repos='http://cran.us.r-project.org')
@@ -36,3 +37,4 @@ install.packages('rgeos', version='0.5-3', repos='http://cran.us.r-project.org')
 install.packages('tmap', version='3.1', repos='http://cran.us.r-project.org')
 install.packages('sf', version='0.9-5', repos='http://cran.us.r-project.org')
 install.packages('lattice', version='0.20-41', repos='http://cran.us.r-project.org')
+devtools::install_github("rstudio/fontawesome") # does not exist on cran thus installed from git repot
