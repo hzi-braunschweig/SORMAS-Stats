@@ -33,6 +33,7 @@ library(rgeos)
 library(tmap)
 library(sf)
 library(lattice)
+library(fontawesome)
 
 # Load data
 # - use tryCatch lateron
