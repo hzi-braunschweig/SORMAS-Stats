@@ -46,7 +46,6 @@ load(file.path("./demo-data", "siDat.RData"))
 # functions for contact data analysis
 load(file.path("./utils", "dateTimeToDate.R"))
 load(file.path("./utils", "import.multiple.csv.files.R"))
-load(file.path("./utils", "importDataFrontEnd.R"))
 load(file.path("./utils", "plotNet.R"))
 load(file.path("./utils","importingData.R"))
 load(file.path("./utils","mergingData.R"))
