@@ -24,6 +24,16 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     caTools \
 	BiocManager \
   && rm -rf /tmp/downloaded_packages
+#----------------------------------------------
+# installing dependencies for tmap package
+# add a repository that ships the latest version of R:
+RUN add-apt-repository ppa:marutter/rrutter3.5 \
+# update the repositories so the software can be found:
+&& apt update\
+# install system dependencies:
+&& apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libfontconfig1-dev \
+# binary versions of key R packages:
+&& apt install r-base-dev r-cran-sf r-cran-raster r-cran-rjava
 
 # ---------------------------------------------
 # Install missing debian/ubuntu packages
