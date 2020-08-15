@@ -23,7 +23,6 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     remotes \
     selectr \
     caTools \
-	BiocManager \
   && rm -rf /tmp/downloaded_packages
 #----------------------------------------------
 # ---------------------------------------------
