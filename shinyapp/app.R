@@ -45,15 +45,12 @@ load(file.path("./demo-data", "elist.RData"))
 load(file.path("./demo-data", "siDat.RData"))
 
 # load binary files
+# functions for contact data analysis
 load(file.path("./utils", "dateTimeToDate.R"))
 load(file.path("./utils", "import.multiple.csv.files.R"))
 load(file.path("./utils", "importDataFrontEnd.R"))
 load(file.path("./utils", "plotNet.R"))
-
-# functions for contact data analysis
 load(file.path("./utils","importingData.R"))
-load(file.path("./utils","import.multiple.csv.files.R"))
-load(file.path("./utils","plotNet.R"))
 load(file.path("./utils","mergingData.R"))
 load(file.path("./utils","contIdsForSingleChain.R"))
 
