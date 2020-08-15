@@ -20,7 +20,7 @@ install.packages('extrafontdb', version='1.0', repos='http://cran.us.r-project.o
 install.packages('webshot', version='0.5.2', repos='http://cran.us.r-project.org')
 install.packages('ggthemes', version='4.2.0', repos='http://cran.us.r-project.org')
 install.packages('lubridate', version='1.7.9', repos='http://cran.us.r-project.org')
-install.packages('Hmisc', version='4.4-0', repos='http://cran.us.r-project.org')
+install.packages('Hmisc', version='4.4-1', repos='http://cran.us.r-project.org')
 install.packages('gdata', version='2.18.0', repos='http://cran.us.r-project.org')
 install.packages('scales', version='1.1.1', repos='http://cran.us.r-project.org')
 install.packages('EpiEstim', version='2.2-3', repos='http://cran.us.r-project.org')
