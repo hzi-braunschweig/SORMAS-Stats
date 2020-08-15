@@ -7,7 +7,8 @@ install.packages('shinyjs', version='1.1', repos='http://cran.us.r-project.org')
 #install.packages('V8', version='3.0.2', repos='http://cran.us.r-project.org')
 
 # Install required R packages for the program
-install.packages("devtools", version='2.3.1', repos='http://cran.us.r-project.org')
+# install.packages("devtools", version='2.3.1', repos='http://cran.us.r-project.org')  # provided by rocker/shiny
+# install_github("r-lib/devtools")
 install.packages('dplyr', version='0.0.5', repos='http://cran.us.r-project.org')
 install.packages('ggplot2', version='3.3.2', repos='http://cran.us.r-project.org')
 install.packages('RColorBrewer', version='1.1-2', repos='http://cran.us.r-project.org')
