@@ -67,234 +67,384 @@ load(file.path("./utils","RtPlot.R"))
 
 # Define UI for dataset viewer app ----
 ui <- shinyUI(bootstrapPage(
-   #tags$head(includeHTML("gtag.html")),
-   navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
-              "Contacts Statistics", id="nav",
-              tabPanel( "Contacts Plots",
-                        sidebarLayout(
-                          sidebarPanel( 
-                            span(tags$i(h6("Please filter the database of contacts using tabs below.")), style="color:#045a8d"),
-                            
-                            pickerInput("diseaseUi", "Disease of source case", choices = c("CORONAVIRUS", "LASSA","MONKEYPOX", "LASSA",
-                                                                                           "CSM","EVD","NEW_INFLUENZA", "PLAGUE",
-                                                                                           "UNDEFINED","UNSPECIFIED_VHF","MEASLES","OTHER"), 
-                                        selected = c("CORONAVIRUS"),
-                                        multiple = FALSE),
-                            dateRangeInput("reportdateUi","Contact report date range (input: dd-mm-yyyy)" , start = Sys.Date()-30, end = Sys.Date()-1, min = NULL,
-                                           max = NULL, format = "dd-mm-yyyy", startview = "month",
-                                           weekstart = 0, language = "en", separator = " to ", width = NULL,
-                                           autoclose = TRUE),
-                            pickerInput("regionUi", "Region of contact (region of case is used if missing)", choices = c("All regions",levels(as.factor(contRegionDist$region_name)))),
-                            pickerInput("districtUi", "District of contact (district of case is used if missing)", choices = c("All districts",levels(as.factor(contRegionDist$district_name)))),
-                            
-                            #selectizeInput(inputId = 'select_input', label = 'Choose your files...', choices = '*', multiple = TRUE),
-                            #verbatimTextOutput('debug'),
-                            fileInput("case", "Input case data (.csv)",
-                                      multiple = TRUE,
-                                      accept = c("text/csv",
-                                                 "text/comma-separated-values,text/plain",
-                                                 ".csv")),
-                            
-                            # Horizontal line ----
-                            # tags$hr(),
-                            
-                            # Input: Checkbox if file has header ----
-                            checkboxInput("header", "Header", TRUE),
-                            
-                            # Input: Select separator ----
-                            selectInput("sep", "Separator",
-                                        choices = c(Comma = ",",
-                                                    Semicolon = ";"), # Tab = "\t"
-                                        selected = ";"),
-                            
-                            
-                            # Horizontal line ----
-                            # tags$hr(),
-                            
-                            # Input: Select number of rows to display ----
-                            radioButtons("disp", "Display",
-                                         choices = c(Head = "head",
-                                                     All = "all"),
-                                         selected = "head"),
-                            
-                            # pickerInput("outcome_select", "Outcome:",   
-                            #            choices = c("Deaths per 100,000", "Cases per 100,000", "Cases (total)", "Deaths (total)"), 
-                            #            selected = c("Deaths per 100,000"),
-                            #            multiple = FALSE),
-                            
-                            #  pickerInput("start_date", "Plotting start date:",   
-                            #            choices = c("Date", "Day of 100th confirmed case", "Day of 10th death"), 
-                            #            options = list(`actions-box` = TRUE),
-                            #            selected = "Date",
-                            #            multiple = FALSE), 
-                            
-                            "All the statistics generated on all the tabs are based on the filter that you provided above.",
-                            
-                            width = 3),
-                          
-                          mainPanel(
-                            tabsetPanel(
-                              tabPanel("Graphs", plotOutput("plot")),
-                              tabPanel("Contacts per case", plotOutput("plotContPerCase")),
-                              #tabPanel("Transmission chain", visNetworkOutput("transChain", width = "100%", height = "100vh")),
-                              tabPanel("Serial Interval distribution", plotOutput("siHist", width = "100%", height = "100vh"))
-                              #tabPanel("Followup chart")
-                              #tabPanel("More ??", plotlyOutput("country_plot"))
-                              #tabPanel("Cumulative (log10)", plotlyOutput("country_plot_cumulative_log"))
-                            )
-                          )
+  #tags$head(includeHTML("gtag.html")),
+  navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
+             "SORMAS Stats", id="nav",
+             
+             tabPanel( "Filter Options",
+                       sidebarLayout(
+                         sidebarPanel( 
+                           span(tags$i(h6("Please filter the database using tabs below.")), style="color:#045a8d"),
+                           
+                           pickerInput("diseaseUi", "Disease of source case", choices = c("CORONAVIRUS", "LASSA","MONKEYPOX", "LASSA",
+                                                                                          "CSM","EVD","NEW_INFLUENZA", "PLAGUE",
+                                                                                          "UNDEFINED","UNSPECIFIED_VHF","MEASLES","OTHER"), 
+                                       selected = c("CORONAVIRUS"),
+                                       multiple = FALSE),
+                           dateRangeInput("reportdateUi","Contact report date range (input: dd-mm-yyyy)" , start = Sys.Date()-30, end = Sys.Date()-1, min = NULL,
+                                          max = NULL, format = "dd-mm-yyyy", startview = "month",
+                                          weekstart = 0, language = "en", separator = " to ", width = NULL,
+                                          autoclose = TRUE),
+                           pickerInput("regionUi", "Region of contact (region of case is used if missing)", choices = c("All regions",levels(as.factor(contRegionDist$region_name)))),
+                           pickerInput("districtUi", "District of contact (district of case is used if missing)", choices = c("All districts",levels(as.factor(contRegionDist$district_name)))),
+                           
+                           #pickerInput("resultingCaseOnlyUi", "Visualize only chains with resulting cases?", choices = c("Yes", "No")),
+                           #checkboxInput("resultingCaseOnlyUi", "Visualize only chains with resulting cases?", TRUE),
+                           #numericInput("visSingleChainUi", "Visualize only chain with this source case ID", value = NULL),
+                           #selectizeInput(inputId = 'select_input', label = 'Choose your files...', choices = '*', multiple = TRUE),
+                           #verbatimTextOutput('debug'),
+                           # fileInput("case", "Input case data (.csv)",
+                           #           multiple = TRUE,
+                           #           accept = c("text/csv",
+                           #                      "text/comma-separated-values,text/plain",
+                           #                      ".csv")),
+                           # fileInput('reference_files', 'References', multiple = T,
+                           #           accept = c('text/csv', 'text/comma-separated-values,text/plain', '.csv')),
+                           # # Horizontal line ----
+                           # # tags$hr(),
+                           # # Input: Checkbox if file has header ----
+                           # checkboxInput("header", "Header", TRUE),
+                           # 
+                           # # Input: Select separator ----
+                           # selectInput("sep", "Separator",
+                           #             choices = c(Comma = ",",
+                           #                         Semicolon = ";"), # Tab = "\t"
+                           #             selected = ";"),
+                           # 
+                           # 
+                           # # Horizontal line ----
+                           # # tags$hr(),
+                           # 
+                           # # Input: Select number of rows to display ----
+                           # radioButtons("disp", "Display",
+                           #              choices = c(Head = "head",
+                           #                          All = "all"),
+                           #              selected = "head"),
+                           # 
+                           # pickerInput("outcome_select", "Outcome:",   
+                           #            choices = c("Deaths per 100,000", "Cases per 100,000", "Cases (total)", "Deaths (total)"), 
+                           #            selected = c("Deaths per 100,000"),
+                           #            multiple = FALSE),
+                           
+                           #  pickerInput("start_date", "Plotting start date:",   
+                           #            choices = c("Date", "Day of 100th confirmed case", "Day of 10th death"), 
+                           #            options = list(`actions-box` = TRUE),
+                           #            selected = "Date",
+                           #            multiple = FALSE), 
+                           
+                           "All the statistics generated on all the tabs are based on the filter that you provided above.",
+                           
+                           width = 3),
+                         
+                         mainPanel(
+                           tabsetPanel(
+                             tabPanel("Bar plot", plotOutput("plot", width = "100%", height = "90vh"), downloadButton("downloadBarplot", "Download this plot"), tags$br(),tags$br(),
+                                      " Each bar in this plot represents a region or district and the height of the bar corresponds to the number of contacts 
+                                      in the region or district."),
+                             tabPanel("Contacts per case", plotOutput("plotContPerCase", width = "100%", height = "90vh"),  downloadButton("downloadContPerCasePlot", "Download this plot"), tags$br(),tags$br(),
+                                      " Contact per case."),
+                             #tabPanel("Transmission chain", visNetworkOutput("transChain", width = "100%", height = "100vh")),
+                             tabPanel("Serial Interval distribution", plotOutput("siHist", width = "100%", height = "100vh"), downloadButton("downloadSerialIntervalPlot", "Download this plot"), tags$br(),tags$br(),
+                                      "The Distribution of serial interval. This figure was obtained by plottig the histogram of the difference in number of days between symptom onset of a source case person and 
+                                      a cantact person that became a case as a result of the contact. Only contacts that resulted to a case were considered here.")
+                             #tabPanel("Time series and focasting", plotOutput(plot(rnorm(100)), width = "100%", height = "100vh"))
+                             #tabPanel("Followup chart")
+                             #tabPanel("More ??", plotlyOutput("country_plot"))
+                             #tabPanel("Cumulative (log10)", plotlyOutput("country_plot_cumulative_log"))
+                           )
+                         )
+                       )
+                       
+             ),
+             
+             ############################## contact summary counts ##########
+             
+             tabPanel("Contacts summary",
+                      mainPanel( 
+                        tabsetPanel(
+                          tabPanel("Table counts", verbatimTextOutput("tableCount")),
+                          tabPanel("Serial Interval", verbatimTextOutput("si")),
+                          tabPanel("Basic reproduction number (R0) ", verbatimTextOutput(1.5)),
+                          # tabPanel("Contacts per case", plotOutput("plotContPerCase")),
+                          #  tabPanel("Transmission chain", visNetworkOutput("transChain", width = "100%", height = "100vh")),
+                          # tabPanel("Serial Interval distribution", plotOutput("siHist", width = "100%", height = "100vh")),
+                          # tabPanel("New", plotlyOutput("country_plot")),
+                          tabPanel("Followup", verbatimTextOutput("summaryVisit"))
+                          #tabPanel("Cumulative (log10)", plotlyOutput("country_plot_cumulative_log"))
                         )
-
-              ),
+                        , width = 12)
+                      
+             ),
+             ###############
+             # tabPanel("Controls",
+             #          fluidRow(column(4, offset=1, selectInput("X", label="x var",
+             #                                                   choices = list("Age" = "Age", "Weight" = "Weight", "Circumference" = "Circumference"),
+             #                                                   multiple=F) ),
+             #                   column(4,selectInput("Y", label="y var",
+             #                                        choices = list("Age" = "Age", "Weight" = "Weight", "Circumference" = "Circumference"),
+             #                                        multiple=F))) ,
+             #          fluidRow(column(5, offset=1, plotOutput("plot", height = "400px") ),
+             #                   column(5, class= "R2C2", helpText("This is an exemple") ) ), width = 12),
+             
+             tabPanel("Performance Indicators",
+                      mainPanel( width=12,
+                                 dashboardPage(
+                                   # dashboardHeader(title = "Contact KPI"),
+                                   dashboardHeader( ),
+                                   dashboardSidebar(
+                                     pickerInput("conPerson", "Contact entity type", choices = c("Contact", "Contact person"), # option to view contact or contact person
+                                                 selected = c("Contact"),
+                                                 multiple = FALSE)
+                                   ),
+                                   dashboardBody(
+                                     ##################################""
+                                     # infoBoxes with fill=FALSE
+                                     # infoBoxes with fill=TRUE
+                                     # fluidRow(
+                                     #   infoBox("New Orders3", 10 * 2, icon = icon("credit-card"), fill = TRUE),
+                                     #   infoBoxOutput("progressBox3"),
+                                     #   infoBoxOutput("approvalBox3")
+                                     # ),
+                                     # fluidRow(
+                                     #   infoBox("New Orders4", 10 * 2, icon = icon("credit-card"), fill = TRUE),
+                                     #   infoBoxOutput("progressBox4"),
+                                     #   infoBoxOutput("approvalBox4")
+                                     # ),
+                                     # fluidRow(
+                                     #   infoBox("New Orders5", 10 * 2, icon = icon("credit-card"), fill = TRUE),
+                                     #   infoBoxOutput("progressBox5"),
+                                     #   infoBoxOutput("approvalBox5")
+                                     # ),
+                                     # fluidRow(
+                                     #   column(2, wellPanel(p("Column width 2")  )),
+                                     #   column(10, wellPanel(p("Column width 10")))),
+                                     # fluidRow(
+                                     #  column(12 , valueBox(15*8, "Butget", icon = icon("credit-card") )),
+                                     #  #column(4, valueBox(1*8, "Butget", icon = icon("credit-card") )),
+                                     #  column(12 , valueBox(5*8, "contacts converted to case" ))
+                                     #  ),
+                                     fluidRow(width=12,
+                                              column(3, wellPanel(p(" ")),  valueBox(textOutput("allCont"), "All contacts", width = 12)),
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("contUnconfirmed"), "Unconfirmed", width = 12)),
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("contConfirmed"), "Confirmed", width = 12)),
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("contNot"), "Discarded", width = 12))),
+                                     # column(2, wellPanel(p(" ")), valueBox(440, "Symptomatic", width = 12))),
+                                     fluidRow(width=12,
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("activeCont"), "Active", width = 12)),
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("convertedToCase"), "Converted to case", width = 12)),
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("notConvertedToCase"), "Not-converted to case", width = 12)),
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("dropped"), "Dropped", width = 12))),
+                                     fluidRow(width=12,
+                                              column(3, wellPanel(p(" ")),  valueBox(textOutput("underFU"), "Under FU", width = 12)),
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("overdueFU"), "Overdue FU", width = 12)),
+                                              column(3, wellPanel(p(" ")),  valueBox(textOutput("canceledFU"), "Canceled FU", width = 12)),
+                                              column(3, wellPanel(p(" ")), valueBox(textOutput("lostToFU"), "Lost to FU", width = 12))),
+                                     # fluidRow(width=12,
+                                     #          column(3, wellPanel(p(" ")),  valueBox(textOutput("overdueFU"), "Overdue FU", width = 12)),
+                                     #          column(3, wellPanel(p(" ")), valueBox(55*8, "Visited on last day", width = 12)),
+                                     #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 1-2 days", width = 12)),
+                                     #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 3-6 days", width = 12)),
+                                     #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in >= 7 days", width = 12))),
+                                     # fluidRow(width=12,
+                                     #   column(3, wellPanel(p(" ")),  valueBox(55*8+78*8, "Under followup", width = 12)),
+                                     #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 1-2 days", width = 12)),
+                                     #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 3-6 days", width = 12)),
+                                     #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in >= 7 days", width = 12))),
+                                     fluidRow(width=12,
+                                              #column(3, wellPanel(p(" ")),  valueBox("not done", " All Transmission chains", width = 12)),
+                                              #column(3, wellPanel(p(" ")), valueBox("not done", "Chains with new cases", width = 12)),
+                                              column(4, wellPanel(p(" ")), valueBox(textOutput("minConPerCase"), "Minimum contact per case", width = 12)),
+                                              column(4, wellPanel(p(" ")), valueBox(textOutput("medianConPerCase"), "Median contact per case", width = 12)),
+                                              column(4, wellPanel(p(" ")), valueBox(textOutput("maxConPerCase"), "Maximum contact per case", width = 12))),
+                                     
+                                     
+                                   )))),
+             #############################################################################################
+             
+             ####### Trans chain old #####
+             
+             # tabPanel("Tranmission chain",
+             #          mainPanel( 
+             #            tabsetPanel(
+             #            tabPanel("Transmission chain", visNetworkOutput("transChain", width = "100%", height = "100vh"))
+             #            
+             #            )
+             #            , width = 12)
+             #          
+             # ),
+             
+             ### trans chain 2 #######
               
-              ############################## contact summary counts ##########
-              
-              tabPanel("Contacts summary",
-                       mainPanel( 
-                         tabsetPanel(
-                           tabPanel("Table counts", verbatimTextOutput("tableCount")),
-                           tabPanel("Serial Interval", verbatimTextOutput("si")),
-                           # tabPanel("Contacts per case", plotOutput("plotContPerCase")),
-                           #  tabPanel("Transmission chain", visNetworkOutput("transChain", width = "100%", height = "100vh")),
-                           # tabPanel("Serial Interval distribution", plotOutput("siHist", width = "100%", height = "100vh")),
-                           # tabPanel("New", plotlyOutput("country_plot")),
-                           tabPanel("Followup", verbatimTextOutput("summaryVisit"))
-                           #tabPanel("Cumulative (log10)", plotlyOutput("country_plot_cumulative_log"))
-                         )
-                         , width = 12)
-                       
-              ),
-              ###############
-              # tabPanel("Controls",
-              #          fluidRow(column(4, offset=1, selectInput("X", label="x var",
-              #                                                   choices = list("Age" = "Age", "Weight" = "Weight", "Circumference" = "Circumference"),
-              #                                                   multiple=F) ),
-              #                   column(4,selectInput("Y", label="y var",
-              #                                        choices = list("Age" = "Age", "Weight" = "Weight", "Circumference" = "Circumference"),
-              #                                        multiple=F))) ,
-              #          fluidRow(column(5, offset=1, plotOutput("plot", height = "400px") ),
-              #                   column(5, class= "R2C2", helpText("This is an exemple") ) ), width = 12),
-              
-              tabPanel("Performance Indicators",
-                       mainPanel( width=12,
-                             dashboardPage(
-                               dashboardHeader(title = "Contact KPI"),
-                               dashboardSidebar(
-                                pickerInput("conPerson", "Contact entity type", choices = c("Contact", "Contact person"), # option to view contact or contact person
-                                               selected = c("Contact"),
-                                               multiple = FALSE)
-                               ),
-                               dashboardBody(
-                                 ##################################""
-                                 # infoBoxes with fill=FALSE
-                                                           # infoBoxes with fill=TRUE
-                                 # fluidRow(
-                                 #   infoBox("New Orders3", 10 * 2, icon = icon("credit-card"), fill = TRUE),
-                                 #   infoBoxOutput("progressBox3"),
-                                 #   infoBoxOutput("approvalBox3")
-                                 # ),
-                                 # fluidRow(
-                                 #   infoBox("New Orders4", 10 * 2, icon = icon("credit-card"), fill = TRUE),
-                                 #   infoBoxOutput("progressBox4"),
-                                 #   infoBoxOutput("approvalBox4")
-                                 # ),
-                                 # fluidRow(
-                                 #   infoBox("New Orders5", 10 * 2, icon = icon("credit-card"), fill = TRUE),
-                                 #   infoBoxOutput("progressBox5"),
-                                 #   infoBoxOutput("approvalBox5")
-                                 # ),
-                                 # fluidRow(
-                                 #   column(2, wellPanel(p("Column width 2")  )),
-                                 #   column(10, wellPanel(p("Column width 10")))),
-                                 # fluidRow(
-                                 #  column(12 , valueBox(15*8, "Butget", icon = icon("credit-card") )),
-                                 #  #column(4, valueBox(1*8, "Butget", icon = icon("credit-card") )),
-                                 #  column(12 , valueBox(5*8, "contacts converted to case" ))
-                                 #  ),
-                                 fluidRow(width=12,
-                                   column(3, wellPanel(p(" ")),  valueBox(textOutput("allCont"), "All contacts", width = 12)),
-                                   column(3, wellPanel(p(" ")), valueBox(textOutput("contUnconfirmed"), "Unconfirmed", width = 12)),
-                                   column(3, wellPanel(p(" ")), valueBox(textOutput("contConfirmed"), "Confirmed", width = 12)),
-                                   column(3, wellPanel(p(" ")), valueBox(textOutput("contNot"), "Not a contact", width = 12))),
-                                  # column(2, wellPanel(p(" ")), valueBox(440, "Symptomatic", width = 12))),
-                                 fluidRow(width=12,
-                                          column(3, wellPanel(p(" ")), valueBox(textOutput("activeCont"), "Active", width = 12)),
-                                          column(3, wellPanel(p(" ")), valueBox(textOutput("convertedToCase"), "Converted to case", width = 12)),
-                                          column(3, wellPanel(p(" ")), valueBox(textOutput("notConvertedToCase"), "Not-converted to case", width = 12)),
-                                          column(3, wellPanel(p(" ")), valueBox(textOutput("dropped"), "Dropped", width = 12))),
-                                 fluidRow(width=12,
-                                          column(3, wellPanel(p(" ")),  valueBox(textOutput("underFU"), "Under FU", width = 12)),
-                                          column(3, wellPanel(p(" ")), valueBox(textOutput("overdueFU"), "Overdue FU", width = 12)),
-                                          column(3, wellPanel(p(" ")),  valueBox(textOutput("canceledFU"), "Canceled FU", width = 12)),
-                                          column(3, wellPanel(p(" ")), valueBox(textOutput("lostToFU"), "Lost to FU", width = 12))),
-                                 # fluidRow(width=12,
-                                 #          column(3, wellPanel(p(" ")),  valueBox(textOutput("overdueFU"), "Overdue FU", width = 12)),
-                                 #          column(3, wellPanel(p(" ")), valueBox(55*8, "Visited on last day", width = 12)),
-                                 #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 1-2 days", width = 12)),
-                                 #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 3-6 days", width = 12)),
-                                 #          column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in >= 7 days", width = 12))),
-                                 # fluidRow(width=12,
-                                 #   column(3, wellPanel(p(" ")),  valueBox(55*8+78*8, "Under followup", width = 12)),
-                                 #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 1-2 days", width = 12)),
-                                 #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in 3-6 days", width = 12)),
-                                 #   column(3, wellPanel(p(" ")), valueBox(55*8, "Not FU in >= 7 days", width = 12))),
-                                 fluidRow(width=12,
-                                   column(3, wellPanel(p(" ")),  valueBox("not done", " All Transmission chains", width = 12)),
-                                   column(3, wellPanel(p(" ")), valueBox("not done", "Chains with new cases", width = 12)),
-                                   column(3, wellPanel(p(" ")), valueBox(textOutput("maxConPerCase"), "Max contacts per case", width = 12)),
-                                   column(3, wellPanel(p(" ")), valueBox(textOutput("medianConPerCase"), "Median contact per case", width = 12)))
-                            
-                               )))),
-
-              #######
-              
-              tabPanel("Tranmission chain",
-                       mainPanel( 
-                         tabsetPanel(
-                           #tabPanel("Table counts", verbatimTextOutput("tableCount")),
-                           # tabPanel("Serial Interval", verbatimTextOutput("si")),
-                           # tabPanel("Contacts per case", plotOutput("plotContPerCase")),
-                           tabPanel("Transmission chain", visNetworkOutput("transChain", width = "100%", height = "100vh"))
-                           # tabPanel("Serial Interval distribution", plotOutput("siHist", width = "100%", height = "100vh")),
-                           # tabPanel("New", plotlyOutput("country_plot")),
-                           #tabPanel("Visits statisics", verbatimTextOutput("summaryVisit")),
-                           #tabPanel("Cumulative (log10)", plotlyOutput("country_plot_cumulative_log"))
-                         )
-                         , width = 12)
-                       
-              ),
-              ####
-              tabPanel("Contact Map",
-                       mainPanel( 
-                         tabsetPanel(
-                           #tabPanel("Table counts", verbatimTextOutput("tableCount")),
-                           # tabPanel("Serial Interval", verbatimTextOutput("si")),
-                           # tabPanel("Contacts per case", plotOutput("plotContPerCase")),
-                           #tabPanel("Transmission chain", visNetworkOutput("transChain", width = "100%", height = "100vh"))
-                           # tabPanel("Serial Interval distribution", plotOutput("siHist", width = "100%", height = "100vh")),
-                           # tabPanel("New", plotlyOutput("country_plot")),
-                           #tabPanel("Visits statisics", verbatimTextOutput("summaryVisit")),
-                           tabPanel("Cumulative (log10)" )
-                         )
-                         , width = 12)
-                       
-              ),
-            ##################################################"
-              
-              tabPanel("Data",
-                       numericInput("maxrows", "Rows to show", 25),
-                       #tabPanel("Contact linelisting", tableOutput("rawData"))
-                       #verbatimTextOutput("rawData"),
-                       tableOutput("rawData"),
-                       downloadButton("downloadCsv", "Download as CSV"),tags$br(),tags$br(),
-                       "Published by ", tags$a(href="https://github.com/hzi-braunschweig", 
-                                               " SORMAS-Open Project, Helmholtz Centre for Infection Research, Braunschweig, Germany.")
-              )
-              
-              
-
-              
-   )          
+             tabPanel("Tranmission Network",
+                      mainPanel( width = 12,
+                                 dashboardPage(
+                                   dashboardHeader(),
+                                   dashboardSidebar(#pickerInput("resultingCaseOnlyUi", "Contact entity type", choices = c("Contact", "Contact person"), # option to view contact or contact person
+                                     #           selected = c("Contact"),
+                                     #           multiple = FALSE)
+                                     checkboxInput("resultingCaseOnlyUi", "Visualize only chains with resulting cases?", TRUE),
+                                     numericInput("visSingleChainUi", "Visualize only chain with this source case person ID", value = NULL)
+                                   ),
+                                   dashboardBody(
+                                     fluidRow(
+                                     visNetworkOutput("transChain", width = "100%", height = "100vh"), width=12 )
+                                    # visNetworkOutput("transChain", width = "100%", height = "100vh"), width=12,  tags$br(), tags$br(), downloadButton("downloadTransNetworkPlot", "Download this plot")) 
+                                   )
+                                 ))
+                      
+             ),
+             ####
+             # tabPanel("Map",
+             #          mainPanel( 
+             #            tabsetPanel(
+             #              tabPanel("Cumulative (log10)" )
+             #            )
+             #            , width = 12)
+             #          
+             # ),
+             ##################################################"
+             
+             
+             
+             tabPanel("Data Export",
+                      mainPanel( 
+                        tabsetPanel(
+                          tabPanel("Detailed contact Export",
+                                   numericInput("maxrows", "Rows to show", 20),
+                                   verbatimTextOutput("conRegionDistExpTable"),
+                                   downloadButton("conRegionDistExpCsv", "Download as CSV"),tags$br(),tags$br(),
+                                   "Each row in this data is a contact between a case person and a contact person. The data was obtained by merging contacts and their cases, thus the columns contains variables for contacts and cases"),
+                          tabPanel("Contacts by Case Export",
+                                   numericInput("maxrows", "Rows to show", 20),
+                                   verbatimTextOutput("conPerCaseExpTable"),
+                                   downloadButton("conPerCaseExpCsv", "Download as CSV"),tags$br(),tags$br(),
+                                   "Each row in this data is a case. The data was obtained by summing the number of contacts for each case. Cases with no contact are not included in this table"),
+                          tabPanel("Contact by Region Export",
+                                   numericInput("maxrows", "Rows to show", 20),
+                                   verbatimTextOutput("conPerGerionExpTable"),
+                                   downloadButton("conPerGerionExpCsv", "Download as CSV"),tags$br(),tags$br(),
+                                   "Each row in this data is a region with corresponding number of contacts. 
+                                         The data was obtained by summing the number of contacts in each region.
+                                         The resgion of the source case was used in case the region of the contact was missing."
+                                   
+                          ),
+                          tabPanel("Serial Interval Export",
+                                   numericInput("maxrows", "Rows to show", 20),
+                                   verbatimTextOutput("siExpTable"),
+                                   downloadButton("siExpCsv", "Download as CSV"),tags$br(),tags$br(),
+                                   "Each row in this data is a contact between a case person and a contact person. 
+                                         The data was obtained by calculating the number of days between the symptom onset of the source case person and that of the secondary case (contact) person. 
+                                         Only contacts that resulted to a case were cosidered."
+                                   
+                          ))
+                        , width = 12)),
+             
+             
+             
+             
+             # tabPanel("Case Survaillance Analysis",
+             #          mainPanel( 
+             #            tabsetPanel(
+             #              tabPanel("Epidemic curve"),
+             #              tabPanel("Case Pyramid",  plotlyOutput("casePyramidPlot", width = "70%", height = "80vh") ),
+             #              tabPanel("Time series plot",  plotlyOutput("caseTimeSeriesPlot", width = "90%", height = "80vh") )
+             #              
+             #            )
+             #            , width = 12)
+             #          
+             # ),
+             
+             # tabPanel( "Case Survaillance Analysis",
+             #           sidebarLayout(
+             #             sidebarPanel( 
+             #               span(tags$i(h6("Visualization options.")), style="color:#045a8d"),
+             #               
+             #               pickerInput("timeUnitUi", "Grouping", choices = c("Day","Epi-week", "Month"),
+             #                           selected = c("Epi-week"),
+             #                           multiple = FALSE),
+             #               #"All the statistics generated on all the tabs are based on the filter that you provided above.",                           
+             #               width = 2),                         
+             #             mainPanel( 
+             #               tabsetPanel(
+             #                 tabPanel("Epidemic curve"),
+             #                 tabPanel("Time series plot",  plotlyOutput("caseTimeSeriesPlot", width = "100%", height = "80vh") ) ,
+             #                 tabPanel("Case Pyramid",  plotlyOutput("casePyramidPlot", width = "100%", height = "80vh") )
+             #               )
+             #             )                       
+             #           )
+             # ),
+             
+             tabPanel( "Case Survaillance Analysis",
+                       sidebarLayout(
+                         sidebarPanel( 
+                           span(tags$i(h6("Visualization options.")), style="color:#045a8d"),
+                           
+                           conditionalPanel(condition = "input.tabs1==1",
+                                            #selectizeInput("timeUnitEpicurveUi", "Grouping", choices = c("Day","Epi-week", "Month"),selected = c("Epi-week"),multiple = FALSE)
+                                            radioButtons("timeUnitEpicurveUi","Choose an option",  choices = c("Day","Epi-week", "Month"),selected = c("Epi-week"))
+                                         
+                                            ),
+                           
+                           conditionalPanel(condition = "input.tabs1==2",
+                                            #selectizeInput("timeUnitUi", "Grouping", choices = c("Day","Epi-week", "Month"),selected = c("Epi-week"),multiple = FALSE),
+                                            radioButtons("timeUnitUi","Choose",  choices = c("Day","Epi-week", "Month"),selected = c("Epi-week")),
+                                            checkboxInput(inputId = "cumUi", label = "Cummulative cases", value =F),
+                                            checkboxInput(inputId = "byRegiontimeUnitUi", label = "Cases by region", value =F),
+                                            checkboxInput(inputId = "cumRegionUi", label = "Cummulative cases by region", value =F)
+                                            ),
+                           
+                           conditionalPanel(condition = "input.tabs1==3", h4(" ")),
+                           
+                           conditionalPanel(condition = "input.tabs1==4",
+                                            radioButtons("caseMapshapesUi","Map shapes",  choices = c("By region","By district"),selected = c("By region")),
+                                           ),
+                           conditionalPanel(condition = "input.tabs1==5",
+                                            radioButtons("rtMethodUi","SI estimation method ",  choices = c("Parametric-Gamma","Transmission data"),selected = c("Parametric-Gamma")),
+                                            radioButtons("rsiUi","Ploting parameters",  choices = c("all","R","SI"),selected = c("all"))
+                                            # radioButtons("mean_siUi","Parametric dist mean",  choices = c("all","R","SI"),selected = c("all")),
+                                            # radioButtons("std_siUi","Parametric dist sd",  choices = c("all","R","SI"),selected = c("all"))
+                                            ),
+                           
+                                            #selectizeInput("timeUnitUi", "Grouping", choices = c("Day","Epi-week", "Month"),selected = c("Epi-week"),multiple = FALSE)),
+                                            width = 2),
+                         mainPanel( 
+                           tabsetPanel(id="tabs1",
+                             tabPanel("Epidemic curve", value = 1, plotlyOutput("caseEpicurvePlot", width = "100%", height = "80vh")),
+                             tabPanel("Time series plot", value = 2, plotlyOutput("caseTimeSeriesPlot", width = "100%", height = "80vh") ) ,
+                             tabPanel("Case Pyramid",  value = 3,  plotlyOutput("casePyramidPlot", width = "100%", height = "80vh") ),
+                             tabPanel("Region map", value = 4, plotOutput("regionMapCaseCount", width = "100%", height = "80vh")),
+                             tabPanel("Reproduction number", value = 5, plotOutput("rtPlot", width = "100%", height = "80vh"))
+                           )
+                         )                       
+                       )
+             ),
+             
+            
+             tabPanel("Case Data exportations",
+                      mainPanel( 
+                        tabsetPanel(
+                          tabPanel("Cumulative (log10)" )
+                        )
+                        , width = 12)
+                      
+             )
+             ##
+       
+             ####
+             # tabPanel("Maps",
+             #          mainPanel(
+             #            tabsetPanel(
+             #              tabPanel("Region map", plotOutput("regionMapCaseCount", width = "100%", height = "90vh"))
+             #            )
+             #            , width = 12)
+             # 
+             # )
+       
+             
+             
+                   
+             
+  )          
 ))
 
 
