@@ -40,7 +40,8 @@ install.packages('sp', version='1.4-2', repos='http://cran.us.r-project.org')
 install.packages('broom', version='0.7.0', repos='http://cran.us.r-project.org')
 install.packages('ggmap', version='3.0.0', repos='http://cran.us.r-project.org')
 install.packages('rgeos', version='0.5-3', repos='http://cran.us.r-project.org')
-install.packages('tmap', version='3.1', repos='http://cran.us.r-project.org')
+#install.packages('tmap', version='3.1', repos='http://cran.us.r-project.org')
+devtools::install_github("mtennekes/tmap")  #dependency of tmap
 # install.packages('sf', version='0.9-5', repos='http://cran.us.r-project.org') # dependency of tmap and its installed in the docker file 
 install.packages('lattice', version='0.20-41', repos='http://cran.us.r-project.org')
 devtools::install_github("rstudio/fontawesome") # does not exist on cran thus installed from git repot
