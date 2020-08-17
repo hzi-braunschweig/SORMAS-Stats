@@ -33,7 +33,7 @@ devtools::install_github("r-spatial/sf")  # dependency of tmap
 devtools::install_github("rspatial/raster")  # dependency of tmap 
 install.packages('rgdal', version='1.5-12', repos='http://cran.us.r-project.org')
 install.packages('maps', version='3.3.0', repos='http://cran.us.r-project.org')
-#install.packages('maptools', version='1.0-1', repos='http://cran.us.r-project.org')
+install.packages('maptools', version='1.0-1', repos='http://cran.us.r-project.org')
 install.packages('mapdata', version='2.3.0', repos='http://cran.us.r-project.org')
 install.packages('foreign', version='0.8-76', repos='http://cran.us.r-project.org')
 install.packages('sp', version='1.4-2', repos='http://cran.us.r-project.org')
@@ -45,3 +45,4 @@ install.packages('rgeos', version='0.5-3', repos='http://cran.us.r-project.org')
 # install.packages('sf', version='0.9-5', repos='http://cran.us.r-project.org') # dependency of tmap and its installed in the docker file 
 install.packages('lattice', version='0.20-41', repos='http://cran.us.r-project.org')
 devtools::install_github("rstudio/fontawesome") # does not exist on cran thus installed from git repot
+install.packages('sp', version='1.4-2', repos='http://cran.us.r-project.org')
