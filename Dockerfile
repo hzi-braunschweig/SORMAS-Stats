@@ -40,6 +40,7 @@ RUN apt-get update \
 # Install required R packages for shiny
 COPY requirements.R /root/requirements.R
 RUN Rscript /root/requirements.R
+RUN R -e "installXLSXsupport()"
 
 # Debugging
 #RUN R -e ".libPaths()"
