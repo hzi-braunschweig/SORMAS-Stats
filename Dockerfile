@@ -33,6 +33,8 @@ RUN apt-get update \
        libv8-dev \
        libudunits2-dev \
        libgdal-dev \
+       perl \
+       libcompress-raw-zlib-perl \
  && apt-get -y autoremove \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
@@ -40,7 +42,7 @@ RUN apt-get update \
 # Install required R packages for shiny
 COPY requirements.R /root/requirements.R
 RUN Rscript /root/requirements.R
-RUN R -e "installXLSXsupport()"
+#RUN R -e "library(gdata); gdata::installXLSXsupport()"
 
 # Debugging
 #RUN R -e ".libPaths()"
