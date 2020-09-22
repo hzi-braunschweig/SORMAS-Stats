@@ -80,8 +80,9 @@ regionShapes@data$StateName[regionShapes@data$StateName == "Akwa Ibom"] = "Akwa-
 ######################################""""""
 
 # Define UI for dataset viewer app ----
-ui <- ui <- shinyUI(bootstrapPage(
+ui <- shinyUI(bootstrapPage(
   #tags$head(includeHTML("gtag.html")),
+  tags$style("@import url(https://use.fontawesome.com/releases/v5.7.2/css/all.css);"),
   navbarPage(theme = shinytheme("flatly"), collapsible = TRUE,
              "SORMAS Stats", id="nav",
              
@@ -101,7 +102,7 @@ ui <- ui <- shinyUI(bootstrapPage(
                                           autoclose = TRUE),
                            pickerInput("regionUi", "Region of contact (region of case is used if missing)", choices = c("All regions",levels(as.factor(contRegionDist$region_name)))),
                            pickerInput("districtUi", "District of contact (district of case is used if missing)", choices = c("All districts",levels(as.factor(contRegionDist$district_name)))),
-                           
+                          
                            #pickerInput("resultingCaseOnlyUi", "Visualize only chains with resulting cases?", choices = c("Yes", "No")),
                            #checkboxInput("resultingCaseOnlyUi", "Visualize only chains with resulting cases?", TRUE),
                            #numericInput("visSingleChainUi", "Visualize only chain with this source case ID", value = NULL),
@@ -153,7 +154,7 @@ ui <- ui <- shinyUI(bootstrapPage(
                            h6("Powered by:"),
                            tags$img(src = "HZI_Logo.jpg", height = 50, width = 200),
                            
-                           width = 3), 
+                           width = 3),
                          
                          mainPanel(
                            tabsetPanel(
@@ -454,24 +455,11 @@ ui <- ui <- shinyUI(bootstrapPage(
                         , width = 12)
                       
              )
-             ##
-             
-             ####
-             # tabPanel("Maps",
-             #          mainPanel(
-             #            tabsetPanel(
-             #              tabPanel("Region map", plotOutput("regionMapCaseCount", width = "100%", height = "90vh"))
-             #            )
-             #            , width = 12)
-             # 
-             # )
-             
-             
-             
              
              
   )          
 ))
+
 
 
 
