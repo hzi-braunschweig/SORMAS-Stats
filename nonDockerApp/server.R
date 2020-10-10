@@ -113,7 +113,8 @@ load("RtPlot.R")
 # dataListImprted = importingData(mypath = mypath, sep = sep)   # ## This is needed only when loading data exported from front end of sormas. 
 # importDataFrontEndOutput = mergingData(dataList = dataListImprted)
 # To read data from postgres, use this code. Connection to db is brokem immediately function is done reading data
-importDataFrontEndOutput = mergingDataFromDB(DB_USER = "sormas_user", DB_PASS = "password", DB_HOST = "127.0.0.1", DB_PORT = "5432", DB_NAME= "sormas")
+importDataFrontEndOutput = mergingDataFromDB(DB_USER = "sormas_user", DB_PASS = "password", DB_HOST = "127.0.0.1",
+                                             DB_PORT = "5432", DB_NAME= "sormas")
 
 contRegionDist = importDataFrontEndOutput$contRegionDist
 nodeLineList = importDataFrontEndOutput$nodeLineList  # id here is person id
