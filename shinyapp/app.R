@@ -44,7 +44,6 @@ load(file.path("./demo-data", "elist.RData"))
 load(file.path("./demo-data", "siDat.RData"))
 load(file.path("./demo-data", "casePersonRegionDist.RData"))
 
-
 # load binary files
 # functions for contact data analysis
 load(file.path("./utils", "dateTimeToDate.R"))
