@@ -10,5 +10,12 @@ con <- dbConnect(
         user = 'postgres',
         password = 'password'
 )
- return(con)
+# dbListTables(con)
+return(con)
+}
+
+# mockup, write to DB later
+do_writeback <- function(df,filename){
+    f <- paste('/srv/output/',filename, sep="")
+    saveRDS(df, file=f)
 }

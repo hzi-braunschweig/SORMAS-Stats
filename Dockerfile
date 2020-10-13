@@ -11,11 +11,10 @@ RUN mkdir -p code
 RUN mkdir -p output
 
 ## install R-packages
-COPY src/install_packages.R code/
+COPY install_packages.R code/
 RUN Rscript code/install_packages.R
 
-COPY src/main.R code/
-COPY src/db/sormas_db.R    code/db/sormas_db.R 
+COPY src/ code/
 
 #CMD Rscript code/main.R
 CMD ["sh", "-c", "tail -f /dev/null"]
