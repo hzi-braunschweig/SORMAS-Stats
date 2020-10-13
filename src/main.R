@@ -1,5 +1,5 @@
-i <- 1
-while (i < 6) {
-print(i)
-i = i+1
-}
+source('db/sormas_db.R')
+
+con <- do_connect()
+
+dbListTables(con)
