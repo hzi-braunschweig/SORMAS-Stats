@@ -62,7 +62,7 @@ services:
       - autoheal=true
     command: -c 'config_file=/etc/postgresql/postgresql.conf'
     #image: hzibraunschweig/sormas-postgres:${SORMAS_DOCKER_VERSION}
-    build: postgres/
+    build: docker/postgres/
     environment:
       - POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
       - DB_NAME=sormas
@@ -84,28 +84,6 @@ services:
       retries: 3
       start_period: 30s
 
-  pg_dump:
-    restart: unless-stopped
-    image: hzibraunschweig/sormas-pg-dump:${SORMAS_DOCKER_VERSION}
-    environment:
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=sormas
-      - DB_NAME_AUDIT=sormas_audit
-      - PGPASSWORD=${SORMAS_POSTGRES_PASSWORD}
-      - SORMAS_POSTGRES_USER=${SORMAS_POSTGRES_USER}
-      - TZ=${TZ}
-      - MIN=15,45 # Twice the hour on 15 and 45 (use crontab notation)
-      - HOUR= # Keep empty for every hour. Use crontab notation otherwise
-      - KEEP=1 # keep db dumps for one day in backup folder
-    volumes:
-      - /backup:/var/opt/db_dumps
-    cpus: ${DB_DUMP_CPUS}
-    mem_limit: ${DB_DUMP_MEM}
-    mem_reservation: ${DB_DUMP_MEM_RESERVED}
-    depends_on:
-      postgres:
-        condition: service_healthy
-
   apache2:
     restart: unless-stopped
     labels:
@@ -118,7 +96,7 @@ services:
       - TZ=${TZ}
       - PROMETHEUS_SERVERS=${PROMETHEUS_SERVERS}
     volumes:
-      - ./apache2/certs:/usr/local/apache2/certs
+      - ./docker/apache2/certs:/usr/local/apache2/certs
       - ${SORMAS_PATH}/apache2_log:/var/log/apache2
     ports:
       - 443:443
@@ -136,28 +114,9 @@ services:
       sormas:
         condition: service_healthy
 
-  autoheal:
-    restart: unless-stopped
-    image: willfarrell/autoheal
-    environment:
-        # watch all running containers.
-      - AUTOHEAL_CONTAINER_LABEL=all
-        # check every 10 seconds
-      - AUTOHEAL_INTERVAL=10
-        # wait 0 seconds before first health check
-      - AUTOHEAL_START_PERIOD=0
-        # Docker waits max 10 seconds (the Docker default) for a container to stop before killing
-      - AUTOHEAL_DEFAULT_STOP_TIMEOUT=10
-        # Unix socket for curl requests to Docker API
-      - DOCKER_SOCK=/var/run/docker.sock
-        # --max-time seconds for curl requests to Docker API
-      - CURL_TIMEOUT=30
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
   statistics:
     restart: unless-stopped
-    build: .
+    build: src/stats/
     volumes:
       - ${SORMAS_PATH}/statistics/data/:/srv/data
       - ${SORMAS_PATH}/statistics/output/:/srv/output
@@ -166,7 +125,7 @@ services:
 
   grafana:
     restart: unless-stopped
-    build: grafana/
+    build: src/grafana/
     environment:
       - SORMAS_POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
       - DB_HOST=${DB_HOST}
