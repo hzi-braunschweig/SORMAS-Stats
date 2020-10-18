@@ -11,11 +11,11 @@ RUN mkdir -p code/R
 RUN mkdir -p code/python
 RUN mkdir -p output
 
-## install R-packages
-COPY install_packages.R code/R
+## install and cache R-packages
+COPY R/install_packages.R code/R/
 RUN Rscript code/R/install_packages.R
 
-COPY src/ code/
+COPY . code/
 
 #CMD Rscript code/main.R
 CMD ["sh", "-c", "tail -f /dev/null"]
