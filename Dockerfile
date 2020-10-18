@@ -1,71 +1,21 @@
-# check available R versions here: <https://hub.docker.com/r/rocker/shiny/tags>
-FROM rocker/shiny:3.6.3
-# ---------------------------------------------
-#code with default packahes from https://hub.docker.com/r/rocker/shiny-verse/dockerfile
-RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-  libxml2-dev \
-  libcairo2-dev \
-  libsqlite3-dev \
-  libmariadbd-dev \
-  libmariadbclient-dev \
-  libpq-dev \
-  libssl-dev \
-  libxml2-dev \
-  libcurl4-openssl-dev \
-  libssh2-1-dev \
-  unixodbc-dev \
-  && install2.r --error \
-    --deps TRUE \
-    tidyverse \
-    dplyr \
-    devtools \
-    formatR \
-    remotes \
-    selectr \
-    caTools \
-  && rm -rf /tmp/downloaded_packages
-#----------------------------------------------
-# ---------------------------------------------
-# Install missing debian/ubuntu packages
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-       libcurl4-openssl-dev \
-       libv8-dev \
-       libudunits2-dev \
-       libgdal-dev \
-       perl \
-       libcompress-raw-zlib-perl \
- && apt-get -y autoremove \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+FROM r-base
 
-# Install required R packages for shiny
-COPY requirements.R /root/requirements.R
-RUN Rscript /root/requirements.R
-#RUN R -e "library(gdata); gdata::installXLSXsupport()"
+RUN apt update && apt upgrade -y
+RUN apt install -y libpq-dev vim
 
-# Debugging
-#RUN R -e ".libPaths()"
+WORKDIR /srv
 
-# ---------------------------------------------
-# Install missing debian/ubuntu packages
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-       xtail \
- && apt-get -y autoremove \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+## create directories
+RUN mkdir -p data
+RUN mkdir -p code/R
+RUN mkdir -p code/python
+RUN mkdir -p output
 
-# Copy the app
-RUN ls -la /srv/shiny-server
-RUN rm -rf /srv/shiny-server/*
-COPY shinyapp /srv/shiny-server/
-RUN chmod -R 755 /srv/shiny-server/
-RUN ls -la /srv/shiny-server
+## install R-packages
+COPY install_packages.R code/R
+RUN Rscript code/R/install_packages.R
 
-# Expose port 
-# (We can map it to standard HTTP port lateron when building the container!)
-EXPOSE 3838
+COPY src/ code/
 
-# run the shiny app
-CMD ["/usr/bin/shiny-server.sh"]
+#CMD Rscript code/main.R
+CMD ["sh", "-c", "tail -f /dev/null"]
