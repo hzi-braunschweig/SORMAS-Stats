@@ -1,7 +1,9 @@
 FROM r-base
 
 RUN apt update && apt upgrade -y
-RUN apt install -y libpq-dev vim
+RUN apt install -y libpq-dev python3-pip python3-dev vim 
+
+RUN pip install "yandex-pgmigrate==1.0.5"
 
 WORKDIR /srv
 

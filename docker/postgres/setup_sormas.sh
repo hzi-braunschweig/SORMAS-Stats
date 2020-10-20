@@ -30,7 +30,7 @@ psql -v ON_ERROR_STOP=1 --username "postgres" <<EOSQL
     CREATE USER stats_user WITH PASSWORD '${SORMAS_POSTGRES_PASSWORD}' CREATEDB;
     CREATE USER stats_reader WITH PASSWORD '${SORMAS_POSTGRES_PASSWORD}';
     
-    CREATE DATABASE sormas_statistics WITH OWNER = 'stats_user' ENCODING = 'UTF8';
+    CREATE DATABASE sormas_stats WITH OWNER = 'stats_user' ENCODING = 'UTF8';
 
     \c ${DB_NAME}
     
@@ -40,16 +40,9 @@ EOSQL
 echo "Starting reading statistics setup..."
 
 psql -v ON_ERROR_STOP=1 --username "postgres" <<EOSQL
-    \c sormas_statistics
+    \c sormas_stats
     GRANT USAGE ON SCHEMA public TO stats_reader;
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO stats_reader;
-
-    CREATE TABLE cases_per_day (
-	id serial PRIMARY KEY,
-    date DATE,
-    number INTEGER
-    );
-    ALTER TABLE cases_per_day OWNER TO stats_user;
 EOSQL
 
 
