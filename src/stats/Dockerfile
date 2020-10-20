@@ -19,5 +19,8 @@ RUN Rscript code/R/install_packages.R
 
 COPY . code/
 
+# FIXME this must run on application start, not build time
+#RUN pgmigrate -c "host=postgres dbname=sormas_stats user=stats_user password=password" -t latest migrate
+
 #CMD Rscript code/main.R
 CMD ["sh", "-c", "tail -f /dev/null"]
