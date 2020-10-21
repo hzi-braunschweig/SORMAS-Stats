@@ -42,7 +42,7 @@ echo "Starting reading statistics setup..."
 psql -v ON_ERROR_STOP=1 --username "postgres" <<EOSQL
     \c sormas_stats
     GRANT USAGE ON SCHEMA public TO stats_reader;
-    ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO stats_reader;
+    ALTER DEFAULT PRIVILEGES FOR USER stats_user IN SCHEMA public GRANT SELECT ON TABLES TO stats_reader;
 EOSQL
 
 

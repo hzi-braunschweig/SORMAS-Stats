@@ -2,7 +2,7 @@ source('db/sormas_db.R') # convenient functions
 source('epi-stats/covid_cases.R') # import all your stats functions here
 
 sormas_db <- do_connect('sormas', 'sormas_reader', 'password')
-stats_db <- do_connect('sormas_statistics', 'stats_user', 'password')
+stats_db <- do_connect('sormas_stats', 'stats_user', 'password')
 
 start <- as.Date(Sys.time() - as.difftime(7, unit="days"), format="%Y-%m-%d")
 end   <- as.Date(Sys.time(), format="%Y-%m-%d")
