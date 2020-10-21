@@ -19,7 +19,7 @@ datasources:
     orgId: 1
     url: ${DB_HOST}:5432
     user: stats_reader
-    database: sormas_statistics
+    database: sormas_stats
     isDefault: true
     # <map> fields that will be converted to json and stored in jsonData
     jsonData:

@@ -6,9 +6,25 @@ This project's goal is to provide first class statistics for SORMAS.
 * DO NOT CONNECT THIS TO A PRODUCTION SERVER
 
 # FAQ
-* Does it work: No
+* Does it work (yet): Kind of
 * Should I use it in production: Absolutely not
 * Will it eat my laundry: Yes
+
+
+# Base directory structure
+Check the `READMEs` in the subfolders for more details.
+
+```
+SORMAS-Stats
+├── dev # useful tools and resources which makes a devs life easier
+├── docker # necessary to run the SORMAS-Docker stack via docker-compose
+├── src # directory contains useful 
+│   ├── grafana # Dockerfile, dashboards and datasources for Grafana to visualize data
+│   ├── old # first version of R code: Will be ported and removed eventually
+│   └── stats # contains Dockerfile DB migrations, and statistics scripts in R and Python
+├── .env # ENV variables for docker-compose
+└── docker-compose.yml # run more or less a SORMAS-Docker stack with a stats and grafana container included
+```
 
 # How do I build and run it?
 Start the stack via `docker-compose up -d`. This might take a while as this starts more or less a complete [SORMAS-Docker]() deployment including together with the `statistics` and `grafana` container of this repository.
