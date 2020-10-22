@@ -20,7 +20,7 @@ Check the `READMEs` in the subfolders for more details.
 SORMAS-Stats
 ├── dev # useful tools and resources which makes a devs life easier
 ├── docker # necessary to run the SORMAS-Docker stack via docker-compose
-├── src # directory contains useful 
+├── src #
 │   ├── grafana # Dockerfile, dashboards and datasources for Grafana to visualize data
 │   ├── old # first version of R code: Will be ported and removed eventually
 │   └── stats # contains Dockerfile DB migrations, and statistics scripts in R and Python
