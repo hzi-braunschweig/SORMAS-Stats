@@ -1,4 +1,4 @@
 # see https://crontab.guru/ for help on crontabs syntax
 
 #   m     h     dom     mon     dow     command
-   */5    *      *       *       *      /srv/src/config/run_stats.sh 
+    *     *      *       *       *      /srv/src/config/run_stats.sh 

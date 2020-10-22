@@ -1,8 +1,9 @@
-FROM r-base
+FROM alpine
 
-RUN apt update && apt upgrade -y
-RUN apt install -y libpq-dev python3-pip python3-dev cron vim 
+RUN apk update && apk upgrade
+RUN apk add --no-cache build-base postgresql-dev py3-pip python3-dev R R-dev R-doc bash vim
 
+# FIXME(@JonasCir) https://github.com/yandex/pgmigrate/issues/22
 RUN pip install "yandex-pgmigrate==1.0.5"
 
 WORKDIR /srv
@@ -26,4 +27,4 @@ COPY . src/
 # run migration
 ENTRYPOINT ["/srv/src/config/setup.sh" ]
 
-CMD [ "/usr/sbin/cron", "-f" ]
+CMD ["crond","-f", "-L", "/dev/stdout"]

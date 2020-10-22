@@ -8,6 +8,9 @@ All Python code goe under `python`.
 ## DB
 The [db](db/) folder contains the DB migrations. If you want to extend or modify the DB, this is the place to go. Read the [README](db/README.md) for more details how database migration works. To dry run your changes. To apply the migration run `pgmigrate -c "host=postgres dbname=sormas_stats user=stats_user password=password" -t latest migrate` 
 
+## Config
+The [config](config/) folder contains the [setup](config/setup.sh) script which runs at startup and e.g., initiates the DB migration to the latest version. The [crontab](config/crontab) defines how a certain statistic script is scheduled. Scripts running at the same schudle can be grouped together like [run_stats.sh](config/run_stats.sh) does for example. If you struggle to write your cron expression, this [site](https://crontab.guru/) has you covered!
+
 ## Build it!
 To create a container which contains the statistic scripts and also the DB migrations run:
 `docker build -t local-sormas/stats .` from this folder. Start and debug the container via `docker run -it local-sormas/stats bash`
