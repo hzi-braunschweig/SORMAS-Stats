@@ -1,26 +1,30 @@
-FROM r-base
+FROM alpine
 
-RUN apt update && apt upgrade -y
-RUN apt install -y libpq-dev python3-pip python3-dev vim 
+RUN apk update && apk upgrade
+RUN apk add --no-cache build-base postgresql-dev py3-pip python3-dev R R-dev R-doc bash vim
 
+# FIXME(@JonasCir) https://github.com/yandex/pgmigrate/issues/22
 RUN pip install "yandex-pgmigrate==1.0.5"
 
 WORKDIR /srv
 
 ## create directories
 RUN mkdir -p data
-RUN mkdir -p code/R
-RUN mkdir -p code/python
+RUN mkdir -p src/R
+RUN mkdir -p src/python
 RUN mkdir -p output
 
 ## install and cache R-packages
-COPY R/install_packages.R code/R/
-RUN Rscript code/R/install_packages.R
+COPY R/install_packages.R src/R/
+RUN Rscript src/R/install_packages.R
 
-COPY . code/
+# setup cron tab
+COPY config/crontab /etc/cron.d/crontab
+RUN crontab /etc/cron.d/crontab
 
-# FIXME this must run on application start, not build time
-#RUN pgmigrate -c "host=postgres dbname=sormas_stats user=stats_user password=password" -t latest migrate
+COPY . src/
 
-#CMD Rscript code/main.R
-CMD ["sh", "-c", "tail -f /dev/null"]
+# run migration
+ENTRYPOINT ["/srv/src/config/setup.sh" ]
+
+CMD ["crond","-f", "-L", "/dev/stdout"]
