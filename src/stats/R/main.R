@@ -17,6 +17,3 @@ while (cur <= end)
     do_writeback_cases_per_day(stats_db, cases)
     cur <- cur + 1                    
 }
-
-
-

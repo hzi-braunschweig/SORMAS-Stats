@@ -1,7 +1,7 @@
 # Welcome
 This project's goal is to provide first class statistics for SORMAS.
 
-The high level idea for SORMAS-Stats is to have a dedicated container running in the SORMAS-Docker deployment (separations of concern). The container runs R and python scripts on a CRON schedule. The statistic scripts fetch data from the sormas DB with a read-only role and write their results back into a dedicated statistics database. This statistics database can easily be consumed by all sorts other tools for example Grafana or R-Shiny for visualization. The visualizations could be made accessible from SORMAS either by navigating to them through a button click or by using iframes.
+The high level idea for SORMAS-Stats is to have a dedicated container running in the SORMAS-Docker deployment (separations of concern). The container runs `R` and `python` scripts on a CRON schedule. The statistic scripts fetch data from the sormas DB with a read-only role and write their results back into a dedicated statistics database. This statistics database can easily be consumed by all sorts other tools for example Grafana or R-Shiny for visualization. The visualizations could be made accessible from SORMAS either by navigating to them through a button click or by using iframes.
 
 # REMINDER
 * This is alpha code
@@ -29,7 +29,13 @@ SORMAS-Stats
 ```
 
 # How do I build and run it?
-Start the stack via `docker-compose up -d`. This might take a while as this starts more or less a complete [SORMAS-Docker]() deployment including together with the `statistics` and `grafana` container of this repository. The statistics scripts are currently executed every 5 minutes.
+1. Start the stack via `docker-compose up -d`. This might take a while as this starts more or less a complete [SORMAS-Docker]() deployment including together with the `statistics` and `grafana` container of this repository. 
+1. Insert this line into your /etc/hosts file: `127.0.0.1	sormas-docker-test.com`
+1. Once the stack has started, navigate to `sormas-docker-test.com`. Use the devloper mode to generate sample data.
+1. Navigate to `localhost:3000` and login with `admin:admin` to access Grafana. The `SORMAS Main` dashord`contains the visualizations. 
+
+
+The statistics scripts which pull data from the SORMAS-DB and store the results in the statistic DB are currently executed every minute.
 
 # How do I contribute?
 First of all: Thank you for getting involved, we love contributions! Follow these steps:
