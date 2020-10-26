@@ -6,8 +6,5 @@ pgmigrate -c "host=postgres dbname=sormas_stats user=stats_user password=passwor
 
 echo "Migration successful"
 
-
-# see: https://github.com/dubiousjim/dcron/issues/13
-# ignore using `exec` for `dcron` to get another pid instead of `1`
-# exec "$@"
-"$@"
+cron -f -L 15 > /proc/1/fd/1 2>&1
+echo "This should never happen"
