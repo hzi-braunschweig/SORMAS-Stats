@@ -1,2 +1,4 @@
 sormas-rest.yaml
-sormas-client/
+out/
+venv/
+.idea/
