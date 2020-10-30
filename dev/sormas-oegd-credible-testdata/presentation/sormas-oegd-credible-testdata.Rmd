@@ -1,0 +1,374 @@
+---
+title: Generation of a credible test data set for SORMAS
+subtitle: HZI -- 30 October 2020
+author: \newline \newline Stéphane Ghozzi \newline \small Hemholtz Centre for Infection Research (HZI) \newline stephane.ghozzi@helmholtz-hzi.de \normalsize
+fontsize: 8pt
+output:
+  beamer_presentation: 
+    includes:
+      in_header: presentation-beamer-header.tex
+    slide_level: 2
+    keep_tex: yes
+---
+
+## Approach
+
+COVID-19 case counts from RKI for Braunschweig, Salzgitter, Wolfsburg:
+
+- corona dashboard: per county, reporting day, onset day, age group, sex
+- SurvStat: per county, reporting week, case definition
+
+\vspace{1.5cm}
+
+Generate individual **cases** that reproduce these counts
+
+---
+
+Add **case features**
+
+- onset date (Gumbel distribution fitted to data)
+- infection date (~ exp, scale = 3 days)
+- country of residence (Germany/France, 5%)
+- first and family names ("German + ~Turkish + ~Polish" / "French")
+- address ~ county of reporting LHA (85%)
+- hospitalization (10%)
+- death (3%)
+- symptoms ~ case definition + list (rough probas, incl. asymptomatic)
+
+---
+
+Create chains of **infections**
+
+- cases of generation 0, 1, 2, 3, 4 (e.g. 0 = 20%)
+- added sequentially
+- p(infection) ~ degree, exp(diff infection date)
+- location ~ close to index (exp), gen 0: random in address 
+
+---
+
+Create **contacts**
+
+- number of contacts ~ social contact matrix / age (POLYMOD)
+- location ~ close to index (exp)
+- address ~ address index (67%)
+- contacted (50%)
+- quarantine (75%)
+- tested | contacted (75%)
+
+---
+
+Create **events** and **participants**
+
+- n participants ~ N(10, 10), at least 5
+- at least 1 case
+- event date ~ w/in 2 weeks after infection date of case
+- 1% chance that a participant is a case or a contact
+- participants: random locations
+- event: location = center of mass
+
+## Distributions
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/case_count_ts_plot.pdf}
+\end{center}
+
+---
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/degrees_plot.pdf}
+\end{center}
+
+---
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/Rt_plot.pdf}
+\end{center}
+
+---
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/csize_plot.pdf}
+\end{center}
+
+\tiny
+overall: 314 components
+\normalsize
+
+## Graph
+
+building the complete graph ~ 8 s
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/cases_graph.pdf}
+\end{center}
+
+---
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/cases_contacts_graph_plot.pdf}
+\end{center}
+
+---
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/all/abstract_graph.pdf}
+\end{center}
+
+---
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/all/geo_graph_map.pdf}
+\end{center}
+
+## Filter graph by infection date
+
+as an example... *reporting* date might be more relevant
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/graph_infectdate-2020-03-20.pdf}
+\end{center}
+
+## Example 1: component with infection chain
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/44/abstract_graph.pdf}
+\end{center}
+
+---
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/44/geo_graph_map.pdf}
+\end{center}
+
+## Example 2: component with event
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/99/abstract_graph.pdf}
+\end{center}
+
+---
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/99/geo_graph_map.pdf}
+\end{center}
+
+## Outlook
+
+**Interface** to SORMAS and SORMAS-Stats formats:
+
+- export test data to SORMAS
+- import SORMAS data to run code (vis + analysis)
+- export results to SORMAS-Stats
+
+---
+
+Improve the **generation process:**
+
+- reduce data quality (add missing, incorrect values)
+- statistics-based and age-dependent prob. hospitalization, prob. death
+- age-dependent infectiosity
+- age distribution in age group 
+- prob. test ~ testing rate
+- non-tree structure (already loops possible through events)
+- events are local
+
+---
+
+Add **features:**
+
+- proper address ~ location / phone number / birth date / sex "divers"
+- time and result of test
+- isolation/quarantine dates
+- hospitalization and death dates
+- ICU
+- time dynamics of LHA work, e.g., date of contact, of quarantine
+- occupation of case
+- setting/context of infection, of event: type, name
+
+---
+
+**Visualizations** and **analyses:**
+
+- prioritization (backward tracing)
+- aggregation over regions
+- aberration detection vs. components
+- sizes/number of components in time
+- cumulative number of cases, contacts, participants
+- longest transmission chain, shortest path
+- classical epi: R, SI
+- dispersion K
+- modeling SEIR, under-reporting
+
+## Data structure
+
+`persons_df`
+
+\vspace{0.2cm}
+
+\tiny
+```
+tibble [12,822 × 29] (S3: tbl_df/tbl/data.frame)
+ $ local_health_authority: chr [1:12822] "Braunschweig" "Braunschweig" "Braunschweig" "Braunschweig" ...
+ $ sex                   : chr [1:12822] "w" "w" "w" "w" ...
+ $ age_group             : chr [1:12822] "A00-A04" "A00-A04" "A00-A04" "A00-A04" ...
+ $ reporting_date        : Date[1:12822], format: "2020-03-22" "2020-03-31" ...
+ $ reporting_week        : chr [1:12822] "2020-W12" "2020-W14" "2020-W36" "2020-W41" ...
+ $ onset_date            : Date[1:12822], format: "2020-03-18" "2020-03-30" ...
+ $ id                    : num [1:12822] 1 2 3 4 5 6 7 8 9 10 ...
+ $ is_case               : logi [1:12822] TRUE TRUE TRUE TRUE TRUE TRUE ...
+ $ age                   : int [1:12822] 4 3 2 3 2 3 10 5 7 13 ...
+ $ country_of_residence  : chr [1:12822] "Deutschland" "Deutschland" "Deutschland" "Deutschland" ...
+ $ address               : chr [1:12822] "Braunschweig" "Braunschweig" "Braunschweig" "Braunschweig" ...
+ $ infection_date        : Date[1:12822], format: "2020-03-16" "2020-03-15" ...
+ $ case_def_id           : chr [1:12822] "C" "C" "C" "E" ...
+ $ case_def              : chr [1:12822] "klinisch-labordiagnostisch" "klinisch-labordiagnostisch" "klinisch-labordiagnostisch" "labordiagnostisch bei unbekannter Klinik" ...
+ $ has_symptoms          : logi [1:12822] TRUE TRUE TRUE FALSE TRUE TRUE ...
+ $ hospitalized          : logi [1:12822] TRUE FALSE FALSE FALSE FALSE FALSE ...
+ $ died                  : logi [1:12822] FALSE FALSE TRUE FALSE FALSE FALSE ...
+ $ generation            : chr [1:12822] "0" "3" "1" "4" ...
+ $ infected_by           : int [1:12822] NA 834 928 940 75 1263 1165 990 1185 1263 ...
+ $ degree                : num [1:12822] 2 1 0 0 0 1 0 4 0 0 ...
+ $ has_contact           : logi [1:12822] FALSE TRUE TRUE TRUE TRUE TRUE ...
+ $ contact_contacted     : logi [1:12822] NA NA NA NA NA NA ...
+ $ contact_quarantine    : logi [1:12822] NA NA NA NA NA NA ...
+ $ contact_tested        : logi [1:12822] NA NA NA NA NA NA ...
+ $ first_name            : chr [1:12822] "Gisela" "Birgit" "Gisela" "Claudia" ...
+ $ family_name           : chr [1:12822] "Wolf" "Richter" "Hofmann" "Wagner" ...
+ $ longitude             : num [1:12822] 10.5 10.6 10.6 10.5 10.8 ...
+ $ latitude              : num [1:12822] 52.2 52.3 52.3 52.3 52.4 ...
+ $ was_in_event          : logi [1:12822] FALSE FALSE FALSE FALSE FALSE FALSE ...
+```
+\normalsize
+
+---
+
+`symptoms_cases_df`
+
+\vspace{0.2cm}
+
+\tiny
+```
+# A tibble: 3,156 x 3
+      id symptom             id_person
+   <dbl> <chr>                   <int>
+ 1     1 Husten                      1
+ 2     2 Geruchssinnsverlust         1
+ 3     3 Niesen                      1
+ 4     4 Geruchssinnsverlust         2
+ 5     5 Fieber                      3
+ 6     6 Geruchssinnsverlust         3
+ 7     7 Schmerzen                   3
+ 8     8 Kopfschmerzen               3
+ 9     9 Atemnot                     3
+10    10 Husten                      5
+# … with 3,146 more rows
+```
+\normalsize
+
+---
+
+`contacts_df`
+
+\vspace{0.2cm}
+
+\tiny
+```
+# A tibble: 11,558 x 4
+      id id_index id_contact is_infection
+   <dbl>    <int>      <dbl> <lgl>       
+ 1     1      834          2 TRUE        
+ 2     2      928          3 TRUE        
+ 3     3      940          4 TRUE        
+ 4     4       75          5 TRUE        
+ 5     5     1263          6 TRUE        
+ 6     6     1165          7 TRUE        
+ 7     7      990          8 TRUE        
+ 8     8     1185          9 TRUE        
+ 9     9     1263         10 TRUE        
+10    10      331         11 TRUE        
+# … with 11,548 more rows
+```
+\normalsize
+
+---
+
+`events_df`
+
+\vspace{0.2cm}
+
+\tiny
+```
+# A tibble: 69 x 5
+      id date       address      longitude latitude
+   <int> <date>     <chr>            <dbl>    <dbl>
+ 1     1 2020-03-29 Braunschweig      10.5     52.2
+ 2     2 2020-04-02 Braunschweig      10.6     52.3
+ 3     3 2020-03-24 Braunschweig      10.6     52.3
+ 4     4 2020-08-02 Braunschweig      10.6     52.3
+ 5     5 2020-06-11 Braunschweig      10.5     52.3
+ 6     6 2020-03-28 Braunschweig      10.6     52.3
+ 7     7 2020-06-10 Braunschweig      10.6     52.3
+ 8     8 2020-04-01 Braunschweig      10.5     52.3
+ 9     9 2020-09-04 Braunschweig      10.6     52.3
+10    10 2020-04-03 Braunschweig      10.6     52.3
+# … with 59 more rows
+```
+\normalsize
+
+---
+
+`event_participants_df`
+
+\vspace{0.2cm}
+
+\tiny
+```
+# A tibble: 1,019 x 3
+      id id_event id_participant
+   <dbl>    <int>          <dbl>
+ 1     1        1           1365
+ 2     2        1          11879
+ 3     3        1          11880
+ 4     4        1          11881
+ 5     5        1          11882
+ 6     6        1          11883
+ 7     7        1          11884
+ 8     8        1          11885
+ 9     9        1          11886
+10    10        2           1022
+# … with 1,009 more rows
+```
+\normalsize
+
+---
+
+`network_graph`
+
+\vspace{0.2cm}
+
+\tiny
+```
+# A tbl_graph: 12891 nodes and 12577 edges
+#
+# A rooted forest with 314 trees
+#
+# Node Data: 12,891 x 6 (active)
+  id    type  root_case date                  geometry degree
+  <chr> <chr> <lgl>     <date>                 <POINT>  <dbl>
+1 1     case  TRUE      2020-03-16 (10.45975 52.22532)      7
+2 2     case  FALSE     2020-03-15  (10.5613 52.34013)      9
+3 3     case  FALSE     2020-08-07 (10.56129 52.34783)      2
+4 4     case  FALSE     2020-09-24 (10.52487 52.33067)      8
+5 5     case  FALSE     2020-09-24 (10.76194 52.41157)      8
+6 6     case  FALSE     2020-10-10 (10.56603 52.32992)     11
+# … with 12,885 more rows
+#
+# Edge Data: 12,577 x 3
+   from    to                               geometry
+  <int> <int>                           <LINESTRING>
+1   834     2  (10.66729 52.40816, 10.5613 52.34013)
+2   928     3 (10.72258 52.44257, 10.56129 52.34783)
+3   940     4 (10.69093 52.37612, 10.52487 52.33067)
+# … with 12,574 more rows
+```
+\normalsize

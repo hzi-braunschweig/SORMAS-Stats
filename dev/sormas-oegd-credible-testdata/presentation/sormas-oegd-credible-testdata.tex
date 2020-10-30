@@ -1,0 +1,611 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  8pt,
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Generation of a credible test data set for SORMAS},
+  pdfauthor={Stéphane Ghozzi Hemholtz Centre for Infection Research (HZI) stephane.ghozzi@helmholtz-hzi.de },
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{tikz}
+
+\setbeamertemplate{navigation symbols}{}
+\defbeamertemplate{footline}{title and page number}{%
+    \color{gray!95}
+    \hspace{2em} \inserttitle \hfill%
+    \insertpagenumber\,/\,\insertpresentationendpage\kern2em\vskip2pt%
+    \vspace{0.2cm}%
+}
+\setbeamertemplate{footline}[title and page number]{}
+\setbeamertemplate{frametitle}{
+    \vspace{0.5cm}
+    \insertframetitle
+}
+\setlength{\fboxsep}{0pt}
+\setlength{\fboxrule}{0.1pt}
+\useinnertheme{circles}
+\usefonttheme{serif}
+
+\definecolor{vegablue}{HTML}{1F77B4}
+\definecolor{vegaorange}{HTML}{FF7F0E}
+\definecolor{vegagreen}{HTML}{2CA02C}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{subtitle}{fg=vegablue}
+\setbeamercolor{frametitle}{fg=vegablue}
+\setbeamercolor{structure}{fg=black}
+
+\hypersetup{colorlinks=true,linkcolor=vegablue,urlcolor=vegablue,citecolor=vegablue,anchorcolor=vegablue}
+
+\newcommand{\p}{\mathrm{p}}
+\newcommand{\x}{\bm{x}}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Generation of a credible test data set for SORMAS}
+\subtitle{HZI -- 30 October 2020}
+\author{\newline \newline Stéphane Ghozzi \newline \small Hemholtz
+Centre for Infection Research (HZI)
+\newline \href{mailto:stephane.ghozzi@helmholtz-hzi.de}{\nolinkurl{stephane.ghozzi@helmholtz-hzi.de}}
+\normalsize}
+\date{}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}{Approach}
+\protect\hypertarget{approach}{}
+COVID-19 case counts from RKI for Braunschweig, Salzgitter, Wolfsburg:
+
+\begin{itemize}
+\tightlist
+\item
+  corona dashboard: per county, reporting day, onset day, age group, sex
+\item
+  SurvStat: per county, reporting week, case definition
+\end{itemize}
+
+\vspace{1.5cm}
+
+Generate individual \textbf{cases} that reproduce these counts
+\end{frame}
+
+\begin{frame}
+Add \textbf{case features}
+
+\begin{itemize}
+\tightlist
+\item
+  onset date (Gumbel distribution fitted to data)
+\item
+  infection date (\textasciitilde{} exp, scale = 3 days)
+\item
+  country of residence (Germany/France, 5\%)
+\item
+  first and family names (``German + \textasciitilde Turkish +
+  \textasciitilde Polish'' / ``French'')
+\item
+  address \textasciitilde{} county of reporting LHA (85\%)
+\item
+  hospitalization (10\%)
+\item
+  death (3\%)
+\item
+  symptoms \textasciitilde{} case definition + list (rough probas,
+  incl.~asymptomatic)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Create chains of \textbf{infections}
+
+\begin{itemize}
+\tightlist
+\item
+  cases of generation 0, 1, 2, 3, 4 (e.g.~0 = 20\%)
+\item
+  added sequentially
+\item
+  p(infection) \textasciitilde{} degree, exp(diff infection date)
+\item
+  location \textasciitilde{} close to index (exp), gen 0: random in
+  address
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Create \textbf{contacts}
+
+\begin{itemize}
+\tightlist
+\item
+  number of contacts \textasciitilde{} social contact matrix / age
+  (POLYMOD)
+\item
+  location \textasciitilde{} close to index (exp)
+\item
+  address \textasciitilde{} address index (67\%)
+\item
+  contacted (50\%)
+\item
+  quarantine (75\%)
+\item
+  tested \textbar{} contacted (75\%)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Create \textbf{events} and \textbf{participants}
+
+\begin{itemize}
+\tightlist
+\item
+  n participants \textasciitilde{} N(10, 10), at least 5
+\item
+  at least 1 case
+\item
+  event date \textasciitilde{} w/in 2 weeks after infection date of case
+\item
+  1\% chance that a participant is a case or a contact
+\item
+  participants: random locations
+\item
+  event: location = center of mass
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Distributions}
+\protect\hypertarget{distributions}{}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/case_count_ts_plot.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/degrees_plot.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/Rt_plot.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/csize_plot.pdf}
+\end{center}
+
+\tiny
+
+overall: 314 components \normalsize
+\end{frame}
+
+\begin{frame}{Graph}
+\protect\hypertarget{graph}{}
+building the complete graph \textasciitilde{} 8 s
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/cases_graph.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/cases_contacts_graph_plot.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/all/abstract_graph.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/all/geo_graph_map.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}{Filter graph by infection date}
+\protect\hypertarget{filter-graph-by-infection-date}{}
+as an example\ldots{} \emph{reporting} date might be more relevant
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/graph_infectdate-2020-03-20.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}{Example 1: component with infection chain}
+\protect\hypertarget{example-1-component-with-infection-chain}{}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/44/abstract_graph.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/44/geo_graph_map.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}{Example 2: component with event}
+\protect\hypertarget{example-2-component-with-event}{}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/99/abstract_graph.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/99/geo_graph_map.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}{Outlook}
+\protect\hypertarget{outlook}{}
+\textbf{Interface} to SORMAS and SORMAS-Stats formats:
+
+\begin{itemize}
+\tightlist
+\item
+  export test data to SORMAS
+\item
+  import SORMAS data to run code (vis + analysis)
+\item
+  export results to SORMAS-Stats
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Improve the \textbf{generation process:}
+
+\begin{itemize}
+\tightlist
+\item
+  reduce data quality (add missing, incorrect values)
+\item
+  statistics-based and age-dependent prob. hospitalization, prob. death
+\item
+  age-dependent infectiosity
+\item
+  age distribution in age group
+\item
+  prob. test \textasciitilde{} testing rate
+\item
+  non-tree structure (already loops possible through events)
+\item
+  events are local
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+Add \textbf{features:}
+
+\begin{itemize}
+\tightlist
+\item
+  proper address \textasciitilde{} location / phone number / birth date
+  / sex ``divers''
+\item
+  time and result of test
+\item
+  isolation/quarantine dates
+\item
+  hospitalization and death dates
+\item
+  ICU
+\item
+  time dynamics of LHA work, e.g., date of contact, of quarantine
+\item
+  occupation of case
+\item
+  setting/context of infection, of event: type, name
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\textbf{Visualizations} and \textbf{analyses:}
+
+\begin{itemize}
+\tightlist
+\item
+  prioritization (backward tracing)
+\item
+  aggregation over regions
+\item
+  aberration detection vs.~components
+\item
+  sizes/number of components in time
+\item
+  cumulative number of cases, contacts, participants
+\item
+  longest transmission chain, shortest path
+\item
+  classical epi: R, SI
+\item
+  dispersion K
+\item
+  modeling SEIR, under-reporting
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Data structure}
+\protect\hypertarget{data-structure}{}
+\texttt{persons\_df}
+
+\vspace{0.2cm}
+
+\tiny
+
+\begin{verbatim}
+tibble [12,822 × 29] (S3: tbl_df/tbl/data.frame)
+ $ local_health_authority: chr [1:12822] "Braunschweig" "Braunschweig" "Braunschweig" "Braunschweig" ...
+ $ sex                   : chr [1:12822] "w" "w" "w" "w" ...
+ $ age_group             : chr [1:12822] "A00-A04" "A00-A04" "A00-A04" "A00-A04" ...
+ $ reporting_date        : Date[1:12822], format: "2020-03-22" "2020-03-31" ...
+ $ reporting_week        : chr [1:12822] "2020-W12" "2020-W14" "2020-W36" "2020-W41" ...
+ $ onset_date            : Date[1:12822], format: "2020-03-18" "2020-03-30" ...
+ $ id                    : num [1:12822] 1 2 3 4 5 6 7 8 9 10 ...
+ $ is_case               : logi [1:12822] TRUE TRUE TRUE TRUE TRUE TRUE ...
+ $ age                   : int [1:12822] 4 3 2 3 2 3 10 5 7 13 ...
+ $ country_of_residence  : chr [1:12822] "Deutschland" "Deutschland" "Deutschland" "Deutschland" ...
+ $ address               : chr [1:12822] "Braunschweig" "Braunschweig" "Braunschweig" "Braunschweig" ...
+ $ infection_date        : Date[1:12822], format: "2020-03-16" "2020-03-15" ...
+ $ case_def_id           : chr [1:12822] "C" "C" "C" "E" ...
+ $ case_def              : chr [1:12822] "klinisch-labordiagnostisch" "klinisch-labordiagnostisch" "klinisch-labordiagnostisch" "labordiagnostisch bei unbekannter Klinik" ...
+ $ has_symptoms          : logi [1:12822] TRUE TRUE TRUE FALSE TRUE TRUE ...
+ $ hospitalized          : logi [1:12822] TRUE FALSE FALSE FALSE FALSE FALSE ...
+ $ died                  : logi [1:12822] FALSE FALSE TRUE FALSE FALSE FALSE ...
+ $ generation            : chr [1:12822] "0" "3" "1" "4" ...
+ $ infected_by           : int [1:12822] NA 834 928 940 75 1263 1165 990 1185 1263 ...
+ $ degree                : num [1:12822] 2 1 0 0 0 1 0 4 0 0 ...
+ $ has_contact           : logi [1:12822] FALSE TRUE TRUE TRUE TRUE TRUE ...
+ $ contact_contacted     : logi [1:12822] NA NA NA NA NA NA ...
+ $ contact_quarantine    : logi [1:12822] NA NA NA NA NA NA ...
+ $ contact_tested        : logi [1:12822] NA NA NA NA NA NA ...
+ $ first_name            : chr [1:12822] "Gisela" "Birgit" "Gisela" "Claudia" ...
+ $ family_name           : chr [1:12822] "Wolf" "Richter" "Hofmann" "Wagner" ...
+ $ longitude             : num [1:12822] 10.5 10.6 10.6 10.5 10.8 ...
+ $ latitude              : num [1:12822] 52.2 52.3 52.3 52.3 52.4 ...
+ $ was_in_event          : logi [1:12822] FALSE FALSE FALSE FALSE FALSE FALSE ...
+\end{verbatim}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]
+\texttt{symptoms\_cases\_df}
+
+\vspace{0.2cm}
+
+\tiny
+
+\begin{verbatim}
+# A tibble: 3,156 x 3
+      id symptom             id_person
+   <dbl> <chr>                   <int>
+ 1     1 Husten                      1
+ 2     2 Geruchssinnsverlust         1
+ 3     3 Niesen                      1
+ 4     4 Geruchssinnsverlust         2
+ 5     5 Fieber                      3
+ 6     6 Geruchssinnsverlust         3
+ 7     7 Schmerzen                   3
+ 8     8 Kopfschmerzen               3
+ 9     9 Atemnot                     3
+10    10 Husten                      5
+# … with 3,146 more rows
+\end{verbatim}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]
+\texttt{contacts\_df}
+
+\vspace{0.2cm}
+
+\tiny
+
+\begin{verbatim}
+# A tibble: 11,558 x 4
+      id id_index id_contact is_infection
+   <dbl>    <int>      <dbl> <lgl>       
+ 1     1      834          2 TRUE        
+ 2     2      928          3 TRUE        
+ 3     3      940          4 TRUE        
+ 4     4       75          5 TRUE        
+ 5     5     1263          6 TRUE        
+ 6     6     1165          7 TRUE        
+ 7     7      990          8 TRUE        
+ 8     8     1185          9 TRUE        
+ 9     9     1263         10 TRUE        
+10    10      331         11 TRUE        
+# … with 11,548 more rows
+\end{verbatim}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]
+\texttt{events\_df}
+
+\vspace{0.2cm}
+
+\tiny
+
+\begin{verbatim}
+# A tibble: 69 x 5
+      id date       address      longitude latitude
+   <int> <date>     <chr>            <dbl>    <dbl>
+ 1     1 2020-03-29 Braunschweig      10.5     52.2
+ 2     2 2020-04-02 Braunschweig      10.6     52.3
+ 3     3 2020-03-24 Braunschweig      10.6     52.3
+ 4     4 2020-08-02 Braunschweig      10.6     52.3
+ 5     5 2020-06-11 Braunschweig      10.5     52.3
+ 6     6 2020-03-28 Braunschweig      10.6     52.3
+ 7     7 2020-06-10 Braunschweig      10.6     52.3
+ 8     8 2020-04-01 Braunschweig      10.5     52.3
+ 9     9 2020-09-04 Braunschweig      10.6     52.3
+10    10 2020-04-03 Braunschweig      10.6     52.3
+# … with 59 more rows
+\end{verbatim}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]
+\texttt{event\_participants\_df}
+
+\vspace{0.2cm}
+
+\tiny
+
+\begin{verbatim}
+# A tibble: 1,019 x 3
+      id id_event id_participant
+   <dbl>    <int>          <dbl>
+ 1     1        1           1365
+ 2     2        1          11879
+ 3     3        1          11880
+ 4     4        1          11881
+ 5     5        1          11882
+ 6     6        1          11883
+ 7     7        1          11884
+ 8     8        1          11885
+ 9     9        1          11886
+10    10        2           1022
+# … with 1,009 more rows
+\end{verbatim}
+
+\normalsize
+\end{frame}
+
+\begin{frame}[fragile]
+\texttt{network\_graph}
+
+\vspace{0.2cm}
+
+\tiny
+
+\begin{verbatim}
+# A tbl_graph: 12891 nodes and 12577 edges
+#
+# A rooted forest with 314 trees
+#
+# Node Data: 12,891 x 6 (active)
+  id    type  root_case date                  geometry degree
+  <chr> <chr> <lgl>     <date>                 <POINT>  <dbl>
+1 1     case  TRUE      2020-03-16 (10.45975 52.22532)      7
+2 2     case  FALSE     2020-03-15  (10.5613 52.34013)      9
+3 3     case  FALSE     2020-08-07 (10.56129 52.34783)      2
+4 4     case  FALSE     2020-09-24 (10.52487 52.33067)      8
+5 5     case  FALSE     2020-09-24 (10.76194 52.41157)      8
+6 6     case  FALSE     2020-10-10 (10.56603 52.32992)     11
+# … with 12,885 more rows
+#
+# Edge Data: 12,577 x 3
+   from    to                               geometry
+  <int> <int>                           <LINESTRING>
+1   834     2  (10.66729 52.40816, 10.5613 52.34013)
+2   928     3 (10.72258 52.44257, 10.56129 52.34783)
+3   940     4 (10.69093 52.37612, 10.52487 52.33067)
+# … with 12,574 more rows
+\end{verbatim}
+
+\normalsize
+\end{frame}
+
+\end{document}

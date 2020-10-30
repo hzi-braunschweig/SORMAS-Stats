@@ -1,0 +1,40 @@
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{tikz}
+
+\setbeamertemplate{navigation symbols}{}
+\defbeamertemplate{footline}{title and page number}{%
+    \color{gray!95}
+    \hspace{2em} \inserttitle \hfill%
+    \insertpagenumber\,/\,\insertpresentationendpage\kern2em\vskip2pt%
+    \vspace{0.2cm}%
+}
+\setbeamertemplate{footline}[title and page number]{}
+\setbeamertemplate{frametitle}{
+    \vspace{0.5cm}
+    \insertframetitle
+}
+\setlength{\fboxsep}{0pt}
+\setlength{\fboxrule}{0.1pt}
+\useinnertheme{circles}
+\usefonttheme{serif}
+
+\definecolor{vegablue}{HTML}{1F77B4}
+\definecolor{vegaorange}{HTML}{FF7F0E}
+\definecolor{vegagreen}{HTML}{2CA02C}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{subtitle}{fg=vegablue}
+\setbeamercolor{frametitle}{fg=vegablue}
+\setbeamercolor{structure}{fg=black}
+
+\hypersetup{colorlinks=true,linkcolor=vegablue,urlcolor=vegablue,citecolor=vegablue,anchorcolor=vegablue}
+
+\newcommand{\p}{\mathrm{p}}
+\newcommand{\x}{\bm{x}}
