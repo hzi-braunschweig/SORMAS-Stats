@@ -22,11 +22,11 @@ configuration.debug = True
 # Enter a context with an instance of the API client
 with sormas.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = sormas.ActionControllerApi(api_client)
-    since = 56  # int |
+    api_instance = sormas.CaseControllerApi(api_client)
+    case_data_dto = [sormas.CaseDataDto()] # list[CaseDataDto] |  (optional)
 
     try:
-        api_response = api_instance.get_all(since)
+        api_response = api_instance.post_cases(case_data_dto=case_data_dto)
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling ActionControllerApi->get_all: %s\n" % e)
+        print("Exception when calling CaseControllerApi->post_cases: %s\n" % e)

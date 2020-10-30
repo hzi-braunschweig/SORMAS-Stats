@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 tmp=$(mktemp -d)
 echo $tmp
 wget https://github.com/hzi-braunschweig/SORMAS-Project/releases/download/v1.49.1/sormas_1.49.1.zip -P "$tmp"
@@ -16,3 +16,11 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
 --package-name sormas
 
 sudo chown -R $USER:$USER out
+
+python3 -m venv venv
+source ./venv/bin/activate
+
+pushd out || exit
+python3 setup.py install
+popd || exit
+
