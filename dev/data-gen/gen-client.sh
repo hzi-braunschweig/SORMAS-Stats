@@ -7,7 +7,9 @@ cp "$tmp/deploy/openapi/sormas-rest.yaml" .
 rm -rf "$tmp"
 
 
-sed -i 's/basic-auth/basicAuth/g' sormas-rest.yaml
+sed -i 's/http-basic/basicAuth/g' sormas-rest.yaml
+sed -i 's/[[:space:]]Basic/\ basic/g' sormas-rest.yaml
+
 
 docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
 -i local/sormas-rest.yaml \
@@ -21,6 +23,6 @@ python3 -m venv venv
 source ./venv/bin/activate
 
 pushd out || exit
-python3 setup.py install
+python3 setup.py install --record files.txt
 popd || exit
 
