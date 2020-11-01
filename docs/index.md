@@ -12,4 +12,10 @@ visualizations could be made accessible from SORMAS either by
 navigating to them through a button click or by using iframes.
 
 
-# Developer
+# Stats with
+ * [Jupyter](../dev/README.md)
+ * [R](../src/stats/R)
+ * [Python](../src/stats/python)
+
+# Internal
+ * [DB Migrations](../src/stats/db/README.md)
