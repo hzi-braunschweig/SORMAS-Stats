@@ -1,4 +1,4 @@
-version: '2.3'
+version: '3.4'
 services:
   sormas:
     restart: unless-stopped
@@ -9,6 +9,10 @@ services:
     links:
       - postgres
     image: hzibraunschweig/sormas-application:${SORMAS_DOCKER_VERSION}
+    ports:
+      - '6080:6080'
+      - '6081:6081'
+      - '6049:6049'
     environment:
       - SORMAS_POSTGRES_USER=${SORMAS_POSTGRES_USER}
       - SORMAS_POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
@@ -83,36 +87,6 @@ services:
       timeout: 3s
       retries: 3
       start_period: 30s
-
-  apache2:
-    restart: unless-stopped
-    labels:
-      - autoheal=true
-    links:
-      - sormas
-    image: hzibraunschweig/sormas-apache2:${SORMAS_DOCKER_VERSION}
-    environment:
-      - SORMAS_SERVER_URL=${SORMAS_SERVER_URL}
-      - TZ=${TZ}
-      - PROMETHEUS_SERVERS=${PROMETHEUS_SERVERS}
-    volumes:
-      - ./docker/apache2/certs:/usr/local/apache2/certs
-      - ${SORMAS_PATH}/apache2_log:/var/log/apache2
-    ports:
-      - 443:443
-      - 80:80
-    cpus: ${WEBSERVER_CPUS}
-    mem_limit: ${WEBSERVER_MEM}
-    mem_reservation: ${WEBSERVER_MEM_RESERVED}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "-I", "-k", "--resolve", "${SORMAS_SERVER_URL}:443:127.0.0.1", "https://${SORMAS_SERVER_URL}/downloads/"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 30s
-    depends_on:
-      sormas:
-        condition: service_healthy
 
   statistics:
     restart: unless-stopped
