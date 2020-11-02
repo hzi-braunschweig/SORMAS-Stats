@@ -2,3 +2,4 @@ sormas-rest.yaml
 out/*
 venv/
 .idea/
+*/__pycache__/
