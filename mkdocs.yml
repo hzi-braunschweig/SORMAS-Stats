@@ -1,0 +1,22 @@
+site_name: SORMAS Stats
+repo_name: 'hzi-braunschweig/SORMAS-Stats'
+repo_url: 'https://github.com/hzi-braunschweig/SORMAS-Stats'
+
+theme:
+  name: material
+  features:
+  - tabs
+extra:
+  version: 0.10
+  palette:
+    primary: 'cyan'
+  social:
+  - icon: 'fontawesome/brands/github-alt'
+    link: 'https://github.com/hzi-braunschweig/SORMAS-Stats'
+plugins:
+- search:
+    separator: '[\s]+'
+
+nav:
+- For Developers: 'dev/README.md'
+- Offical Website: "https://sormas.org"
