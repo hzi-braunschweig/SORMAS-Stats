@@ -34,10 +34,13 @@ SORMAS-Stats
 ```
 
 # How do I build and run it?
-1. Start the stack via `docker-compose up -d`. This might take a while as this starts more or less a complete [SORMAS-Docker]() deployment including together with the `statistics` and `grafana` container of this repository. 
-1. Insert this line into your /etc/hosts file: `127.0.0.1	sormas-docker-test.com`
-1. Once the stack has started, navigate to `sormas-docker-test.com`. Use the devloper mode to generate sample data.
-1. Navigate to `localhost:3000` and login with `admin:admin` to access Grafana. The `SORMAS Main` dashord`contains the visualizations. 
+1. Start the stack via `docker-compose up -d`. This might take a while as this 
+  starts more or less a complete [SORMAS-Docker]() deployment including together 
+  with the `statistics` and `grafana` container of this repository. 
+1. Once the stack has started, login to `http://localhost:6080/sormas-ui/#!configuration/devMode` (`admin`:`sadmin`). 
+  Use the developer mode to generate sample data.
+1. Navigate to `localhost:3000` and login with `admin:admin` to access Grafana. 
+  The `SORMAS Main` dashboard contains the visualizations. 
 
 
 The statistics scripts which pull data from the SORMAS-DB and store the results in 
