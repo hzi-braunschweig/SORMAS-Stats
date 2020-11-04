@@ -3,6 +3,9 @@ from pprint import pprint
 import sormas
 from sormas.rest import ApiException
 
+from generators.gen_cases import create_case
+from generators.gen_person import create_person
+
 # Defining the host is optional and defaults to http://localhost/sormas-rest
 # See configuration.py for a list of all supported configuration parameters.
 configuration = sormas.Configuration(
@@ -18,15 +21,16 @@ configuration.debug = True
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
 
-
 # Enter a context with an instance of the API client
 with sormas.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = sormas.CaseControllerApi(api_client)
-    case_data_dto = [sormas.CaseDataDto()] # list[CaseDataDto] |  (optional)
-
     try:
-        api_response = api_instance.post_cases(case_data_dto=case_data_dto)
-        pprint(api_response)
+        p = create_person()
+        person_dto = [p]
+        resp = sormas.PersonControllerApi(api_client).post_persons(person_dto=person_dto)
+        pprint(resp)
+        case_data_dto = [create_case(p.uuid)]
+        resp = sormas.CaseControllerApi(api_client).post_cases(case_data_dto=case_data_dto)
+        pprint(resp)
+
     except ApiException as e:
         print("Exception when calling CaseControllerApi->post_cases: %s\n" % e)
