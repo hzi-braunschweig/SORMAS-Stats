@@ -2,6 +2,7 @@ from datetime import date
 
 from universe.world import World
 
+# todo ### Data ---- should be done beforehand and fixed as parameters
 
 def main():
     # Set everything up
@@ -10,7 +11,10 @@ def main():
     world = World(date.fromisoformat('2020-02-01'))
 
     # Populate default entities in our world
-    world.add_region("Wonderland")
+    # Counties of interest
+    world.add_district("Braunschweig")
+    world.add_district("Salzgitter")
+    world.add_district("Wolfsburg")
 
     # Populate our world with n persons
     world.populate(n=5)
@@ -23,9 +27,10 @@ def main():
 
     # Great, now store the world's case history in SORMAS/JSON/CSV etc
     world.export_sormas()
-    # world.export_json()
+    #world.export_json()
 
     pass
+
 
 
 if __name__ == '__main__':

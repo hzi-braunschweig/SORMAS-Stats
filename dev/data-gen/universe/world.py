@@ -20,8 +20,10 @@ class World:
         self.today = beginning
         self.history = list()
 
-    def add_region(self, region):
-        print(f"Adding {region} to world")
+    def add_district(self, district):
+        print(f"Adding {district} to world")
+        # todo
+
 
     def populate(self, n=5):
         for _ in range(n):
@@ -86,3 +88,8 @@ class World:
 
         # make history
         self.history.append(today_tick)
+
+
+# todo
+def create_infection_chains():
+    pass
