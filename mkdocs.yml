@@ -9,7 +9,7 @@ theme:
 extra:
   version: 0.10
   palette:
-    primary: 'cyan'
+    primary: 'green'
   social:
   - icon: 'fontawesome/brands/github-alt'
     link: 'https://github.com/hzi-braunschweig/SORMAS-Stats'
@@ -17,6 +17,19 @@ plugins:
 - search:
     separator: '[\s]+'
 
+markdown_extensions:
+  - pymdownx.tabbed
+  - pymdownx.superfences
+
 nav:
-- For Developers: 'dev/README.md'
+- Sormas Stats:
+  - Sormas Stats: 'index.md'
+- Jupyter:
+  - 'jupyter.md'
+- Python:
+  - 'python.md'
+- R:
+  - R: 'r.md'
+- Generate Data:
+  - Generate Data: 'data-gen.md'
 - Offical Website: "https://sormas.org"
