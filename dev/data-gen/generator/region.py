@@ -1,9 +1,9 @@
 from sormas import RegionReferenceDto
 
-from generators.utils import sormas_db_connect
+from generator.utils import sormas_db_connect
 
 
-def region_ref():
+def default_region():
     with sormas_db_connect() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT uuid FROM region")

@@ -1,5 +1,5 @@
 from sormas import FacilityReferenceDto
 
 
-def facility_ref():
+def none_facility_ref():
     return FacilityReferenceDto(uuid="SORMAS-CONSTID-ISNONE-FACILITY")
