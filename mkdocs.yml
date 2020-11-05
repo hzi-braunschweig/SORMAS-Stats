@@ -30,6 +30,7 @@ nav:
   - 'python.md'
 - R:
   - R: 'r.md'
-- Generate Data:
-  - Generate Data: 'data-gen.md'
+- Data:
+  - Generation: 'data-gen.md'
+  - Migration: 'db.md'
 - Offical Website: "https://sormas.org"
