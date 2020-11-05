@@ -1,3 +1,5 @@
+from datetime import datetime, time
+
 from sormas import CaseDataDto, CaseClassification, InvestigationStatus
 
 from generator.district import default_district
@@ -9,6 +11,7 @@ from generator.utils import duuid
 
 
 def gen_case_dto(date, p_uuid, disease):
+    date = datetime.combine(date, time(0, 0, 0, ))
     case_dto = CaseDataDto(
         uuid=duuid(),
         disease=disease,

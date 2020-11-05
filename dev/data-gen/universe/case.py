@@ -12,6 +12,10 @@ class Case:
     def __repr__(self):
         return self.__str__()
 
+    def disease(self):
+        # todo can python do delegation?
+        return self.inner.disease
+
     def to_dict(self):
         return {
             "person": self.person.to_dict(),

@@ -19,10 +19,11 @@ def main():
     world.patient_zero()
 
     # Now we let run the simulation for 5 ticks
-    world.simulate(ticks=5)
+    world.simulate(ticks=3)
 
-    # Great, now store the result in SORMAS/JSON/CSV etc
-    world.export_json()
+    # Great, now store the world's case history in SORMAS/JSON/CSV etc
+    world.export_sormas()
+    # world.export_json()
 
     pass
 

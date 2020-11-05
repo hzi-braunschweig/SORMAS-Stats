@@ -1,12 +1,10 @@
 import datetime
 import json as _json
 from json import JSONEncoder
-from pprint import pprint
 
-import sormas
+import sormas as sormas_api
 from sormas.rest import ApiException
-
-from generator.cases import gen_case_dto
+from universe.tick import Tick
 
 
 def json(world):
@@ -27,7 +25,12 @@ def json(world):
 
 
 def sormas(world):
-    configuration = sormas.Configuration(
+    """
+
+    :type world: World
+    """
+
+    configuration = sormas_api.Configuration(
         host="https://sormas-docker-test.com/sormas-rest",
         username="SurvOff",
         password="SurvOff"
@@ -35,15 +38,18 @@ def sormas(world):
     configuration.verify_ssl = False
     configuration.debug = True
 
-    with sormas.ApiClient(configuration) as api_client:
-        try:
-            p = person_dto()
-            person_dto = [p]
-            resp = sormas.PersonControllerApi(api_client).post_persons(person_dto=person_dto)
-            pprint(resp)
-            case_data_dto = [gen_case_dto(p.uuid)]
-            resp = sormas.CaseControllerApi(api_client).post_cases(case_data_dto=case_data_dto)
-            pprint(resp)
+    with sormas_api.ApiClient(configuration) as api_client:
 
-        except ApiException as e:
-            print("Exception: %s\n" % e)
+        day: Tick
+        for day in world.history:
+            date = day.date
+            cases = day.cases
+            for case in cases:
+                person_dto = case.person
+                case_data_dto = case.inner
+                try:
+                    sormas_api.PersonControllerApi(api_client).post_persons(person_dto=[person_dto])
+                    sormas_api.CaseControllerApi(api_client).post_cases(case_data_dto=[case_data_dto])
+                    pass
+                except ApiException as e:
+                    print("Exception: %s\n" % e)

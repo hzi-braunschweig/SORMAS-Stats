@@ -17,7 +17,7 @@ def gen_person_dto(first_name=None, last_name=None, sex=None):
     if sex is None:
         sex = choice([Sex.MALE, Sex.FEMALE])
     if first_name is None:
-        first_name = choice(male_first_names)
+        first_name = choice(male_first_names) if sex is Sex.MALE else choice(female_first_names)
     if last_name is None:
         last_name = choice(last_names)
 
