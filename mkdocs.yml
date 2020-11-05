@@ -6,20 +6,17 @@ theme:
   name: material
   features:
   - tabs
+  palette:
+    primary: 'blue'
+
 extra:
   version: 0.10
-  palette:
-    primary: 'green'
   social:
   - icon: 'fontawesome/brands/github-alt'
     link: 'https://github.com/hzi-braunschweig/SORMAS-Stats'
 plugins:
 - search:
     separator: '[\s]+'
-
-markdown_extensions:
-  - pymdownx.tabbed
-  - pymdownx.superfences
 
 nav:
 - Sormas Stats:
@@ -33,4 +30,4 @@ nav:
 - Data:
   - Generation: 'data-gen.md'
   - Migration: 'db.md'
-- Offical Website: "https://sormas.org"
+- "Sormas.org": "https://sormas.org"
