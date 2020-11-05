@@ -41,8 +41,18 @@ foreign_country = 'Frankreich'
 # Probability that a case has residence abroad
 p_foreign_country = 0.05
 
-
+def country_of_residence():
+    # todo
+    pass
 # todo END
+
+# todo
+# For cases, if they live in the default country, the address is the reporting
+  # local health authority with probability `p_lha_address` and any other county
+  # with uniform probability. If the reside abroad it is "abroad".
+# todo END
+
+
 
 
 def assign_age_from_rki_age_group(ag_vec, m_a):

@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from sormas import Disease
 
+from generator.cases import gen_case_dto
 from generator.person import gen_person_dto
 from universe.case import Case
 from universe.tick import Tick
@@ -25,10 +26,18 @@ class World:
         # todo
 
 
-    def populate(self, n=5):
+    def populate_susceptible(self, n=5):
         for _ in range(n):
             p = gen_person_dto()
             self.susceptible.append(p)
+
+    # todo Create individual cases that reproduce the aggregated data from covid dashboard and SurvStat
+    def populate_cases(self, n=5):
+        for _ in range(n):
+            p = gen_case_dto()
+            self.susceptible.append(p)
+
+        # todo handle initial Ticks
 
     def patient_zero(self, disease=Disease.CORONAVIRUS):
         patient_zero = self.susceptible.pop()
@@ -88,6 +97,15 @@ class World:
 
         # make history
         self.history.append(today_tick)
+
+    def populate_infection_chains(self):
+        pass
+
+    def populate_contacts(self):
+        pass
+
+    def populate_events(self):
+        pass
 
 
 # todo
