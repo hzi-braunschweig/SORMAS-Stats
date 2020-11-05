@@ -12,10 +12,11 @@ visualizations could be made accessible from SORMAS either by
 navigating to them through a button click or by using iframes.
 
 
-# Stats with
- * [Jupyter](../dev/README.md)
- * [R](../src/stats/R)
- * [Python](../src/stats/python)
+# Get Startet with
+ * [Jupyter](jupyter.md)
+ * [R](r.md)
+ * [Python](python.md)
 
 # Internal
- * [DB Migrations](../src/stats/db/README.md)
+ * [DB Migrations](db.md)
+ * [Data-Generation](data-gen.md)

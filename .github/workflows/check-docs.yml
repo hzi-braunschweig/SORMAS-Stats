@@ -1,0 +1,16 @@
+name: Check MKDocs
+on:
+  pull_request:
+    branches:
+    - development
+
+jobs:
+  build:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout master
+      uses: actions/checkout@v1
+
+    - name: Build
+      uses: jnanadarshan/mkdocs-build-action@master
