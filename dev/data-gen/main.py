@@ -20,13 +20,13 @@ def main():
     # Populate our world with n persons
     # world.pre_populate_susceptible()
     # world.pre_populate_infected()
-    world.pre_populate_cases(n=1)
-    world.pre_populate_contacts(n=1)
+    #world.pre_populate_cases(n=1)
+    #world.pre_populate_contacts(n=1)
 
     # world.pre_populate_infection_chains() #todo
     # world.pre_populate_contacts() # todo
     #  ### Geolocations --- todo don't know yet
-    # world.pre_populate_events()   # todo
+    world.pre_populate_events(n=1)
 
     # All set! Now we start the pandemic with patient zero
     # world.patient_zero()

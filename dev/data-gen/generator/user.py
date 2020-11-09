@@ -3,6 +3,7 @@ from sormas import UserReferenceDto
 from generator.utils import sormas_db_connect
 
 
+# todo make this deterministic
 def surv_sup_user_ref():
     with sormas_db_connect() as conn:
         with conn.cursor() as cur:

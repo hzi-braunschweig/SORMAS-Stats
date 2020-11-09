@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from sormas import Disease
 
+from generator.event import gen_event_dto
 from generator.person import gen_person_dto
 from generator.utils import dnow
 from universe.case import Case
@@ -51,8 +52,10 @@ class World:
             case = Contact(person, source_case.inner.uuid, Disease.CORONAVIRUS)
             self.today.contacts.append(case)
 
-    def pre_populate_events(self):
-        pass
+    def pre_populate_events(self, n=2):
+        for _ in range(n):
+            event = gen_event_dto()
+            self.today.events.append(event)
 
     def start(self, disease=Disease.CORONAVIRUS):
         # todo needs rework regardin simuate and tick

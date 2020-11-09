@@ -4,6 +4,7 @@ from json import JSONEncoder
 
 import sormas as sormas_api
 from sormas.rest import ApiException
+
 from universe.tick import Tick
 
 
@@ -51,11 +52,17 @@ def sormas(world):
                 except ApiException as e:
                     print("Exception: %s\n" % e)
 
-            for contact in day. contacts:
+            for contact in day.contacts:
                 person_dto = contact.person
                 contact_dto = contact.inner
                 try:
                     sormas_api.PersonControllerApi(api_client).post_persons(person_dto=[person_dto])
                     sormas_api.ContactControllerApi(api_client).post_contacts(contact_dto=[contact_dto])
+                except ApiException as e:
+                    print("Exception: %s\n" % e)
+
+            for event_dto in day.events:
+                try:
+                    sormas_api.EventControllerApi(api_client).post_events(event_dto=[event_dto])
                 except ApiException as e:
                     print("Exception: %s\n" % e)
