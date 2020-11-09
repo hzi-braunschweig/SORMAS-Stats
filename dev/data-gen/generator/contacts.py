@@ -1,8 +1,17 @@
+import datetime
+
+from sormas import ContactDto
+
 # todo Begin
 # Contacts:
 # Probability that a contact resides in the county of the local health
 # authority responsible for the index (otherwise equal probabilities to reside
 # in the other counties)
+from generator.health_condition import gen_health_condition_dto
+from generator.person import person_ref, case_ref
+from generator.user import surv_sup_user_ref
+from generator.utils import dnow, duuid
+
 p_contact_reside = 2 / 3
 # Probability that a contact has been contacted by the local health authority
 # of the index
@@ -37,4 +46,22 @@ location_dist_scale = 2000
 relative_sample_size_geolocation = 100
 sub_sample_size_geolocation = 100
 
-# todo Begin
+
+# todo End
+
+
+def gen_contact_dto(person_uuid, case_uuid, disease):
+    contact_dto = ContactDto(
+        uuid=duuid(),  # todo broken handling in backend ContactFacadeEjb:280
+        person=person_ref(person_uuid),
+        report_date_time=dnow(),
+        creation_date=dnow(),  # todo  required missing
+        change_date=dnow(),  # todo  required missing
+        reporting_user=surv_sup_user_ref(),
+        last_contact_date=datetime.date.fromisoformat('2020-02-01'),
+        disease=disease,
+        caze=case_ref(case_uuid),  # todo validation exception talking about region
+        health_conditions=gen_health_condition_dto()  # todo ContactFacadeRjb:1092 nullpointer if missing
+
+    )
+    return contact_dto

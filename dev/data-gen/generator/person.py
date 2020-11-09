@@ -1,12 +1,12 @@
 import random
 from random import choice
 
-from sormas import PersonReferenceDto, Sex
+from sormas import PersonReferenceDto, Sex, CaseReferenceDto
 
 from generator.utils import duuid
 from universe.person import Person
 
-random.seed(0)
+random.seed(2)
 
 # Maximum age that can be generated
 max_age = 95
@@ -41,18 +41,19 @@ foreign_country = 'Frankreich'
 # Probability that a case has residence abroad
 p_foreign_country = 0.05
 
+
 def country_of_residence():
     # todo
     pass
+
+
 # todo END
 
 # todo
 # For cases, if they live in the default country, the address is the reporting
-  # local health authority with probability `p_lha_address` and any other county
-  # with uniform probability. If the reside abroad it is "abroad".
+# local health authority with probability `p_lha_address` and any other county
+# with uniform probability. If the reside abroad it is "abroad".
 # todo END
-
-
 
 
 def assign_age_from_rki_age_group(ag_vec, m_a):
@@ -83,11 +84,16 @@ def gen_person_dto(first_name=None, last_name=None, sex=None):
         uuid=uuid,
         sex=sex,
         first_name=first_name,
-        last_name=last_name,
+        last_name=last_name
     )
     return person_dto
 
 
-def person_ref(p_uuid):
-    person_ref_dto = PersonReferenceDto(uuid=p_uuid)
+def person_ref(person_uuid):
+    person_ref_dto = PersonReferenceDto(uuid=person_uuid)
     return person_ref_dto
+
+
+def case_ref(case_uuid):
+    case_ref_dto = CaseReferenceDto(uuid=case_uuid)
+    return case_ref_dto

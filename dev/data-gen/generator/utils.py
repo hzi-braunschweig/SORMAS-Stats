@@ -1,4 +1,3 @@
-import random
 import uuid
 from datetime import datetime
 
@@ -11,7 +10,9 @@ def sormas_db_connect(host="localhost", port="5432", dbname="sormas", user="sorm
 
 
 def duuid():
-    tmp = str(uuid.UUID(int=random.getrandbits(128)))
+    #todo make det. again
+    # tmp = str(uuid.UUID(int=random.getrandbits(128)))
+    tmp = str(uuid.uuid4())
     return tmp
 
 

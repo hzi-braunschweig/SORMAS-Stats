@@ -42,14 +42,20 @@ def sormas(world):
 
         day: Tick
         for day in world.history:
-            date = day.date
-            cases = day.cases
-            for case in cases:
+            for case in day.cases:
                 person_dto = case.person
                 case_data_dto = case.inner
                 try:
                     sormas_api.PersonControllerApi(api_client).post_persons(person_dto=[person_dto])
                     sormas_api.CaseControllerApi(api_client).post_cases(case_data_dto=[case_data_dto])
-                    pass
+                except ApiException as e:
+                    print("Exception: %s\n" % e)
+
+            for contact in day. contacts:
+                person_dto = contact.person
+                contact_dto = contact.inner
+                try:
+                    sormas_api.PersonControllerApi(api_client).post_persons(person_dto=[person_dto])
+                    sormas_api.ContactControllerApi(api_client).post_contacts(contact_dto=[contact_dto])
                 except ApiException as e:
                     print("Exception: %s\n" % e)

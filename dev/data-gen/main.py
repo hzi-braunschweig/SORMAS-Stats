@@ -13,35 +13,31 @@ def main():
 
     # Populate default entities in our world
     # Counties of interest
-    world.add_district("Braunschweig")
-    world.add_district("Salzgitter")
-    world.add_district("Wolfsburg")
+    # world.add_district("Braunschweig")
+    # world.add_district("Salzgitter")
+    # world.add_district("Wolfsburg")
 
     # Populate our world with n persons
-    #world.populate_susceptible(n=5)
-    world.populate_cases(n=3)
+    # world.pre_populate_susceptible()
+    # world.pre_populate_infected()
+    world.pre_populate_cases(n=1)
+    world.pre_populate_contacts(n=1)
 
-    world.populate_infection_chains() #todo
-    world.populate_contacts() # todo
+    # world.pre_populate_infection_chains() #todo
+    # world.pre_populate_contacts() # todo
     #  ### Geolocations --- todo don't know yet
-    world.populate_events()   # todo
-
-
-
-
-
-
+    # world.pre_populate_events()   # todo
 
     # All set! Now we start the pandemic with patient zero
     # world.patient_zero()
     # Now we let run the simulation for 5 ticks
-    #world.simulate(ticks=3)
+    # world.simulate(ticks=3)
+
+    world.stop()
 
     # Great, now store the world's case history in SORMAS/JSON/CSV etc
     world.export_sormas()
     # world.export_json()
-
-    pass
 
 
 if __name__ == '__main__':

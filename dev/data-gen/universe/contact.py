@@ -1,10 +1,11 @@
-from generator.cases import gen_case_dto
+# todo make Contact extend the Dto?
+from generator.contacts import gen_contact_dto
 
-# todo make Case extend the Dto?
-class Case:
-    def __init__(self, date, person, disease):
+
+class Contact:
+    def __init__(self, person, case_uuid, disease):
         self.person = person
-        self.inner = gen_case_dto(date, person.uuid, disease)
+        self.inner = gen_contact_dto(person.uuid, case_uuid, disease)
 
     def __str__(self):
         return f"({self.inner.disease}: {self.person})"

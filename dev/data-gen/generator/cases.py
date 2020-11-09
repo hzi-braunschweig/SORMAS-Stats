@@ -89,6 +89,7 @@ def impute_infection_date():
 
 
 def gen_case_dto(date, p_uuid, disease):
+    # FIXME date needs to be more specified
     date = datetime.combine(date, time(0, 0, 0, ))
     case_dto = CaseDataDto(
         uuid=duuid(),
