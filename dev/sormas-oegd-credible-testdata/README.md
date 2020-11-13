@@ -13,6 +13,8 @@ The content of [img/](img/) is made available to project partners in a private o
 
 Overall it takes about 20 minutes to generate the data set and about 20 minutes as well for the plots of 315 graph components.
 
+N.B. random seeds are not set (yet) so that each run please produce different results.
+
 ## Issues and improvements
 
 ### Limitations
