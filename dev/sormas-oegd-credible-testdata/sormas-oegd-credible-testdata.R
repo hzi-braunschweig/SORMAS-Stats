@@ -20,12 +20,13 @@ library(ggnetwork)
 library(tidyr)
 library(stringr)
 library(dplyr)
+library(trendbreaker) # remotes::install_github("reconhub/trendbreaker")
 
 ### Parameters ----
 
 # Computations:
-# Whether to generate the test data set or to load it
-generate_dataset <- FALSE
+generate_dataset <- FALSE # whether to generate the test data set or to load it
+plot_individual_components <- FALSE
 
 # Data download:
 # If corona dashboard data are downloaded, SurvStat data should be downloaded at
@@ -209,7 +210,7 @@ mu_event_size <- 10 # mean parameter of the Gaussian used in draw the event size
 sig_event_size <- 10 # standard deviation of the Gaussian
 min_event_size <- 5 # minimum size of an event
 p_known_participant <- 0.01 # 0.2 # proportion of participants who are a case
-  # or a contact, knowing that there is at least one case participating
+# or a contact, knowing that there is at least one case participating
 
 ### Functions ----
 
@@ -947,6 +948,7 @@ if (generate_dataset) {
     )
     iloc <- sample(icandidate_locations, size = 1, prob = p_loc_dist)
 
+    persons_df$address[icontact] <- geolocations_df$county[iloc]
     persons_df$longitude[icontact] <- geolocations_df$longitude[iloc]
     persons_df$latitude[icontact] <- geolocations_df$latitude[iloc]
 
@@ -1224,7 +1226,7 @@ if (generate_dataset) {
     stop("There are persons who are neither a case, a contact or a participant!")
   }
 
-  ### Graph components ----
+  ### Graph ----
   # For nodes without coordinates, assign longitude and latitude of the upper
   # left corner of the bounding box of the county shapes (xmin resp. ymax).
 
@@ -1309,52 +1311,55 @@ if (generate_dataset) {
 
   # Persons
   saveRDS(persons_df, here(data_dir, "out/persons_df.rds"))
-  write.csv(persons_df, here(data_dir, "out/persons_df-format1.csv"),
+  write.csv(persons_df, here(data_dir, "out/persons_df.csv"),
     row.names = FALSE, fileEncoding = "UTF-8")
-  write.csv2(persons_df, here(data_dir, "out/persons_df-format2.csv"),
-    row.names = FALSE, fileEncoding = "UTF-8")
-  write.xlsx(persons_df, here(data_dir, "out/persons_df-format3.xlsx"),
-    rowNames = FALSE)
+  # write.csv2(persons_df, here(data_dir, "out/persons_df-format2.csv"),
+  #   row.names = FALSE, fileEncoding = "UTF-8")
+  # write.xlsx(persons_df, here(data_dir, "out/persons_df-format3.xlsx"),
+  #   rowNames = FALSE)
+
+  # Geolocations
+  saveRDS(geolocations_df, here(data_dir, "out/geolocations_df.rds"))
 
   # Symptoms
   saveRDS(symptoms_cases_df, here(data_dir, "out/symptoms_cases_df.rds"))
   write.csv(symptoms_cases_df,
-    here(data_dir, "out/symptoms_cases_df-format1.csv"), row.names = FALSE,
+    here(data_dir, "out/symptoms_cases_df.csv"), row.names = FALSE,
     fileEncoding = "UTF-8")
-  write.csv2(symptoms_cases_df,
-    here(data_dir, "out/symptoms_cases_df-format2.csv"), row.names = FALSE,
-    fileEncoding = "UTF-8")
-  write.xlsx(symptoms_cases_df,
-    here(data_dir, "out/symptoms_cases_df-format3.xlsx"), rowNames = FALSE)
+  # write.csv2(symptoms_cases_df,
+  #   here(data_dir, "out/symptoms_cases_df-format2.csv"), row.names = FALSE,
+  #   fileEncoding = "UTF-8")
+  # write.xlsx(symptoms_cases_df,
+  #   here(data_dir, "out/symptoms_cases_df-format3.xlsx"), rowNames = FALSE)
 
   # Contacts
   saveRDS(contacts_df, here(data_dir, "out/contacts_df.rds"))
-  write.csv(contacts_df, here(data_dir, "out/contacts_df-format1.csv"),
+  write.csv(contacts_df, here(data_dir, "out/contacts_df.csv"),
     row.names = FALSE, fileEncoding = "UTF-8")
-  write.csv2(contacts_df, here(data_dir, "out/contacts_df-format2.csv"),
-    row.names = FALSE, fileEncoding = "UTF-8")
-  write.xlsx(contacts_df, here(data_dir, "out/contacts_df-format3.xlsx"),
-    rowNames = FALSE)
+  # write.csv2(contacts_df, here(data_dir, "out/contacts_df-format2.csv"),
+  #   row.names = FALSE, fileEncoding = "UTF-8")
+  # write.xlsx(contacts_df, here(data_dir, "out/contacts_df-format3.xlsx"),
+  #   rowNames = FALSE)
 
   # Events
   saveRDS(events_df, here(data_dir, "out/events_df.rds"))
-  write.csv(events_df, here(data_dir, "out/events_df-format1.csv"),
+  write.csv(events_df, here(data_dir, "out/events_df.csv"),
     row.names = FALSE, fileEncoding = "UTF-8")
-  write.csv2(events_df, here(data_dir, "out/events_df-format2.csv"),
-    row.names = FALSE, fileEncoding = "UTF-8")
-  write.xlsx(events_df, here(data_dir, "out/events_df-format3.xlsx"),
-    rowNames = FALSE)
+  # write.csv2(events_df, here(data_dir, "out/events_df-format2.csv"),
+  #   row.names = FALSE, fileEncoding = "UTF-8")
+  # write.xlsx(events_df, here(data_dir, "out/events_df-format3.xlsx"),
+  #   rowNames = FALSE)
 
   # Event participants
   saveRDS(event_participants_df, here(data_dir, "out/event_participants_df.rds"))
   write.csv(event_participants_df,
-    here(data_dir, "out/event_participants_df-format1.csv"), row.names = FALSE,
+    here(data_dir, "out/event_participants_df.csv"), row.names = FALSE,
     fileEncoding = "UTF-8")
-  write.csv2(event_participants_df,
-    here(data_dir, "out/event_participants_df-format2.csv"), row.names = FALSE,
-    fileEncoding = "UTF-8")
-  write.xlsx(event_participants_df,
-    here(data_dir, "out/event_participants_df-format3.xlsx"), rowNames = FALSE)
+  # write.csv2(event_participants_df,
+  #   here(data_dir, "out/event_participants_df-format2.csv"), row.names = FALSE,
+  #   fileEncoding = "UTF-8")
+  # write.xlsx(event_participants_df,
+  #   here(data_dir, "out/event_participants_df-format3.xlsx"), rowNames = FALSE)
 
   # Clusters
   saveRDS(network_graph, here(data_dir, "out/network_graph.rds"))
@@ -1362,6 +1367,7 @@ if (generate_dataset) {
 } else {
 
   persons_df <- readRDS(here(data_dir, "out/persons_df.rds"))
+  geolocations_df <- readRDS(here(data_dir, "out/geolocations_df.rds"))
   symptoms_cases_df <- readRDS(here(data_dir, "out/symptoms_cases_df.rds"))
   contacts_df <- readRDS(here(data_dir, "out/contacts_df.rds"))
   events_df <- readRDS(here(data_dir, "out/events_df.rds"))
@@ -1372,6 +1378,8 @@ if (generate_dataset) {
 }
 
 ### Plots ----
+
+### Time series and distributions ----
 
 # Case counts as functions of reporting, onset and infection dates
 case_count_ts <- persons_df %>%
@@ -1408,12 +1416,12 @@ case_count_ts_plot <- ggplot(case_count_ts_full,
 ggsave(case_count_ts_plot, filename = here(img_dir, "case_count_ts_plot.pdf"),
   width = 20, height = 15, units = "cm")
 
-# Reproduction number Rt as read from the infection degree
+# Community reproduction number Rt as read from the infection degree
 Rt_df <- persons_df %>%
   filter(is_case) %>%
   select(infection_date, degree) %>%
   group_by(infection_date) %>%
-  summarise(Rt = mean(degree)) %>%
+  summarise(Rt = mean(degree, na.rm = TRUE)) %>%
   ungroup() %>%
   right_join(
     tibble(infection_date =
@@ -1451,6 +1459,49 @@ Rt_plot <- ggplot(Rt_df, aes(x=infection_date)) +
 ggsave(Rt_plot, filename = here(img_dir, "Rt_plot.pdf"),
   width = 20, height = 15, units = "cm")
 
+# Community dispersion index Dt as read from the infection degree
+Dt_df <- persons_df %>%
+  filter(is_case) %>%
+  select(infection_date, degree) %>%
+  group_by(infection_date) %>%
+  summarise(Dt = var(degree, na.rm = TRUE) / mean(degree, na.rm = TRUE)) %>%
+  ungroup() %>%
+  right_join(
+    tibble(infection_date =
+        seq(min(case_count_ts$date), max(case_count_ts$date), by = "day")
+    )
+  ) %>%
+  mutate(Dt = ifelse(is.na(Dt), 0, Dt)) %>%
+  arrange(infection_date)
+Dt_df$Dt_mean <- c(
+  rep(NA, 3),
+  rollmean(Dt_df$Dt, 7, align = "center"),
+  rep(NA, 3)
+)
+Dt_df$Dt_sd <- c(
+  rep(NA, 3),
+  rollapply(Dt_df$Dt, 7, sd, align = "center"),
+  rep(NA, 3)
+)
+
+Dt_plot <- ggplot(Dt_df, aes(x=infection_date)) +
+  geom_ribbon(aes(ymin = pmax(0, Dt_mean-Dt_sd), ymax = Dt_mean+Dt_sd),
+    fill = "grey75", alpha = 0.5) +
+  geom_line(aes(y=Dt), color = "black", size = 0.3) +
+  geom_line(aes(y=Dt_mean), color = vega_colors[1], size = 1) +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  ggtitle(
+    "Dispersion index D from community infection degree",
+    subtitle = paste0(
+      "ignores the imported cases, i.e. without known index case\n",
+      "with 7-day rolling mean +/- 1 standard deviation"
+    )
+  ) +
+  labs(y = "D community") +
+  theme_bw()
+ggsave(Dt_plot, filename = here(img_dir, "Dt_plot.pdf"),
+  width = 20, height = 15, units = "cm")
+
 # Infection degree distribution with mean, median and dispersion index
 # D = var/mu
 degrees <- persons_df %>% filter(is_case) %>% select(degree)
@@ -1483,9 +1534,195 @@ ggsave(degrees_plot,
   filename = here(img_dir, "degrees_plot.pdf"),
   width = 20, height = 15, units = "cm")
 
+# Serial interval
+persons_df_infected <- persons_df %>% filter(!is.na(infected_by))
+infect_intervals <- NULL
+for (i in 1:nrow(persons_df_infected)) {
+  ## DEBUG
+  # i <- 1
+
+  infectdate_infected <- persons_df_infected$infection_date[i]
+  infectdate_infectee <- persons_df_infected %>%
+    filter(id == persons_df_infected$infected_by[i]) %>%
+    pull(infection_date)
+  infect_intervals <- bind_rows(infect_intervals,
+    tibble(interval = as.numeric(infectdate_infected - infectdate_infectee)))
+
+}
+# Fit a Gamma distribution, remove intervals of 0
+infect_intervals_fit <- glm(interval ~ 1,
+  infect_intervals %>% filter(interval > 0), family = "Gamma")
+infect_intervals_distrib <- tibble(
+  interval = 1:max(infect_intervals$interval),
+  density = dgamma(
+    1:max(infect_intervals$interval),
+    shape = summary(infect_intervals_fit)$dispersion /
+      infect_intervals_fit$coefficients,
+    scale = summary(infect_intervals_fit)$dispersion
+  )
+)
+infect_intervals_plot <- ggplot(infect_intervals,
+    aes(interval, after_stat(density))) +
+  geom_histogram(color = "black", fill = vega_colors[1], size = 0.5,
+    bins = nrow(infect_intervals_distrib)) +
+  geom_line(data = infect_intervals_distrib,
+    aes(interval, density)) +
+  ggtitle("Serial intervial distribution",
+    subtitle = paste0("mean = ",
+      signif(mean(infect_intervals$interval), digits = 2), "\n",
+      "fit with Gamma distribution (intervals 0 removed)")) +
+  theme_bw()
+ggsave(infect_intervals_plot,
+  filename = here(img_dir, "infect_intervals_plot.pdf"), width = 20,
+  height = 15, units = "cm")
+
+# Delays
+reporting_delays <- persons_df %>%
+  filter(!is.na(onset_date)) %>%
+  mutate(delay = as.numeric(reporting_date-onset_date)) %>%
+  select(delay)
+p_reporting_delay <- fitdist(reporting_delays$delay, "gumbel",
+  start = list(a = 10, b = 10))
+reporting_delay_distrib <- tibble(
+  delay = min(reporting_delays$delay):max(reporting_delays$delay),
+  density = dgumbel(min(reporting_delays$delay):max(reporting_delays$delay),
+    p_reporting_delay$estimate['a'], p_reporting_delay$estimate['b'])
+)
+reporting_delays_plot <- ggplot(reporting_delays,
+  aes(delay, after_stat(density))) +
+  geom_histogram(color = "black", fill = vega_colors[1], size = 0.5,
+    bins = nrow(reporting_delay_distrib)) +
+  geom_line(data = reporting_delay_distrib,
+    aes(delay, density)) +
+  ggtitle("Distribution of delay between onset and reporting date",
+    subtitle = "fit with Gumbel distribution") +
+  theme_bw()
+ggsave(reporting_delays_plot,
+  filename = here(img_dir, "reporting_delays_plot.pdf"), width = 20,
+  height = 15, units = "cm")
+
+# Symptom distributions
+# Joint distribution
+joint_symptoms <- NULL
+for (s1 in p_symptoms$symptom) {
+  joint_symptoms <- bind_rows(
+    joint_symptoms,
+    tibble(symptom1 = s1, symptom2 = s1,
+      n = symptoms_cases_df %>% filter(symptom == s1) %>% pull(id_person) %>%
+        unique() %>% length())
+  )
+  for (s2 in p_symptoms$symptom[p_symptoms$symptom != s1]) {
+    n_joint <- symptoms_cases_df %>%
+      filter(symptom %in% c(s1, s2)) %>%
+      count(id_person) %>%
+      filter(n > 1) %>%
+      nrow()
+    joint_symptoms <- bind_rows(
+      joint_symptoms,
+      tibble(symptom1 = s1, symptom2 = s2, n = n_joint)
+    )
+  }
+}
+joint_symptoms_plot <- ggplot(joint_symptoms, aes(symptom1, symptom2,
+    fill = n)) +
+  geom_tile(color = "black") +
+  scale_fill_gradient(low = vega_colors[1], high = vega_colors[2]) +
+  labs(x = "symptom", y = "symptom") +
+  ggtitle("Co-occurrence of symptoms") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggsave(joint_symptoms_plot,
+  filename = here(img_dir, "joint_symptoms_plot.pdf"), width = 20,
+  height = 15, units = "cm")
+
+# Marginals, including cases without symptomes
+marginal_symptoms <- tibble(
+  symptom = c("no symptom", "any symptom"),
+  n = c(
+    persons_df %>% filter(is_case & !has_symptoms) %>% nrow(),
+    persons_df %>% filter(is_case & has_symptoms) %>% nrow()
+  )
+)
+for (sy in p_symptoms$symptom) {
+  marginal_symptoms <- bind_rows(
+    marginal_symptoms,
+    tibble(
+      symptom = sy,
+      n = joint_symptoms %>% filter(symptom1 == sy & symptom2 == sy) %>%
+        pull(n)
+    )
+  )
+}
+marginal_symptoms$symptom <- factor(marginal_symptoms$symptom,
+  levels = marginal_symptoms$symptom)
+marginal_symptoms_plot <- ggplot(marginal_symptoms, aes(symptom, n,
+    fill = symptom %in% c("no symptom", "any symptom"))) +
+  geom_bar(stat = "identity", color = "black", size = 0.5) +
+  scale_x_discrete(breaks = marginal_symptoms$symptom) +
+  scale_fill_manual(values = list("TRUE" = vega_colors[1], "FALSE" = "grey50")) +
+  ggtitle("Distribution of symptoms",
+    subtitle = paste0("RKI case definitions: C (any symptom; ",
+      sum(persons_df$case_def_id == "C", na.rm = TRUE), "), D (no symptom; ",
+      sum(persons_df$case_def_id == "D", na.rm = TRUE), "), E (unknown; ",
+      sum(persons_df$case_def_id == "E", na.rm = TRUE), ")")) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "none")
+ggsave(marginal_symptoms_plot,
+  filename = here(img_dir, "marginal_symptoms_plot.pdf"), width = 20,
+  height = 15, units = "cm")
+
+### Time series analyses ----
+# for local health authority Braunschweig, based on infection date
+
+count_ts <- persons_df %>%
+  filter(local_health_authority == "Braunschweig" & is_case) %>%
+  select(infection_date) %>%
+  group_by(infection_date) %>%
+  summarize(count = n()) %>%
+  ungroup() %>%
+  arrange(infection_date) %>%
+  mutate(weekday = weekdays(infection_date, abbreviate = FALSE))
+
+# Anomaly detection with package `trendbreaker`
+
+asmodee_models <- list(
+  regression = lm_model(count ~ infection_date),
+  poisson_constant = glm_model(count ~ 1, family = "poisson"),
+  negbin_time = glm_nb_model(count ~ infection_date),
+  negbin_time_weekday = glm_nb_model(count ~ infection_date + weekday),
+  negbin_time_weekday2 = glm_nb_model(count ~ infection_date * weekday)
+)
+asmodee_res <- asmodee(
+  data = count_ts %>% filter(infection_date >= max(infection_date) - 84),
+  models = asmodee_models,
+  method = evaluate_aic,
+  fixed_k = 7,
+  alpha = 0.1
+)
+anomaly_detection_plot <- plot(asmodee_res, x_axis = "infection_date",
+  point_size = 1, guide = TRUE) +
+  ggtitle("Anomaly detection for Braunschweig",
+    subtitle = "algorithm trendbreaker::ASMODEE, k = 7, alpha = 0.1")
+ggsave(anomaly_detection_plot,
+  filename = here(img_dir, "anomaly_detection_plot.pdf"), width = 20,
+  height = 15, units = "cm")
+
+# Nowcasting and Re(t)
+# using https://github.com/FelixGuenther/nc_covid19_bavaria
+# TODO
+
+### Graphs ----
+
 # Individual clusters, in abstract, in time (phylotree, dist = time between
 # infections or geographical distance), in space
 # TODO: write a function instead of repeating the code for plotting the graphs
+# TODO: filter graphs using `persons_df$is_case`, `$has_contact`,
+#       `$was_in_event`:
+#       - "case" = `is_case`
+#       - "contact" = `!is_case & has_contact`
+#       - "participant" = `!is_case & !has_contact & was_in_event` (where
+#         `was_in_event` is actually superfluous but might be useful if further
+#         person types are added later)
 node_colors <- vega_colors[1:4]
 names(node_colors) <- c("case", "contact", "event", "participant")
 
@@ -1577,7 +1814,7 @@ csize_plot <- ggplot(network_components$csize %>% as_tibble() %>%
   ggtitle(
     "Component size distribution",
     subtitle = paste0(
-      "including cases, contacts, events and participants\n",
+      "including all cases, contacts, events and participants\n",
       "mean = ", signif(mean(network_components$csize), 2),
       ", median = ", signif(median(network_components$csize), 2),
       ", dispersion index D = var/µ = ",
@@ -1589,101 +1826,198 @@ ggsave(csize_plot, filename = here(img_dir, "csize_plot.pdf"), width = 20,
   height = 15, units = "cm")
 
 # Individual components
-tic()
-for (graphcomp in c("all", names(components_list))) {
+if (plot_individual_components) {
 
-  dir.create(here(img_dir, paste0("components/", graphcomp)),
-    showWarnings = FALSE, recursive = TRUE)
+  tic()
+  for (graphcomp in c("all",
+          names(components_list)[network_components$csize > 1])) {
 
-  # Select a component
-  if (graphcomp == "all") {
-    subnetwork_component <- network_graph
-    comp_size <- network_graph %>% activate(nodes) %>% as_tibble() %>% nrow()
-  } else {
-    subnetwork_component <- network_graph %>%
-      activate(nodes) %>%
-      filter(id %in% components_list[[graphcomp]])
-    comp_size <- length(components_list[[graphcomp]])
-  }
+    dir.create(here(img_dir, paste0("components/", graphcomp)),
+      showWarnings = FALSE, recursive = TRUE)
 
-  # Plot graph in an abstract space
-  abstract_graph <- ggraph(subnetwork_component, layout = "igraph",
-    algorithm = "nicely") +
-    geom_edge_fan(show.legend = FALSE, color = "black",
-      aes(alpha = stat(index))) +
-    geom_node_point(aes(color = type, size = degree, fill = root_case),
-      shape = 21, stroke = 1.5) +
-    scale_color_manual(values = node_colors) +
-    scale_fill_manual(values = list("TRUE" = vega_colors[1],
-      "FALSE" = rgb(0, 0, 0, 0), na.value = rgb(0, 0, 0, 0))) +
-    ggtitle(paste("Component", graphcomp),
-      subtitle = paste0("size = ", comp_size,
-        ifelse(graphcomp == "all", ", solitary cases excluded", ""))) +
-    theme_graph(foreground = "black", fg_text_colour = "white",
-      base_family = "", title_face = "plain", title_size = 14)
-  ggsave(abstract_graph,
-    filename = here(img_dir, paste0("components/", graphcomp,
-      "/abstract_graph.pdf")),
-    width = 20, height = 15, units = "cm")
-
-  # Show underlying map: interactive
-  geo_graph_leaflet <- tm_shape(county_shapes) +
-    tm_borders(lwd = 2) +
-    tm_shape(subnetwork_component %>% activate(edges) %>% as_tibble() %>%
-      st_as_sf() %>% st_set_crs(4326)) +
-    tm_lines(col = "grey60")
-  for(ntype in c("case", "contact", "event", "participant")) {
-    if (nrow(subnetwork_component %>% activate(nodes) %>%
-        filter(type == ntype) %>% as_tibble()) > 0) {
-      geo_graph_leaflet <- geo_graph_leaflet +
-        tm_shape(subnetwork_component %>% activate(nodes) %>%
-          filter(type == ntype) %>% as_tibble() %>% st_as_sf() %>%
-          st_set_crs(4326)) +
-        tm_dots(col = node_colors[[ntype]], size = 0.1)
+    # Select a component
+    if (graphcomp == "all") {
+      subnetwork_component <- network_graph
+      comp_size <- network_graph %>% activate(nodes) %>% as_tibble() %>% nrow()
+    } else {
+      subnetwork_component <- network_graph %>%
+        activate(nodes) %>%
+        filter(id %in% components_list[[graphcomp]])
+      comp_size <- length(components_list[[graphcomp]])
     }
-  }
-  geo_graph_leaflet <- geo_graph_leaflet +
-    tmap_options(basemaps = 'OpenStreetMap', basemaps.alpha = 0.5)
-  geo_graph_leaflet <- tmap_leaflet(geo_graph_leaflet, mode = "view")
-  htmlwidgets::saveWidget(geo_graph_leaflet,
-    file = here(img_dir, paste0("components/", graphcomp,
-      "/subnetwork_component.html")))
 
-  # Show underlying map: static
-  # Method 1: save PNG from Leaflet widget
-  # webshot::install_phantomjs()
-  webshot::webshot(
-    here(img_dir, paste0("components/", graphcomp,
-      "/subnetwork_component.html")),
-    here(img_dir, paste0("components/", graphcomp,
-      "/subnetwork_component.png"))
+    # Plot graph in an abstract space
+    abstract_graph <- ggraph(subnetwork_component, layout = "igraph",
+      algorithm = "nicely") +
+      geom_edge_fan(show.legend = FALSE, color = "black",
+        aes(alpha = stat(index))) +
+      geom_node_point(aes(color = type, size = degree, fill = root_case),
+        shape = 21, stroke = 1.5) +
+      scale_color_manual(values = node_colors) +
+      scale_fill_manual(values = list("TRUE" = vega_colors[1],
+        "FALSE" = rgb(0, 0, 0, 0), na.value = rgb(0, 0, 0, 0))) +
+      ggtitle(paste("Component", graphcomp),
+        subtitle = paste0("size = ", comp_size,
+          ifelse(graphcomp == "all", ", solitary cases excluded", ""))) +
+      theme_graph(foreground = "black", fg_text_colour = "white",
+        base_family = "", title_face = "plain", title_size = 14)
+    ggsave(abstract_graph,
+      filename = here(img_dir, paste0("components/", graphcomp,
+        "/abstract_graph.pdf")),
+      width = 20, height = 15, units = "cm")
+
+    # Show underlying map: interactive
+    geo_graph_leaflet <- tm_shape(county_shapes) +
+      tm_borders(lwd = 2) +
+      tm_shape(subnetwork_component %>% activate(edges) %>% as_tibble() %>%
+          st_as_sf() %>% st_set_crs(4326)) +
+      tm_lines(col = "grey60")
+    for(ntype in c("case", "contact", "event", "participant")) {
+      if (nrow(subnetwork_component %>% activate(nodes) %>%
+          filter(type == ntype) %>% as_tibble()) > 0) {
+        geo_graph_leaflet <- geo_graph_leaflet +
+          tm_shape(subnetwork_component %>% activate(nodes) %>%
+              filter(type == ntype) %>% as_tibble() %>% st_as_sf() %>%
+              st_set_crs(4326)) +
+          tm_dots(col = node_colors[[ntype]], size = 0.1)
+      }
+    }
+    geo_graph_leaflet <- geo_graph_leaflet +
+      tmap_options(basemaps = 'OpenStreetMap', basemaps.alpha = 0.5)
+    geo_graph_leaflet <- tmap_leaflet(geo_graph_leaflet, mode = "view")
+    htmlwidgets::saveWidget(geo_graph_leaflet,
+      file = here(img_dir, paste0("components/", graphcomp,
+        "/subnetwork_component.html")))
+
+    # Show underlying map: static
+    # Method 1: save PNG from Leaflet widget
+    # webshot::install_phantomjs()
+    webshot::webshot(
+      here(img_dir, paste0("components/", graphcomp,
+        "/subnetwork_component.html")),
+      here(img_dir, paste0("components/", graphcomp,
+        "/subnetwork_component.png"))
+    )
+
+    # Method 2: query map and draw with ggplot
+    bb_counties <- bb(county_shapes)
+    names(bb_counties) <- c("left", "bottom", "right", "top")
+    county_map <- get_map(bb_counties)
+    geo_graph_map <- ggmap(county_map) +
+      geom_raster(hjust = 0, vjust = 0, fill = "white", alpha = 0.5) +
+      geom_sf(data = county_shapes, fill = NA, inherit.aes = FALSE) +
+      geom_sf(data = subnetwork_component %>% activate(edges) %>%
+          as_tibble() %>% st_as_sf() %>% st_set_crs(4326), color = "grey60",
+        inherit.aes = FALSE) +
+      geom_sf(data = subnetwork_component %>% activate(nodes) %>% as_tibble() %>%
+          st_as_sf() %>% st_set_crs(4326), aes(color = type, size = degree,
+            fill = root_case),
+        shape = 21, stroke = 1.5, inherit.aes = FALSE) +
+      scale_color_manual(values = node_colors) +
+      scale_fill_manual(values = list("TRUE" = vega_colors[1],
+        "FALSE" = rgb(0, 0, 0, 0), na.value = rgb(0, 0, 0, 0))) +
+      ggtitle(paste("Component", graphcomp),
+        subtitle = paste0("size = ", comp_size,
+          ifelse(graphcomp == "all", ", solitary cases excluded", ""))) +
+      theme_bw() +
+      theme(panel.grid = element_blank())
+    ggsave(geo_graph_map,
+      filename = here(img_dir, paste0("components/", graphcomp,
+        "/geo_graph_map.pdf")),
+      width = 20, height = 15, units = "cm")
+  }
+  toc()
+
+}
+
+# Longest paths
+longest_path_relativesizes <- NULL
+for (graphcomp in names(components_list)[network_components$csize > 1]) {
+
+  subnetwork_component <- network_graph %>%
+    activate(nodes) %>%
+    filter(id %in% components_list[[graphcomp]])
+
+  longest_path_relativesizes <- bind_rows(
+    longest_path_relativesizes,
+    tibble(
+      cases = max(distances(subnetwork_component %>% activate(nodes) %>%
+          filter(type == "case"))) /
+          nrow(subnetwork_component %>% activate(nodes) %>% as_tibble() %>%
+            filter(type == "case")),
+      casescontacts = max(distances(subnetwork_component %>% activate(nodes) %>%
+          filter(type %in% c("case", "contact")))) /
+          nrow(subnetwork_component %>% activate(nodes) %>% as_tibble() %>%
+              filter(type %in% c("case", "contact"))),
+      allnodes = max(distances(subnetwork_component)) /
+          nrow(subnetwork_component %>% activate(nodes) %>% as_tibble())
+    )
   )
 
-  # Method 2: query map and draw with ggplot
-  bb_counties <- bb(county_shapes)
-  names(bb_counties) <- c("left", "bottom", "right", "top")
-  county_map <- get_map(bb_counties)
-  geo_graph_map <- ggmap(county_map) +
-    geom_raster(hjust = 0, vjust = 0, fill = "white", alpha = 0.5) +
-    geom_sf(data = county_shapes, fill = NA, inherit.aes = FALSE) +
-    geom_sf(data = subnetwork_component %>% activate(edges) %>% as_tibble() %>%
-        st_as_sf() %>% st_set_crs(4326), color = "grey60", inherit.aes = FALSE) +
-    geom_sf(data = subnetwork_component %>% activate(nodes) %>% as_tibble() %>%
-        st_as_sf() %>% st_set_crs(4326), aes(color = type, size = degree,
-          fill = root_case),
-      shape = 21, stroke = 1.5, inherit.aes = FALSE) +
-    scale_color_manual(values = node_colors) +
-    scale_fill_manual(values = list("TRUE" = vega_colors[1],
-      "FALSE" = rgb(0, 0, 0, 0), na.value = rgb(0, 0, 0, 0))) +
-    ggtitle(paste("Component", graphcomp),
-      subtitle = paste0("size = ", comp_size,
-        ifelse(graphcomp == "all", ", solitary cases excluded", ""))) +
-    theme_bw() +
-    theme(panel.grid = element_blank())
-  ggsave(geo_graph_map,
-    filename = here(img_dir, paste0("components/", graphcomp,
-      "/geo_graph_map.pdf")),
-    width = 20, height = 15, units = "cm")
 }
-toc()
+longest_path_relativesizes <- longest_path_relativesizes %>%
+  pivot_longer(cols = everything(), names_to = "node_type",
+    values_to = "relative_length")
+longest_path_relativesizes_plot <- ggplot(longest_path_relativesizes,
+  aes(relative_length, color = node_type)) +
+  geom_density(size = 1) +
+  scale_color_manual(values = c("cases" = vega_colors[1],
+    "casescontacts" = vega_colors[2], "allnodes" = vega_colors[3])) +
+  labs(x = "relative length", color = "node types") +
+  ggtitle("Length of longest path relative to component size") +
+  theme_bw()
+ggsave(longest_path_relativesizes_plot,
+  filename = here(img_dir, "longest_path_relativesizes_plot.pdf"), width = 20,
+  height = 15, units = "cm")
+
+# Pick one example to illustrate shortest path
+graphcomp_example <- 5
+node_from <- "824"
+node_to <- "1306"
+subnetwork_component <- network_graph %>%
+  activate(nodes) %>%
+  filter(id %in% components_list[[graphcomp_example]])
+shortestpath <- shortest_paths(
+  graph = subnetwork_component,
+  from = which(subnetwork_component %>% activate(nodes) %>% pull(id) == node_from),
+  to = which(subnetwork_component %>% activate(nodes) %>% pull(id) == node_to),
+  output = 'both'
+)
+
+subnetwork_component <- subnetwork_component %>% activate(edges) %>%
+  mutate(path_type = ifelse(
+    from %in% unlist(shortestpath$vpath) & to %in% unlist(shortestpath$vpath),
+    "shortest_path",
+    "other")
+  )
+shortest_path_plot <- ggraph(subnetwork_component, layout = "igraph",
+  algorithm = "nicely") +
+  geom_edge_fan(aes(linetype = path_type)) +
+  geom_node_point(aes(color = type, size = degree, fill = root_case),
+    shape = 21, stroke = 1.5) +
+  scale_color_manual(values = node_colors) +
+  scale_fill_manual(values = list("TRUE" = vega_colors[1],
+    "FALSE" = rgb(0, 0, 0, 0), na.value = rgb(0, 0, 0, 0))) +
+  ggtitle(paste0("Shortest path from case ", node_from, " to case ", node_to),
+    subtitle = paste0("component ", graphcomp_example)) +
+  theme_graph(foreground = "black", fg_text_colour = "white",
+    base_family = "", title_face = "plain", title_size = 14)
+ggsave(shortest_path_plot, filename = here(img_dir, "shortest_path_plot.pdf"),
+  width = 20, height = 15, units = "cm")
+
+# Look at inter-county components and summarize them
+# network_graph_address <- network_graph %>%
+#   activate(nodes) %>%
+#   left_join(
+#     bind_rows(
+#       persons_df %>% mutate(id = as.character(id)) %>% select(id, address),
+#       events_df %>% mutate(id = paste0("e", id)) %>% select(id, address)
+#     )
+#   )
+#
+# address_nodes <- network_graph_address %>%
+#   activate(nodes) %>%
+#   as_tibble() %>%
+#   count(type, address) %>%
+#   mutate(id = row_number())
 
