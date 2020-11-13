@@ -1,0 +1,197 @@
+---
+title: Data visualization for SORMAS
+subtitle: 10 November 2020
+author: \newline \newline Stéphane Ghozzi \newline \small Hemholtz Centre for Infection Research (HZI) \newline stephane.ghozzi@helmholtz-hzi.de \normalsize
+fontsize: 8pt
+output:
+  beamer_presentation: 
+    includes:
+      in_header: presentation-beamer-header.tex
+    slide_level: 2
+    keep_tex: yes
+---
+
+## Software
+
+SORMAS is an infectious-disease surveillance and response tool for recording:
+
+- **cases** (persons infected)
+- their **contacts**
+- **events** and their **participants**
+
+\vspace{0.75cm}
+
+open source
+
+deployed in France, Germany, Ghana, Nigeria, Switzerland
+
+HZI + partners: development, training, support
+
+current development focus on **COVID-19**
+
+\vspace{0.75cm}
+
+https://www.sormas.org/ \newline
+https://www.sormas-oegd.de/ \newline
+https://github.com/hzi-braunschweig/SORMAS-Project
+
+## Data
+
+High dimensional:
+
+- person (address, phone number, sex, age, occupation, ...)
+- disease course (symptoms, laboratory tests, ...)
+- context (setting of event, ...)
+- workflow of public-health workers (contact in quarantaine, ...)
+
+... and much more!
+
+N.B. strong data privacy
+
+\vspace{0.75cm}
+
+In progress: generation of a **credible synthetic data set** for
+
+- software testing
+- training
+- **analyses, visualizations, collaborations**
+
+## Visualizations
+
+### The usual
+
+\vspace{0.5cm}
+
+- distributions
+- time series
+- choropleth maps
+- ...
+
+\vspace{1cm}
+
+### Indicators
+
+\vspace{0.5cm}
+
+- reproduction number $R_e$
+- dispersion factor $K$
+- anomaly detection
+- ...
+
+---
+
+### Networks
+
+\vspace{0.5cm}
+
+the most interesting... and challenging!
+
+\vspace{0.5cm}
+
+Idea/requirement: 
+
+- graphs of **infections**, **contacts** and **event participation**
+- both **abstract** and in geographical **space**
+- highlight necessary collaboration between adminstartive units
+
+\vspace{0.5cm}
+
+Difficulty:
+
+- quickly difficult to read, e.g. ~ 13,000 persons and events in COVID-19 test data for only 3 counties
+- high-dimensionality of relevant information
+
+\vspace{0.5cm}
+
+$\Longrightarrow$ need to hierarchize and navigate information!
+
+## Networks: first idea
+
+\small
+
+In progress, rough sketch... still messy!
+
+\vspace{0.25cm}
+
+1. Build graph:
+- nodes = persons and events
+- edges = infection, contact and participation
+
+\vspace{0.25cm}
+
+2. Filter nodes:
+- by time, e.g. of reporting
+- by **components** (connected subgraphs) ~ clusters
+
+\normalsize
+
+\tiny
+N.B. COVID19 component sizes skewed: most cases infect no one, a few larger clusters
+\normalsize
+
+\vspace{0.25cm}
+
+\small
+
+3. Aggregation at regional level:
+- highlight *trans-regional* components
+
+\vspace{0.25cm}
+
+4. Visualization:
+- node color = type of person or event
+- node size = degree or betweenness (aggregated: number of persons)
+- edge type = type relation (aggregated: number of relations)
+- **interactive**
+
+\normalsize
+
+---
+
+## Example 1: component with infection chain
+
+abstract visualization
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/14/abstract_graph.pdf}
+\end{center}
+
+---
+
+static visualization in space
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/14/geo_graph_map.pdf}
+\end{center}
+
+---
+
+interactive visualization in space
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/14/subnetwork_component.png}
+\end{center}
+
+## Example 2: component with event
+
+abstract visualization
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/55/abstract_graph.pdf}
+\end{center}
+
+---
+
+static visualization in space
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/55/geo_graph_map.pdf}
+\end{center}
+
+---
+
+interactive visualization in space
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/55/subnetwork_component.png}
+\end{center}

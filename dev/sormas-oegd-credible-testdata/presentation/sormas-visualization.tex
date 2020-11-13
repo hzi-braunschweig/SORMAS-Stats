@@ -1,0 +1,428 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  8pt,
+  ignorenonframetext,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{part title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{part title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Data visualization for SORMAS},
+  pdfauthor={Stéphane Ghozzi Hemholtz Centre for Infection Research (HZI) stephane.ghozzi@helmholtz-hzi.de },
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[USenglish]{babel}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{tikz}
+
+\setbeamertemplate{navigation symbols}{}
+\defbeamertemplate{footline}{title and page number}{%
+    \color{gray!95}
+    \hspace{2em} \inserttitle \hfill%
+    \insertpagenumber\,/\,\insertpresentationendpage\kern2em\vskip2pt%
+    \vspace{0.2cm}%
+}
+\setbeamertemplate{footline}[title and page number]{}
+\setbeamertemplate{frametitle}{
+    \vspace{0.5cm}
+    \insertframetitle
+}
+\setlength{\fboxsep}{0pt}
+\setlength{\fboxrule}{0.1pt}
+\useinnertheme{circles}
+\usefonttheme{serif}
+
+\definecolor{vegablue}{HTML}{1F77B4}
+\definecolor{vegaorange}{HTML}{FF7F0E}
+\definecolor{vegagreen}{HTML}{2CA02C}
+\setbeamercolor{title}{fg=black}
+\setbeamercolor{subtitle}{fg=vegablue}
+\setbeamercolor{frametitle}{fg=vegablue}
+\setbeamercolor{structure}{fg=black}
+
+\hypersetup{colorlinks=true,linkcolor=vegablue,urlcolor=vegablue,citecolor=vegablue,anchorcolor=vegablue}
+
+\newcommand{\p}{\mathrm{p}}
+\newcommand{\x}{\bm{x}}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Data visualization for SORMAS}
+\subtitle{10 November 2020}
+\author{\newline \newline Stéphane Ghozzi \newline \small Hemholtz
+Centre for Infection Research (HZI)
+\newline \href{mailto:stephane.ghozzi@helmholtz-hzi.de}{\nolinkurl{stephane.ghozzi@helmholtz-hzi.de}}
+\normalsize}
+\date{}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}{Software}
+\protect\hypertarget{software}{}
+SORMAS is an infectious-disease surveillance and response tool for
+recording:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{cases} (persons infected)
+\item
+  their \textbf{contacts}
+\item
+  \textbf{events} and their \textbf{participants}
+\end{itemize}
+
+\vspace{0.75cm}
+
+open source
+
+deployed in France, Germany, Ghana, Nigeria, Switzerland
+
+HZI + partners: development, training, support
+
+current development focus on \textbf{COVID-19}
+
+\vspace{0.75cm}
+
+\url{https://www.sormas.org/} \newline \url{https://www.sormas-oegd.de/}
+\newline \url{https://github.com/hzi-braunschweig/SORMAS-Project}
+\end{frame}
+
+\begin{frame}{Data}
+\protect\hypertarget{data}{}
+High dimensional:
+
+\begin{itemize}
+\tightlist
+\item
+  person (address, phone number, sex, age, occupation, \ldots)
+\item
+  disease course (symptoms, laboratory tests, \ldots)
+\item
+  context (setting of event, \ldots)
+\item
+  workflow of public-health workers (contact in quarantaine, \ldots)
+\end{itemize}
+
+\ldots{} and much more!
+
+N.B. strong data privacy
+
+\vspace{0.75cm}
+
+In progress: generation of a \textbf{credible synthetic data set} for
+
+\begin{itemize}
+\tightlist
+\item
+  software testing
+\item
+  training
+\item
+  \textbf{analyses, visualizations, collaborations}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Visualizations}
+\protect\hypertarget{visualizations}{}
+\begin{block}{The usual}
+\protect\hypertarget{the-usual}{}
+\vspace{0.5cm}
+
+\begin{itemize}
+\tightlist
+\item
+  distributions
+\item
+  time series
+\item
+  choropleth maps
+\item
+  \ldots{}
+\end{itemize}
+
+\vspace{1cm}
+\end{block}
+
+\begin{block}{Indicators}
+\protect\hypertarget{indicators}{}
+\vspace{0.5cm}
+
+\begin{itemize}
+\tightlist
+\item
+  reproduction number \(R_e\)
+\item
+  dispersion factor \(K\)
+\item
+  anomaly detection
+\item
+  \ldots{}
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Networks}
+\protect\hypertarget{networks}{}
+\vspace{0.5cm}
+
+the most interesting\ldots{} and challenging!
+
+\vspace{0.5cm}
+
+Idea/requirement:
+
+\begin{itemize}
+\tightlist
+\item
+  graphs of \textbf{infections}, \textbf{contacts} and \textbf{event
+  participation}
+\item
+  both \textbf{abstract} and in geographical \textbf{space}
+\item
+  highlight necessary collaboration between adminstartive units
+\end{itemize}
+
+\vspace{0.5cm}
+
+Difficulty:
+
+\begin{itemize}
+\tightlist
+\item
+  quickly difficult to read, e.g.~\textasciitilde{} 13,000 persons and
+  events in COVID-19 test data for only 3 counties
+\item
+  high-dimensionality of relevant information
+\end{itemize}
+
+\vspace{0.5cm}
+
+\(\Longrightarrow\) need to hierarchize and navigate information!
+\end{block}
+\end{frame}
+
+\begin{frame}{Networks: first idea}
+\protect\hypertarget{networks-first-idea}{}
+\small
+
+In progress, rough sketch\ldots{} still messy!
+
+\vspace{0.25cm}
+
+\begin{enumerate}
+\tightlist
+\item
+  Build graph:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  nodes = persons and events
+\item
+  edges = infection, contact and participation
+\end{itemize}
+
+\vspace{0.25cm}
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Filter nodes:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  by time, e.g.~of reporting
+\item
+  by \textbf{components} (connected subgraphs) \textasciitilde{}
+  clusters
+\end{itemize}
+
+\normalsize
+
+\tiny
+
+N.B. COVID19 component sizes skewed: most cases infect no one, a few
+larger clusters \normalsize
+
+\vspace{0.25cm}
+
+\small
+
+\begin{enumerate}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Aggregation at regional level:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  highlight \emph{trans-regional} components
+\end{itemize}
+
+\vspace{0.25cm}
+
+\begin{enumerate}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Visualization:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  node color = type of person or event
+\item
+  node size = degree or betweenness (aggregated: number of persons)
+\item
+  edge type = type relation (aggregated: number of relations)
+\item
+  \textbf{interactive}
+\end{itemize}
+
+\normalsize
+\end{frame}
+
+\begin{frame}{Example 1: component with infection chain}
+\protect\hypertarget{example-1-component-with-infection-chain}{}
+abstract visualization
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/14/abstract_graph.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+static visualization in space
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/14/geo_graph_map.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+interactive visualization in space
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/14/subnetwork_component.png}
+\end{center}
+\end{frame}
+
+\begin{frame}{Example 2: component with event}
+\protect\hypertarget{example-2-component-with-event}{}
+abstract visualization
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/55/abstract_graph.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+static visualization in space
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/55/geo_graph_map.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+interactive visualization in space
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../img/components/55/subnetwork_component.png}
+\end{center}
+\end{frame}
+
+\end{document}
