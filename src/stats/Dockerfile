@@ -5,7 +5,7 @@ RUN apt install -y \
     cron vim \
     libpq-dev \
     python3 python3-pip \
-    r-base r-cran-dbi \
+    r-base r-cran-dbi r-cran-tidyverse \
     python-psycopg2 python-numpy python-scipy python-pandas python-matplotlib
  
 
