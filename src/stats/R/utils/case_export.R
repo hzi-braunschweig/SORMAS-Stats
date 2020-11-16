@@ -4,23 +4,32 @@ source('/srv/src/R/db/sormas_db.R')
 library(lubridate)
 
 fixBirthDate = function(person){
-    # cases with birthdate set!!!
-  perTemp = person[is.na(person$birthdate_yyyy) == F, ] 
-  dm = rep(1, nrow(perTemp))
+  # cases with birth year set!!!
+  birthYear = person[is.na(person$birthdate_yyyy) == F, ] 
+  firstJan = rep(1, nrow(birthYear))
   # if only year is set, set birth date to 1st January
-  perTemp$birthDate = as.Date(with(perTemp, paste(birthdate_yyyy, dm, dm, sep = "-")))
+  birthYear$birthDate = 
+    as.Date(
+      with(
+        birthYear,
+        paste(birthdate_yyyy, firstJan, firstJan, sep = "-")
+      )
+    )
 
   
-  # cases with no birthdate set!!!
-  perTemp2 = person[is.na(person$birthdate_yyyy) == T, ]
-  perTemp2$birthDate = rep(NA,nrow(perTemp2)) 
+  # cases with no birth date set!!!
+  noBirthYear = person[is.na(person$birthdate_yyyy) == T, ]
+  # null birth year
+  noBirthYear$birthDate = rep(NA,nrow(noBirthYear)) 
   
-  person = rbind(perTemp, perTemp2)
+  
+  person = rbind(birthYear, noBirthYear)
   return (person)
 }
 
 caseExport = function(sormas_db){
-
+  
+  
 
   # load cases
   case = db_send_and_setch(
@@ -56,35 +65,31 @@ caseExport = function(sormas_db){
     WHERE archived = FALSE"
   )
   
-  # converting all date formats from POSIX to date
-
-# todo just need year, month, day
-# 2020-11-09 
-  case$reportdate = dateTimeToDate(case$reportdate)
-  case$creationdate = dateTimeToDate(case$creationdate)
+  case$reportdate =   as.Date(case$reportdate, "%Y-%m-%d")
+  case$creationdate = as.Date(case$creationdate, "%Y-%m-%d")
   
 
   person = fixBirthDate(person)
 
   
   # merge case and person table
-  casePerson = merge(case, person, by="person_id",  all.x = T, all.y = F)
+  ret = merge(case, person, by="person_id",  all.x = T, all.y = F)
   
   # calculate age at point when the person was a case
-  casePerson$age = floor(as.numeric(casePerson$reportdate - casePerson$birthDate)/365)
+  ret$age = floor(as.numeric(ret$reportdate - ret$birthDate)/365)
   
   # merge casePerson with region
-  casePersonRegion = merge(casePerson, region, by = "region_id", all.x = T, all.y = F)
+  ret = merge(ret, region, by = "region_id", all.x = T, all.y = F)
   
     # merge casePersonRegion with district
-  casePersonRegionDist = merge(casePersonRegion, district, by = "district_id", all.x = T, all.y = F)
+  ret = merge(ret, district, by = "district_id", all.x = T, all.y = F)
   
   
-  casePersonRegionDist$reportweek = lubridate::week(casePersonRegion$reportdate)
-  casePersonRegionDist$reportmonth = lubridate::month(casePersonRegion$reportdate)
-  casePersonRegionDist$reportyear = lubridate::year(casePersonRegion$reportdate)
+  ret$reportweek = lubridate::week(ret$reportdate)
+  ret$reportmonth = lubridate::month(ret$reportdate)
+  ret$reportyear = lubridate::year(ret$reportdate)
   
-  #View(casePersonRegionDist)
+  #View(ret)
 
-  return(casePersonRegionDist)
+  return(ret)
 }
