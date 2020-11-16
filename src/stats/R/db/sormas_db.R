@@ -16,12 +16,6 @@ return(con)
 }
 
 
-db_send_and_setch <- function(con,query){
-    res <- dbSendQuery(con, query)
-    frame <- dbFetch(res)
-    dbClearResult(res)
-    return(frame)
-}
 
 
 do_writeback_cases_per_day <- function(stat_db, cases){

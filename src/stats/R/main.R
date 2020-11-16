@@ -6,4 +6,5 @@ sormas_db <- do_connect('sormas', 'sormas_reader', 'password')
 stats_db <- do_connect('sormas_stats', 'stats_user', 'password')
 
 
-caseExport(sormas_db)
+exp = caseExport(sormas_db)
+dbWriteTable(stats_db, "cases1", exp)
