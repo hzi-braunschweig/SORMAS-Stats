@@ -12,7 +12,7 @@ CREATE TABLE cases_per_day (
     creation_date DATE NOT NULL,
     report_year SMALLINT NOT NULL CHECK (report_year > 2000),
     report_month SMALLINT NOT NULL CHECK (report_month >= 1 AND report_month <= 12),
-    report_week SMALLINT NOT NULL CHECK (report_week >= 1 AND report_week <= 52),
+    report_week SMALLINT NOT NULL CHECK (report_week >= 1 AND report_week <= 53),
     case_classification,
     outcome, 
     case_origin,
