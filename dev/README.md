@@ -1,6 +1,3 @@
-# This is a very easy setup to connect to a running server
-
-`docker build -t local-sormas/jupyter .`
-`docker run -p 8888:8888 local-sormas/jupyter`
-
-Currently nothing gets mounted into the container, this will change soon
+# Dev helpers
+1. Jupyter contains a jupyter notebook docker to connect and interact with the SORMAS DB for statistics. Useful for debugging and exploration
+2. data-gen contains python scripts to easily connect and push dummy entities. Useful for debugging and showcases.

@@ -121,7 +121,8 @@ services:
       - ${SORMAS_PATH}/statistics/data/:/srv/data
       - ${SORMAS_PATH}/statistics/output/:/srv/output
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   grafana:
     restart: unless-stopped
@@ -133,4 +134,5 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy

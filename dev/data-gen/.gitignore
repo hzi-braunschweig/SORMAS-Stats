@@ -1,0 +1,4 @@
+sormas-rest.yaml
+out/*
+venv/
+.idea/

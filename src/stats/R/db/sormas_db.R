@@ -16,6 +16,8 @@ return(con)
 }
 
 
+
+
 do_writeback_cases_per_day <- function(stat_db, cases){
     RPostgres::dbSendQuery(
         stat_db, 
