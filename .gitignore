@@ -9,3 +9,4 @@
 *.knit.md
 .Renviron
 data
+.idea/
