@@ -1,23 +1,17 @@
 # This function connects to the sormas db generate the data specified 
 # by issue https://github.com/hzi-braunschweig/SORMAS-Stats/issues/88
 # these data will be usfull for further statistics ralated to contacts
+# this functin depends on: contact_export.R
 
-contact_network = function(sormas_db){
+contact_network = function(sormas_db){ 
 
   # load cases
   case = dbGetQuery(
     sormas_db,
-    "SELECT uuid AS case_uuid, id AS case_id, person_id AS person_id_case, region_id AS region_id_case, reportdate AS report_date_case,
-    district_id AS district_id_case, caseclassification AS case_classification, symptoms_id, disease AS disease_case
+    "SELECT uuid AS case_uuid, id AS case_id, person_id AS person_id_case, region_id AS region_id_case, 
+    district_id AS district_id_case, caseclassification AS case_classification, disease AS disease_case
     FROM cases
     WHERE deleted = FALSE and caseclassification != 'NO_CASE'"
-  )
-
-  # load symptom data
-  symptoms = dbGetQuery(
-    sormas_db,
-    "SELECT uuid AS symptom_uuid, id AS symptom_id, onsetdate AS onset_date
-    FROM public.symptoms"
   )
 
   # load person data
@@ -62,8 +56,20 @@ contact_network = function(sormas_db){
     WHERE archived = FALSE"
   )
   
+  #load contacts
   contCaseRegionDist = contact_export(sormas_db)
-
+  
+  #clean-up tables
+  # fix date formats
+  events = events %>%
+    dplyr::mutate(report_date_event = as.Date(format(report_date_event, "%Y-%m-%d")))
+  
+  # converting ids to character for eary stacking of tables 
+  # this is needed because event_uuid was used, using evetid is prone to error when stacking tables
+  person$person_id = as.character(person$person_id)
+  case$person_id_case = as.character(case$person_id_case)
+  eventsParticipant$person_id_eventpart = as.character(eventsParticipant$person_id_eventpart)
+  
   # edge list for cases and contacts
   elist = contCaseRegionDist %>%
     # keeping only contacts with distinct persons pair
