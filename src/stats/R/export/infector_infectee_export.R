@@ -1,20 +1,7 @@
+# This function connects to the sormas db generate the data 
+# specified by issue https://github.com/hzi-braunschweig/SORMAS-Stats/issues/87
 
-# This function connects to the sormas db generate the data specified by issue https://github.com/hzi-braunschweig/SORMAS-Stats/issues/87
-# DB_USER = "sormas_user"
-# DB_PASS = "password"
-# DB_HOST = "127.0.0.1"
-# DB_PORT = "5432"
-# DB_NAME= "sormas"
-# 
-# library(RPostgreSQL)
-# library(DBI)
-# library(lubridate)
-# library(dplyr)
-# sormas_db = dbConnect(PostgreSQL(), user=DB_USER,  dbname=DB_NAME, password = DB_PASS, host=DB_HOST, port=DB_PORT) # should be replaced when doin gpull request
-#load("fixBirthDate.R") # to load this method
-
-# infectorInfecteeExport require fixBirthDate.R, libraries mentioned above and connection to db (sormas_db), 
-infectorInfecteeExport = function(sormas_db){
+infector_infectee_export = function(sormas_db){
   # loading tables from sormas db
   # load cases
   case = dbGetQuery(

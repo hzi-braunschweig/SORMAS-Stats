@@ -1,19 +1,5 @@
-# This function  take as input the infector-infectee data loaded in working directory and generate the disstribution and estimates of the
-# serial interval as specified by issue https://github.com/hzi-braunschweig/SORMAS-Stats/issues/92
+# FIXME import infector_infectee_export
 
-#Dependencies that should be loaded before calling the serialIntervalPlot function
-DB_USER = "sormas_user"; DB_PASS = "password"; DB_HOST = "127.0.0.1"; DB_PORT = "5432"; DB_NAME= "sormas"
-library(RPostgreSQL) 
-library(DBI)
-library(lubridate)
-library(dplyr)
-library(tidyverse)
-library(fitdistrplus) # require by serialIntervalPlot to estimate CI by bootstrap
-sormas_db = dbConnect(PostgreSQL(), user=DB_USER,  dbname=DB_NAME, password = DB_PASS, host=DB_HOST, port=DB_PORT) # should be replaced when doin gpull request
-load("fixBirthDate.R") # to load this method
-load("infectorInfecteeExport.R")
-infectorInfecteePair = infectorInfecteeExport(sormas_db = sormas_db)
-# Main functions 
 offspringDistPlot = function(infectorInfecteePair){ 
   #counting the number of offsprings per infector
   offspring <- infectorInfecteePair %>%
