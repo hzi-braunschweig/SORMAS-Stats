@@ -1,7 +1,18 @@
-source('/srv/src/R/db/sormas_db.R') # convenient functions
-source('/srv/src/R/epi-stats/covid_cases.R') # import all your stats functions here
+library(here)
+library(DBI)
+library(RPostgres)
 
-sormas_db <- do_connect('sormas', 'sormas_reader', 'password')
-stats_db <- do_connect('sormas_stats', 'stats_user', 'password')
+source(here('db/sormas_db.R'))
+source(here('epi-stats/covid_cases.R'))
+source(here('export/contact_export.R'))
+source(here('export/infector_infectee_export.R'))
+source(here('network/contact_network.R'))
+source(here('plotting/offspring_dist_plot.R'))
+source(here('plotting/serial_interval_dist_plot.R'))
+source(here('utils/fix_birth_data.R'))
+source(here('utils/fix_contact_jurisdiction.R'))
+
+sormas_db <- do_connect('localhost', 'sormas', 'sormas_reader', 'password')
+stats_db <- do_connect('localhost', 'sormas_stats', 'stats_user', 'password')
 
 epi_number_of_cases_per_day(sormas_db)

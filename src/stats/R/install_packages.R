@@ -1,9 +1,9 @@
 local(
-    {
-        r <- getOption("repos")
-        r["CRAN"] <- "https://cran.r-project.org"
-        options(repos=r)
-    }
+{
+  r <- getOption("repos")
+  r["CRAN"] <- "https://cran.r-project.org"
+  options(repos = r)
+}
 )
 
-install.packages("RPostgres")
+install.packages(c("RPostgres", "here"))
