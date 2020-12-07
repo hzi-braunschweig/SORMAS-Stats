@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     labels:
       - autoheal=true
-        # override for stop timeout seconds during restart
+      # override for stop timeout seconds during restart
       - autoheal.stop.timeout=30
     links:
       - postgres
@@ -51,7 +51,7 @@ services:
     mem_limit: ${APPSERVER_MEM}
     mem_reservation: ${APPSERVER_MEM_RESERVED}
     healthcheck:
-      test: ["CMD", "curl", "-f", "-I", "http://localhost:6080/sormas-ui/login"]
+      test: [ "CMD", "curl", "-f", "-I", "http://localhost:6080/sormas-ui/login" ]
       interval: 30s
       timeout: 3s
       retries: 3
@@ -82,7 +82,7 @@ services:
     mem_limit: ${DB_MEM}
     mem_reservation: ${DB_MEM_RESERVED}
     healthcheck:
-      test: ["CMD", "psql", "-U", "${SORMAS_POSTGRES_USER}", "-c", "SELECT 1;", "${DB_NAME}"]
+      test: [ "CMD", "psql", "-U", "${SORMAS_POSTGRES_USER}", "-c", "SELECT 1;", "${DB_NAME}" ]
       interval: 30s
       timeout: 3s
       retries: 3
@@ -94,6 +94,8 @@ services:
     volumes:
       - ${SORMAS_PATH}/statistics/data/:/srv/data
       - ${SORMAS_PATH}/statistics/output/:/srv/output
+    environment:
+      - DB_HOST=${DB_HOST}
     depends_on:
       postgres:
         condition: service_healthy
