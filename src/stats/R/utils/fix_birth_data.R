@@ -1,5 +1,5 @@
-# FIXME: Handle given month
-
+# FIXME Handle given month
+# FIXME rename
 fixBirthDate = function(person){
   # cases with birth year set!!!
   birthYear = person[is.na(person$birthdate_yyyy) == F, ] 
