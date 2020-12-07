@@ -1,4 +1,5 @@
 library(here)
+dr_here()
 library(DBI)
 library(RPostgres)
 
@@ -12,7 +13,7 @@ source(here('plotting/serial_interval_dist_plot.R'))
 source(here('utils/fix_birth_data.R'))
 source(here('utils/fix_contact_jurisdiction.R'))
 
-sormas_db <- do_connect('localhost', 'sormas', 'sormas_reader', 'password')
-stats_db <- do_connect('localhost', 'sormas_stats', 'stats_user', 'password')
+sormas_db <- do_connect('sormas', 'sormas_reader', 'password')
+stats_db <- do_connect('sormas_stats', 'stats_user', 'password')
 
 epi_number_of_cases_per_day(sormas_db)
