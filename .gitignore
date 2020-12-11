@@ -8,6 +8,6 @@
 *.utf8.md
 *.knit.md
 .Renviron
-data
+docker-data
 .idea/
 R.Rproj
