@@ -89,13 +89,15 @@ services:
   statistics:
     restart: unless-stopped
     build: src/stats/
+    environment:
+      - DB_HOST=${DB_HOST}
     volumes:
       - ${SORMAS_PATH}/statistics/data/:/srv/data
       - ${SORMAS_PATH}/statistics/output/:/srv/output
-    environment:
-      - DB_HOST=${DB_HOST}
+    ports:
+    - "8080:8080"
     depends_on:
-      postgres:
+      sormas:
         condition: service_healthy
 
   grafana:
@@ -108,5 +110,5 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      postgres:
+      sormas:
         condition: service_healthy

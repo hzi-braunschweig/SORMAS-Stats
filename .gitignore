@@ -11,3 +11,5 @@
 docker-data
 .idea/
 R.Rproj
+**/venv/
+**/__pycache__/

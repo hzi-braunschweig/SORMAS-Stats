@@ -1,10 +1,10 @@
 # Welcome
-This project's goal is to provide first class statistics for SORMAS.
+This project's goal is to provide first class statistics for SORMAS using Python, Python Dash for dashboards, and R.
 
 The high level idea for SORMAS-Stats is to have a dedicated container running in the SORMAS-Docker deployment 
 (separations of concern). The container runs `R` and `python` scripts on a CRON schedule. The statistic scripts 
 fetch data from the sormas DB with a read-only role and write their results back into a dedicated statistics database. 
-This statistics database can easily be consumed by all sorts other tools for example Grafana or R-Shiny for 
+This statistics database can easily be consumed by all sorts other tools for example Grafana or Python Dash for 
 visualization. The visualizations could be made accessible from SORMAS either by navigating to them through a 
 button click or by using iframes.
 
@@ -27,8 +27,7 @@ SORMAS-Stats
 ├── docker # necessary to run the SORMAS-Docker stack via docker-compose
 ├── src #
 │   ├── grafana # Dockerfile, dashboards and datasources for Grafana to visualize data
-│   ├── old # first version of R code: Will be ported and removed eventually
-│   └── stats # contains Dockerfile DB migrations, and statistics scripts in R and Python
+│   └── stats # Dockerfile, DB migrations, Python Dash and statistics scripts in R and Python
 ├── .env # ENV variables for docker-compose
 └── docker-compose.yml # run more or less a SORMAS-Docker stack with a stats and grafana container included
 ```
@@ -41,7 +40,7 @@ SORMAS-Stats
   Use the developer mode to generate sample data.
 1. Navigate to `localhost:3000` and login with `admin:admin` to access Grafana. 
   The `SORMAS Main` dashboard contains the visualizations. 
-
+1. Navigate to `localhost:8080` to see the dashboards crated with python dash
 
 The statistics scripts which pull data from the SORMAS-DB and store the results in 
 the statistic DB are currently executed every minute.

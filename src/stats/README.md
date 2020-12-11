@@ -3,7 +3,7 @@
 All R code goes under `R`.
 
 ## Python code
-All Python code goe under `python`.
+All Python code goes under `python`. This folder also contains the Dash(boards).
 
 ## DB
 The [db](db/) folder contains the DB migrations. If you want to extend or modify the DB, this is the place to go. Read the [README](db/README.md) for more details how database migration works. To apply the migration run `pgmigrate -c "host=postgres dbname=sormas_stats user=stats_user password=password" -t latest migrate`. Adding `--dryrun` will not commit your changes.
