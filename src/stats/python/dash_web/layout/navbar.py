@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 
-_navbar = dbc.NavbarSimple(
+navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink('Lorem', href='#')),
         dbc.NavItem(dbc.NavLink('Ipsum', href='#')),
@@ -20,7 +20,3 @@ _navbar = dbc.NavbarSimple(
     color='#0065d4',
     dark=True,
 )
-
-
-def navbar():
-    return _navbar

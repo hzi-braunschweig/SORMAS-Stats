@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 import dash_html_components as html
 
-_jumbotron = dbc.Jumbotron([
+jumbotron = dbc.Jumbotron([
     html.H1('SORMAS Stats', className='display-3'),
     html.P('lorem ipsum dolor sit amet', className='lead'),
     html.Hr(className='my-2'),
@@ -18,7 +18,3 @@ _jumbotron = dbc.Jumbotron([
     ),
     html.P(dbc.Button('Start', color='primary'), className='lead'),
 ])
-
-
-def jumbotron():
-    return _jumbotron

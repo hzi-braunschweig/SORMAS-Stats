@@ -1,24 +1,22 @@
 import dash
 import dash_bootstrap_components as dbc
-import dash_html_components as html
 import flask
 
-from layout.graph import graph
-from layout.jumbotron import jumbotron
-from layout.navbar import navbar
+from dash_web.layout.index import index_div
+from dash_web.reporting.report import reports
 
 server = flask.Flask(__name__)
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], server=server)
 
-navbar = navbar()
-jumbotron = jumbotron()
-graph = graph()
+server.register_blueprint(reports)
 
-app.layout = html.Div([
-    navbar,
-    jumbotron,
-    graph
-])
+app.layout = index_div
+
+
+def main():
+
+    app.run_server(debug=True)
+
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    main()
