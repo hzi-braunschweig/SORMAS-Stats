@@ -19,7 +19,8 @@ def get_report():
     return send_file(
         pdf_report,
         mimetype='application/pdf',
-        attachment_filename='sormas_stats_report.pdf'
+        attachment_filename='sormas_stats_report.pdf',
+        as_attachment=True
     )
 
 
@@ -32,8 +33,12 @@ template = env.get_template('report.html')
 
 
 def _generate_pdf_report():
-    context = {'a_variable': 'super!:)'}
+    context = {
+        'a_variable': 'super!:)',
+        'graph': _get_figure_html()
+    }
     rendered = template.render(context)
+
     rnd_file = '/tmp/report/' + uuid.uuid4().hex
     Path(rnd_file).touch()
 
@@ -43,4 +48,4 @@ def _generate_pdf_report():
 
 
 def _get_figure_html():
-    div = gapminder.get_html()
+    return gapminder.get_html()

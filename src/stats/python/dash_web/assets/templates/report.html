@@ -6,5 +6,9 @@
 <body>
 <h1>My Webpage</h1>
 {{ a_variable }}
+
+{# Marks the graph html as safe and turns off auto-escaping. This is safe b/c we use the html of the figure directly #}
+{{ graph|safe }}
+
 </body>
 </html>

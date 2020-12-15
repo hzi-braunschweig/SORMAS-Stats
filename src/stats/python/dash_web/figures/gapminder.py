@@ -1,3 +1,5 @@
+import io
+
 import plotly.express as px
 
 _df = px.data.gapminder().query("continent=='Oceania'")
@@ -9,4 +11,6 @@ def get_html():
     :rtype: plotly.graph_objs.Figure
     :return: The gapminder figure
     """
-    return gapminder_fig.write_html(full_html=False)
+    buffer = io.StringIO()
+    gapminder_fig.write_html(buffer, full_html=False)
+    return buffer.getvalue()
