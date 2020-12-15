@@ -1,3 +1,4 @@
+import os
 import uuid
 from pathlib import Path
 
@@ -6,6 +7,7 @@ from flask import Blueprint, send_file
 from jinja2 import Environment, PackageLoader, select_autoescape
 
 from dash_web.figures import gapminder
+from dash_web.utils.config import REPORT_DIRECTORY
 
 reports = Blueprint('reports', __name__)
 
@@ -19,8 +21,8 @@ def get_report():
     return send_file(
         pdf_report,
         mimetype='application/pdf',
-        attachment_filename='sormas_stats_report.pdf',
-        as_attachment=True
+        as_attachment=True,
+        attachment_filename='sormas_stats_report.pdf'
     )
 
 
@@ -39,7 +41,7 @@ def _generate_pdf_report():
     }
     rendered = template.render(context)
 
-    rnd_file = '/tmp/report/' + uuid.uuid4().hex
+    rnd_file = os.path.join(REPORT_DIRECTORY, uuid.uuid4().hex)
     Path(rnd_file).touch()
 
     # todo cover page supported

@@ -12,5 +12,6 @@ def get_html():
     :return: The gapminder figure
     """
     buffer = io.StringIO()
-    gapminder_fig.write_html(buffer, full_html=False)
+    # export a figure inside a div and hide config bar
+    gapminder_fig.write_html(buffer, config={'displayModeBar': False}, full_html=False)
     return buffer.getvalue()

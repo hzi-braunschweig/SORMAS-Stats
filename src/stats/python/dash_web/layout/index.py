@@ -6,13 +6,11 @@ from dash_web.layout.jumbotron import jumbotron
 from dash_web.layout.navbar import navbar
 from dash_web.layout.report import report_download
 
-graph = dcc.Graph(figure=gapminder_fig)
-
 index_div = html.Div(
     [
         navbar,
         jumbotron,
-        graph,
+        dcc.Graph(figure=gapminder_fig),
         report_download
 
     ]
