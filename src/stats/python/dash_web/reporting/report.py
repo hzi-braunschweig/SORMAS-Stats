@@ -11,12 +11,16 @@ from dash_web.utils.config import REPORT_DIRECTORY
 
 reports = Blueprint('reports', __name__)
 
+env = Environment(
+    loader=PackageLoader('dash_web', 'assets/templates'),
+    autoescape=select_autoescape(['html', 'xml'])
+)
+
+template = env.get_template('report.html')
+
 
 @reports.route("/report/", methods=['GET'])
 def get_report():
-    # path = 'test.txt'
-    # return send_from_directory(REPORT_DIRECTORY, path, as_attachment=True)
-
     pdf_report = _generate_pdf_report()
     return send_file(
         pdf_report,
@@ -24,14 +28,6 @@ def get_report():
         as_attachment=True,
         attachment_filename='sormas_stats_report.pdf'
     )
-
-
-env = Environment(
-    loader=PackageLoader('dash_web', 'assets/templates'),
-    autoescape=select_autoescape(['html', 'xml'])
-)
-
-template = env.get_template('report.html')
 
 
 def _generate_pdf_report():

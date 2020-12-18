@@ -14,7 +14,6 @@ app.layout = index_div
 
 
 def main():
-
     app.run_server(debug=True)
 
 
