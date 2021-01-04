@@ -72,6 +72,10 @@ services:
       - DB_NAME_AUDIT=sormas_audit
       - SORMAS_POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
       - SORMAS_POSTGRES_USER=${SORMAS_POSTGRES_USER}
+      - DB_NAME_STATS=${DB_NAME_STATS}
+      - SORMAS_STATS_POSTGRES_USER=${SORMAS_STATS_POSTGRES_USER}
+      - SORMAS_POSTGRES_READONLY_USER=${SORMAS_POSTGRES_READONLY_USER}
+      - SORMAS_STATS_POSTGRES_READONLY_USER=${SORMAS_STATS_POSTGRES_READONLY_USER}
       - TZ=${TZ}
     volumes:
       - ${SORMAS_PATH}/psqldata:/var/lib/postgresql/data
@@ -95,7 +99,7 @@ services:
       - ${SORMAS_PATH}/statistics/data/:/srv/data
       - ${SORMAS_PATH}/statistics/output/:/srv/output
     ports:
-    - "8080:8080"
+      - "8080:8080"
     depends_on:
       sormas:
         condition: service_healthy
