@@ -1,22 +1,23 @@
 import os
 import uuid
+from os.path import join, dirname, abspath
 from pathlib import Path
 
 import pdfkit
 from flask import Blueprint, send_file
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, select_autoescape, FileSystemLoader
 
-from dash_web.figures import gapminder
-from dash_web.utils.config import REPORT_DIRECTORY
-
-reports = Blueprint('reports', __name__)
+from figures import gapminder
+from utils.config import REPORT_DIRECTORY
 
 env = Environment(
-    loader=PackageLoader('dash_web', 'assets/templates'),
+    loader=FileSystemLoader(join(dirname(abspath(__file__)), '../../assets/templates')),
     autoescape=select_autoescape(['html', 'xml'])
 )
 
 template = env.get_template('report.html')
+
+reports = Blueprint('reports', __name__)
 
 
 @reports.route("/report/", methods=['GET'])

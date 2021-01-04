@@ -11,5 +11,5 @@ popd
 
 echo "END R"
 echo "BEGIN python"
-python /srv/src/python/main.py
+python3 /srv/src/python/main.py
 echo "END python"

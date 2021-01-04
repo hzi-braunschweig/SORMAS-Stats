@@ -5,5 +5,5 @@ local(
   options(repos = r)
 }
 )
-
-install.packages(c("RPostgres", "here"))
+# FIXME(@JonasCir) dplyr is to old in Debian repo
+install.packages(c("RPostgres", "here", "dplyr"))

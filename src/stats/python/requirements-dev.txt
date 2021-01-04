@@ -1,0 +1,6 @@
+dash==1.18.1
+dash-bootstrap-components==0.11
+rpy2
+pdfkit
+pandas
+psycopg2

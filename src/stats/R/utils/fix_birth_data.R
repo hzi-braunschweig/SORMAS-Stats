@@ -1,12 +1,12 @@
 # FIXME Handle given month
 # FIXME rename
-fixBirthDate = function(person){
+fixBirthDate <- function(person) {
   # cases with birth year set!!!
-  birthYear = person[is.na(person$birthdate_yyyy) == F, ] 
-  
-  firstJan = rep(1, nrow(birthYear))
+  birthYear <- person[is.na(person$birthdate_yyyy) == F,]
+
+  firstJan <- rep(1, nrow(birthYear))
   # if only year is set, set birth date to 1st January
-  birthYear$date_of_birth = 
+  birthYear$date_of_birth <-
     as.Date(
       with(
         birthYear,
@@ -15,12 +15,12 @@ fixBirthDate = function(person){
     )
 
   # cases with no birth date set!!!
-  noBirthYear = person[is.na(person$birthdate_yyyy) == T, ]
+  noBirthYear <- person[is.na(person$birthdate_yyyy) == T,]
   # null birth year
-  noBirthYear$date_of_birth = rep(NA,nrow(noBirthYear)) 
+  noBirthYear$date_of_birth <- rep(NA, nrow(noBirthYear))
 
 
-  person = rbind(birthYear, noBirthYear)
-  return (person)
+  person <- rbind(birthYear, noBirthYear)
+  return(person)
 }
 
