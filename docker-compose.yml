@@ -92,7 +92,7 @@ services:
 
   statistics:
     restart: unless-stopped
-    build: src/stats/
+    build: src/
     environment:
       - DB_HOST=${DB_HOST}
       - POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
@@ -109,19 +109,6 @@ services:
       - ${SORMAS_PATH}/statistics/output/:/srv/output
     ports:
       - "8080:8080"
-    depends_on:
-      sormas:
-        condition: service_healthy
-
-  grafana:
-    restart: unless-stopped
-    build: src/grafana/
-    environment:
-      - SORMAS_POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
-    ports:
-      - 3000:3000
     depends_on:
       sormas:
         condition: service_healthy
