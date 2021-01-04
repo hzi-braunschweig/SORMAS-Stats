@@ -92,7 +92,7 @@ services:
 
   statistics:
     restart: unless-stopped
-    build: src/stats/
+    build: src/
     environment:
       - DB_HOST=${DB_HOST}
       - POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
