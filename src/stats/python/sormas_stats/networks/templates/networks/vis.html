@@ -20,15 +20,23 @@
 <h1>Transmission Network</h1>
 <div id="container"></div>
 
+{{ nodes|json_script:"nodes" }}
+{{ edges|json_script:"edges" }}
+{{ options|json_script:"options" }}
+
 <script type="text/javascript">
+    function getJSON(id) {
+        return JSON.parse(document.getElementById(id).textContent)
+    }
+
     function drawGraph() {
         let container = document.getElementById('container');
 
-        let nodes = new vis.DataSet({{nodes|tojson}});
-        let edges = new vis.DataSet({{edges|tojson}});
+        let nodes = new vis.DataSet(getJSON('nodes'));
+        let edges = new vis.DataSet(getJSON('edges'));
         let data = {nodes: nodes, edges: edges};
 
-        let options = {{options|safe}};
+        let options = getJSON('options');
 
         return new vis.Network(container, data, options);
     }

@@ -1,14 +1,4 @@
-from os.path import join, dirname, abspath
-
-from jinja2 import Environment, select_autoescape, FileSystemLoader
-
-from modules.transmission_net.load_net import load_net
-
-env = Environment(
-    loader=FileSystemLoader(join(dirname(abspath(__file__)), '../../assets/templates')),
-    autoescape=select_autoescape(['html', 'xml'])
-)
-template = env.get_template('vis.html')
+from networks.transmission_chain.load_chain import load_net
 
 
 def _gen_group(color):
@@ -21,7 +11,7 @@ def _gen_group(color):
     }
 
 
-def get_html():
+def make_vis_net():
     options = {
         'groups': {
             'HEALTHY': _gen_group('#17bd27'),
@@ -41,10 +31,4 @@ def get_html():
 
     nodes, edges = load_net()
 
-    html = template.render(
-        nodes=nodes,
-        edges=edges,
-        options=options,
-    )
-
-    return html
+    return nodes, edges, options

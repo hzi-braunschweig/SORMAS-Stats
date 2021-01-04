@@ -13,7 +13,7 @@ template = loader.get_template('reporting/report.html')
 
 def generate_pdf_report():
     context = {
-        'a_variable': 'super!:)',
+        'introduction': 'Quidem natus voluptatibus laboriosam quis aspernatur voluptatem optio provident.',
         'graph': _get_figure_html()
     }
     rendered = template.render(context)

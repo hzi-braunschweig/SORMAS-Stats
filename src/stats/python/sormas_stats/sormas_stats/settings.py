@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dashboards.apps.DashboardsConfig',
-    'reporting.apps.ReportingConfig'
+    'reporting.apps.ReportingConfig',
+    'networks.apps.NetworksConfig'
 ]
 
 MIDDLEWARE = [
