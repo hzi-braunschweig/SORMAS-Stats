@@ -1,3 +1,7 @@
+library(DBI)
+library(RPostgres)
+# todo remove from main?
+
 do_connect <- function(db_name, user, pwd) {
   # Connect to postgres database
 
@@ -7,7 +11,6 @@ do_connect <- function(db_name, user, pwd) {
     host <- 'localhost'
   }
 
-  print(host)
   con <- dbConnect(
     RPostgres::Postgres(),
     dbname = db_name,

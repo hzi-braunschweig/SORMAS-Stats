@@ -1,24 +1,25 @@
-# This function  take as input the infector-infectee data loaded in working directory and generate the disstribution and estimates of the
-# serial interval as specified by issue https://github.com/hzi-braunschweig/SORMAS-Stats/issues/92
+# This function  take as input the infector-infectee data loaded in working directory and generate the
+# disstribution and estimates of the serial interval as specified
+# by issue https://github.com/hzi-braunschweig/SORMAS-Stats/issues/92
 
 # Main functions 
-serialIntervalPlot = function(infectorInfecteePair, distr = "Lognormal", minSi = NULL, maxSi = NULL){ 
+serialIntervalPlot <- function(infectorInfecteePair, distr = "Lognormal", minSi = NULL, maxSi = NULL){
   # distr = "Weibull", "Gamma", "Lognormal", "Normal"  
   # minSi and maxSi are the min and max user specified values of si to be used for the analysis
   # fiting normal, weibull, gamma, lnorm distributions to serial intervals 
   
   # filtering based on user specified min and max values of serial interval.
   if(any(is.null(c(minSi, maxSi)))) {
-    minSi = min(infectorInfecteePair$serial_interval, na.rm = T)
-    maxSi = max(infectorInfecteePair$serial_interval, na.rm = T)
+    minSi <- min(infectorInfecteePair$serial_interval, na.rm = T)
+    maxSi <- max(infectorInfecteePair$serial_interval, na.rm = T)
   }
-  siVector = c(minSi: maxSi)
+  siVector <- minSi: maxSi
   selData <- infectorInfecteePair %>%
     dplyr::filter(serial_interval != 'NA' & serial_interval %in% siVector)
   
   # Fitting user specified distributions to the data. Dafault distribution is lognormal 
   if(distr == "Normal"){
-    fit  = selData %>%
+    fit <- selData %>%
       dplyr::pull(serial_interval) %>% # extracting si
       fitdistrplus::fitdist(data = ., distr = 'norm')  # fiting a normal distribution to the data
     
@@ -27,12 +28,12 @@ serialIntervalPlot = function(infectorInfecteePair, distr = "Lognormal", minSi =
     fit_boot <- summary(fitdistrplus::bootdist(fit))  
     
     # extracting estimates
-    siEstmate = dplyr::bind_cols(data.frame(fit$estimate), data.frame(fit_boot$CI) ) # extracting estimates and CI as a data frame
-    colnames(siEstmate) = c("Estimate", "Median", "2.5% CI", "97.5% CI")
-    siEstmate = round(siEstmate, 2)
+    siEstmate <- dplyr::bind_cols(data.frame(fit$estimate), data.frame(fit_boot$CI) ) # extracting estimates and CI as a data frame
+    colnames(siEstmate) <- c("Estimate", "Median", "2.5% CI", "97.5% CI")
+    siEstmate <- round(siEstmate, 2)
     
     #Plotting 
-    siDistributionPlot = ggplot(data = selData) +
+    siDistributionPlot <- ggplot(data = selData) +
       geom_histogram(aes(x = serial_interval, y = ..density..), fill = '#dedede', colour = "black", binwidth = 1) +
       stat_function(fun = dnorm, args = list(mean = fit$estimate[[1]], sd = fit$estimate[[2]]), size = 0.8, linetype = 2) +
       #scale_x_continuous("Serial Interval (Days)", limits = c(minSi-2,maxSi+2), breaks = seq(minSi-2,maxSi+2, by =5), expand = c(0,0)) +
@@ -117,7 +118,7 @@ serialIntervalPlot = function(infectorInfecteePair, distr = "Lognormal", minSi =
     siEstmate = dplyr::bind_cols(data.frame(fit$estimate), data.frame(fit_boot$CI) ) # extracting estimates and CI as a data frame
     colnames(siEstmate) = c("Estimate", "Median", "2.5% CI", "97.5% CI")
     siEstmate = round(siEstmate, 2)
-    
+
     #Plotting 
     siDistributionPlot = ggplot(data = selData) +
       geom_histogram(aes(x = serial_interval, y = ..density..), fill = '#dedede', colour = "black", binwidth = 1) +
