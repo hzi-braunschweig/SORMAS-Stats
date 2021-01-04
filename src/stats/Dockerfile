@@ -5,7 +5,7 @@ RUN apt install -y \
     libpq-dev gcc \
     python3 python3-pip python3-setuptools python3-wheel python3-venv python3-dev\
     uwsgi uwsgi-plugin-python3 \
-    python3-psycopg2 python3-pandas python3-pdfkit \
+    python3-psycopg2 python3-pandas python3-pdfkit python3-rpy2 \
     r-base r-cran-dbi
 
 # FIXME(@JonasCir) https://github.com/yandex/pgmigrate/issues/22 and move to requirements.txt
