@@ -112,16 +112,3 @@ services:
     depends_on:
       sormas:
         condition: service_healthy
-
-  grafana:
-    restart: unless-stopped
-    build: src/grafana/
-    environment:
-      - SORMAS_POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
-    ports:
-      - 3000:3000
-    depends_on:
-      sormas:
-        condition: service_healthy
