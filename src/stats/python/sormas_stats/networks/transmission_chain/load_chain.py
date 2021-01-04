@@ -14,6 +14,7 @@ r_contact_network = robjects.globalenv['contact_network']
 
 
 def load_net():
+    # FIXME use env
     connection = r_do_connect('sormas', 'sormas_reader', 'password')
     n_e_list = r_contact_network(connection)
 

@@ -1,4 +1,5 @@
-Django==3.1.5
+Django
+plotly
 psycopg2
 rpy2
 pdfkit

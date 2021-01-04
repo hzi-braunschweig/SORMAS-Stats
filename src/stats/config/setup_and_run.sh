@@ -11,5 +11,6 @@ printenv | grep "DB_HOST" >>  /container.env
 # FIXME monitor cron
 cron -L 15 > /proc/1/fd/1 2>&1
 
-cd src/python/dash_web/
+cd src/python/sormas_stats/sormas_stats
+
 uwsgi --ini uwsgi.ini
