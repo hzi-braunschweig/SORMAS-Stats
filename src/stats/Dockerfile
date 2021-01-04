@@ -22,14 +22,16 @@ RUN mkdir src && \
 COPY R/install_packages.R src/R/
 RUN Rscript src/R/install_packages.R
 
+# [cache] setup cron tab
+COPY config/crontab /etc/cron.d/crontab
+RUN crontab /etc/cron.d/crontab
+
+# FIXME(@JonasCir) python3-rpy2 is to old
 # [cache] install python packages we want to fetch via pip
 COPY python/requirements-prod.txt src/python/
 RUN python3 -m venv src/python/venv && \
     pip3 install -r src/python/requirements-prod.txt
 
-# [cache] setup cron tab
-COPY config/crontab /etc/cron.d/crontab
-RUN crontab /etc/cron.d/crontab
 
 # copy everything
 COPY . src/

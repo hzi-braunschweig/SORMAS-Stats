@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"></script>
+
+    <style type="text/css">
+        #container {
+            width: 500px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+    </style>
+    <title>Transmission Network</title>
+</head>
+
+<body>
+<h1>Transmission Network</h1>
+<div id="container"></div>
+
+{{ nodes|json_script:"nodes" }}
+{{ edges|json_script:"edges" }}
+{{ options|json_script:"options" }}
+
+<script type="text/javascript">
+    function getJSON(id) {
+        return JSON.parse(document.getElementById(id).textContent)
+    }
+
+    function drawGraph() {
+        let container = document.getElementById('container');
+
+        let nodes = new vis.DataSet(getJSON('nodes'));
+        let edges = new vis.DataSet(getJSON('edges'));
+        let data = {nodes: nodes, edges: edges};
+
+        let options = getJSON('options');
+
+        return new vis.Network(container, data, options);
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

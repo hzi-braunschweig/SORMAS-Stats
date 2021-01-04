@@ -13,3 +13,4 @@ docker-data
 R.Rproj
 **/venv/
 **/__pycache__/
+/src/stats/python/sormas_stats/db.sqlite3
