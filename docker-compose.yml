@@ -109,7 +109,9 @@ services:
       - ${SORMAS_PATH}/statistics/output/:/srv/output
     ports:
       - "8080:8080"
-
+    depends_on:
+      sormas:
+        condition: service_healthy
 
   grafana:
     restart: unless-stopped
