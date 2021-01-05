@@ -1,5 +1,0 @@
-# see https://crontab.guru/ for help on crontabs syntax
-SHELL=/bin/bash
-BASH_ENV=/container.env
-#   m     h     dom     mon     dow     command
-    *     *      *       *       *      /srv/src/config/run_stats.sh > /proc/1/fd/1 2>&1

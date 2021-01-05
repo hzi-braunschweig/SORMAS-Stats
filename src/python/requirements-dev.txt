@@ -1,6 +1,0 @@
-Django
-plotly
-psycopg2
-rpy2
-pdfkit
-pandas

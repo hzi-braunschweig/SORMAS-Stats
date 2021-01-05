@@ -1,16 +1,18 @@
 #!/bin/bash
 set -e
 
+cd src/sormas_stats/
+
 # run migration
-pgmigrate -c "host=postgres dbname=sormas_stats user=stats_user password=password" -d /srv/src/db/stats/ -t latest migrate
+python3 manage.py migrate
 echo "Migration successful"
 
-# make env variables accessible to scripts executed by cron
-printenv | grep "DB_HOST" >>  /container.env
+# start celery workers in background
+celery multi start w1 -A sormas_stats -l INFO --pidfile=/var/run/celery/%n.pid --logfile=/var/log/celery/%n%I.log
 
-# FIXME monitor cron
-cron -L 15 > /proc/1/fd/1 2>&1
+# todo cleanup
+celery -A sormas_stats beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler&
 
-cd src/python/sormas_stats/sormas_stats
 
+cd sormas_stats
 uwsgi --ini uwsgi.ini

@@ -1,1 +1,0 @@
--- INSERT INTO debug (msg) VALUES ('afterEach 00_debug_after_each.sql');
