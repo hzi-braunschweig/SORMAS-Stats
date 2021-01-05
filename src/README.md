@@ -14,3 +14,11 @@ The [config](config/) folder contains the [setup](config/setup.sh) script which 
 ## Build it!
 To create a container which contains the statistic scripts and also the DB migrations run:
 `docker build -t local-sormas/stats .` from this folder. Start and debug the container via `docker run -it local-sormas/stats bash`
+
+## Python for SORMAS-Stats
+**IMPORTANT** Before you start run 
+```
+python3 -m venv src/python/venv
+pip3 install -r src/python/requirements-dev.txt
+```
+Always use the python interpreter  from the virtual environment.  

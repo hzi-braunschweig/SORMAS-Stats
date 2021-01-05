@@ -1,0 +1,9 @@
+Django
+celery
+django-celery-results
+django-celery-beat
+plotly
+psycopg2
+rpy2
+pdfkit
+pandas
