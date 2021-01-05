@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'reporting.apps.ReportingConfig',
     'networks.apps.NetworksConfig',
     'stats.apps.StatsConfig'
+    'index.apps.IndexConfig'
 ]
 
 MIDDLEWARE = [
@@ -91,7 +92,6 @@ DATABASES = {
         'USER': os.getenv('SORMAS_STATS_POSTGRES_USER', 'stats_user'),
         'PASSWORD': os.getenv('SORMAS_POSTGRES_PASSWORD', 'password')
     }
-
 }
 
 # Password validation

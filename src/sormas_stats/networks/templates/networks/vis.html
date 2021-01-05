@@ -1,9 +1,10 @@
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"></script>
+{% extends "default.html" %}
 
-    <style type="text/css">
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"></script>
+
+<style type="text/css">
         #container {
             width: 500px;
             height: 500px;
@@ -12,17 +13,19 @@
             position: relative;
             float: left;
         }
-    </style>
-    <title>Transmission Network</title>
-</head>
 
-<body>
-<h1>Transmission Network</h1>
-<div id="container"></div>
+</style>
+<title>Transmission Network</title>
+{% endblock %}
 
-{{ nodes|json_script:"nodes" }}
-{{ edges|json_script:"edges" }}
-{{ options|json_script:"options" }}
+{% block content %}
+    <h1>Transmission Network</h1>
+    <div id="container"></div>
+
+    {{ nodes|json_script:"nodes" }}
+    {{ edges|json_script:"edges" }}
+    {{ options|json_script:"options" }}
+
 
 <script type="text/javascript">
     function getJSON(id) {
@@ -43,6 +46,6 @@
 
     drawGraph();
 
+
 </script>
-</body>
-</html>
+{% endblock %}
