@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboards.apps.DashboardsConfig',
     'reporting.apps.ReportingConfig',
-    'networks.apps.NetworksConfig'
+    'networks.apps.NetworksConfig',
+    'index.apps.IndexConfig'
 ]
 
 MIDDLEWARE = [
