@@ -1,7 +1,7 @@
 from django.db import connections
 
 from stats.models import CasesPerDay as CasesPerDayModel
-from stats.statistics.compute.base import Stats
+from stats.statistics.crunch.base import Stats
 
 
 class CasesPerDay(Stats):

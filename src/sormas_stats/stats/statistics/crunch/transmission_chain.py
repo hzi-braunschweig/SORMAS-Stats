@@ -4,7 +4,7 @@ from rpy2.robjects import pandas2ri
 
 from stats.apps import StatsConfig
 from stats.models import TransmissionChainNodes, TransmissionChainEdges
-from stats.statistics.compute.base import Stats
+from stats.statistics.crunch.base import Stats
 
 
 class TransmissionChain(Stats):
