@@ -107,9 +107,6 @@ services:
       - RABBITMQ_USER=${RABBITMQ_USER}
       - RABBITMQ_PASS=${RABBITMQ_PASS}
       - RABBITMQ_HOSTNAME=${RABBITMQ_HOSTNAME}
-    volumes:
-      - ${SORMAS_PATH}/statistics/data/:/srv/data
-      - ${SORMAS_PATH}/statistics/output/:/srv/output
     ports:
       - "8080:8080"
     depends_on:

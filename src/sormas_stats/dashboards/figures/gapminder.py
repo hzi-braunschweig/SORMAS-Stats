@@ -1,12 +1,12 @@
 import plotly.express as px
 
-_df = px.data.gapminder().query("continent=='Oceania'")
-_gapminder_fig = px.line(_df, x="year", y="lifeExp", color='country')
+from dashboards.figures.base import Figure
 
 
-def get_html():
-    """
-    :rtype: str
-    :return: exports the figure inside a div and hide config bar
-    """
-    return _gapminder_fig.to_html(config={'displayModeBar': False}, full_html=False)
+class Gapminder(Figure):
+
+    @staticmethod
+    def get_html():
+        df = px.data.gapminder().query("continent=='Oceania'")
+        fig = px.line(df, x="year", y="lifeExp", color='country')
+        return fig.to_html(**Figure.html_config)

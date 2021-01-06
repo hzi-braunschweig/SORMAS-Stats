@@ -1,4 +1,6 @@
-from networks.transmission_chain.load_chain import load_net
+import pandas as pd
+
+from stats.models import TransmissionChainNodes, TransmissionChainEdges
 
 
 def _gen_group(color):
@@ -29,6 +31,10 @@ def make_vis_net():
         },
     }
 
-    nodes, edges = load_net()
+    # FIXME
+    nodes = pd.DataFrame.from_records(TransmissionChainNodes.objects.all().values())
+    edges = pd.DataFrame.from_records(TransmissionChainEdges.objects.all().values())
 
-    return nodes, edges, options
+    edges.rename(columns={'source_id': 'from', 'target_id': 'to'}, inplace=True)
+
+    return nodes.to_dict('records'), edges.to_dict('records'), options
