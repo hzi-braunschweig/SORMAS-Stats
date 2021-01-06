@@ -1,5 +1,8 @@
 {% extends "default.html" %}
 
 {% block content %}
+    <h2>Cases per day</h2>
+    {{ cases_per_day|safe }}
+    <h2>Example</h2>
     {{ gapminder|safe }}
 {% endblock content %}

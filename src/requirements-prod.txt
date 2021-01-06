@@ -4,3 +4,4 @@ django-celery-results
 django-celery-beat
 plotly
 rpy2
+uwsgi

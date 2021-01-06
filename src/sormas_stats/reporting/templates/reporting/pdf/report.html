@@ -8,7 +8,10 @@
 {{ introduction }}
 
 {# Marks the graph html as safe and turns off auto-escaping. This is safe b/c we use the html of the figure directly #}
-{{ graph|safe }}
+<h2>Cases per day</h2>
+{{ cases_per_day|safe }}
+<h2>Example</h2>
+{{ gapminder|safe }}
 
 </body>
 </html>

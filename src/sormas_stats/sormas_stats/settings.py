@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 import secrets
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -89,10 +90,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'sormas'),
         'HOST': os.getenv('DB_HOST', 'localhost'),
-        'USER': os.getenv('SORMAS_STATS_POSTGRES_USER', 'stats_user'),
+        'USER': os.getenv('SORMAS_POSTGRES_READONLY_USER', 'sormas_reader'),
         'PASSWORD': os.getenv('SORMAS_POSTGRES_PASSWORD', 'password')
     }
 }
+
+DATABASE_ROUTERS = ['stats.models.SormasRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -141,8 +144,6 @@ CELERY_BROKER_URL = f"amqp://{os.getenv('RABBITMQ_USER', 'rabbit')}:" \
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_SERIALIZER = 'json'
-
-from datetime import timedelta
 
 CELERY_BEAT_SCHEDULE = {
     'sormas_import': {
