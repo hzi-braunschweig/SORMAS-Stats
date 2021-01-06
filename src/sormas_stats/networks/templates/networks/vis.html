@@ -1,5 +1,6 @@
-<html lang="en">
-<head>
+{% extends "default.html" %}
+
+{% block head %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"></script>
 
@@ -12,37 +13,39 @@
             position: relative;
             float: left;
         }
+
     </style>
     <title>Transmission Network</title>
-</head>
+{% endblock %}
 
-<body>
-<h1>Transmission Network</h1>
-<div id="container"></div>
+{% block content %}
+    <h1>Transmission Network</h1>
+    <div id="container"></div>
 
-{{ nodes|json_script:"nodes" }}
-{{ edges|json_script:"edges" }}
-{{ options|json_script:"options" }}
+    {{ nodes|json_script:"nodes" }}
+    {{ edges|json_script:"edges" }}
+    {{ options|json_script:"options" }}
 
-<script type="text/javascript">
-    function getJSON(id) {
-        return JSON.parse(document.getElementById(id).textContent)
-    }
 
-    function drawGraph() {
-        let container = document.getElementById('container');
+    <script type="text/javascript">
+        function getJSON(id) {
+            return JSON.parse(document.getElementById(id).textContent)
+        }
 
-        let nodes = new vis.DataSet(getJSON('nodes'));
-        let edges = new vis.DataSet(getJSON('edges'));
-        let data = {nodes: nodes, edges: edges};
+        function drawGraph() {
+            let container = document.getElementById('container');
 
-        let options = getJSON('options');
+            let nodes = new vis.DataSet(getJSON('nodes'));
+            let edges = new vis.DataSet(getJSON('edges'));
+            let data = {nodes: nodes, edges: edges};
 
-        return new vis.Network(container, data, options);
-    }
+            let options = getJSON('options');
 
-    drawGraph();
+            return new vis.Network(container, data, options);
+        }
 
-</script>
-</body>
-</html>
+        drawGraph();
+
+
+    </script>
+{% endblock %}
