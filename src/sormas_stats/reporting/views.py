@@ -11,4 +11,4 @@ def reporting(request):
 
 def get_report(request):
     pdf_report = generate_pdf_report()
-    return FileResponse(pdf_report, as_attachment=True, filename='sormas_stats_report.pdf')
+    return FileResponse(open(pdf_report, 'rb'), as_attachment=True, filename='sormas_stats_report.pdf')

@@ -1,10 +1,10 @@
 {% extends "default.html" %}
 
 {% block head %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"></script>
 
-<style type="text/css">
+    <style type="text/css">
         #container {
             width: 500px;
             height: 500px;
@@ -14,8 +14,8 @@
             float: left;
         }
 
-</style>
-<title>Transmission Network</title>
+    </style>
+    <title>Transmission Network</title>
 {% endblock %}
 
 {% block content %}
@@ -27,25 +27,25 @@
     {{ options|json_script:"options" }}
 
 
-<script type="text/javascript">
-    function getJSON(id) {
-        return JSON.parse(document.getElementById(id).textContent)
-    }
+    <script type="text/javascript">
+        function getJSON(id) {
+            return JSON.parse(document.getElementById(id).textContent)
+        }
 
-    function drawGraph() {
-        let container = document.getElementById('container');
+        function drawGraph() {
+            let container = document.getElementById('container');
 
-        let nodes = new vis.DataSet(getJSON('nodes'));
-        let edges = new vis.DataSet(getJSON('edges'));
-        let data = {nodes: nodes, edges: edges};
+            let nodes = new vis.DataSet(getJSON('nodes'));
+            let edges = new vis.DataSet(getJSON('edges'));
+            let data = {nodes: nodes, edges: edges};
 
-        let options = getJSON('options');
+            let options = getJSON('options');
 
-        return new vis.Network(container, data, options);
-    }
+            return new vis.Network(container, data, options);
+        }
 
-    drawGraph();
+        drawGraph();
 
 
-</script>
+    </script>
 {% endblock %}

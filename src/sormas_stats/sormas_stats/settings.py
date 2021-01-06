@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'dashboards.apps.DashboardsConfig',
     'reporting.apps.ReportingConfig',
     'networks.apps.NetworksConfig',
-    'stats.apps.StatsConfig'
+    'stats.apps.StatsConfig',
     'index.apps.IndexConfig'
 ]
 
