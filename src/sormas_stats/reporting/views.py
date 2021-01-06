@@ -1,6 +1,12 @@
 from django.http import FileResponse
+from django.shortcuts import render
 
 from reporting.pdf.report_generation import generate_pdf_report
+
+
+def reporting(request):
+    context = {}
+    return render(request, 'reporting/reporting.html', context)
 
 
 def get_report(request):
