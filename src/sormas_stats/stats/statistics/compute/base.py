@@ -8,7 +8,7 @@ class Stats(ABC):
         self.fetched = None
         self.computed = None
 
-    def run(self):
+    def crunch_numbers(self):
         self.fetch()
         self.compute()
         self.store()

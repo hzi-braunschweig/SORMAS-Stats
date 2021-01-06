@@ -10,6 +10,6 @@ def scheduled_sormas_import():
     Called periodically to import data from SORMAS into the SORMAS-Stats DB
     """
     cpd = CasesPerDay()
-    cpd.run()
+    cpd.crunch_numbers()
     chain = TransmissionChain()
-    chain.run()
+    chain.crunch_numbers()
