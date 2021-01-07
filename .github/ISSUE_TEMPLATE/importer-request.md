@@ -1,7 +1,7 @@
 ---
 name: Importer Request
 about: Suggest a new data importer for this project
-title: New Indicator
+title: New Importer
 labels: ''
 assignees: ''
 
