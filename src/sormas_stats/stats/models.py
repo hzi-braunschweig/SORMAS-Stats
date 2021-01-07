@@ -33,7 +33,7 @@ class CasesPerDay(StatsModel):
     count = models.PositiveIntegerField()
 
 
-class TransmissionChainNodes(StatsModel):
+class ContactNetworkNodes(StatsModel):
     GROUP_CHOICES = [
         ('HEALTHY', 'HEALTHY'),
         ('NOT_CLASSIFIED', 'NOT_CLASSIFIED')
@@ -48,9 +48,10 @@ class TransmissionChainNodes(StatsModel):
     shape = models.CharField(max_length=4, choices=SHAPE_CHOICES)
 
 
-class TransmissionChainEdges(StatsModel):
-    source = models.ForeignKey('TransmissionChainNodes', on_delete=models.CASCADE, related_name='%(class)s_source')
-    target = models.ForeignKey('TransmissionChainNodes', on_delete=models.CASCADE)
+class ContactNetworkEdges(StatsModel):
+    source = models.ForeignKey('ContactNetworkNodes', on_delete=models.DO_NOTHING,
+                               related_name='%(class)s_source')
+    target = models.ForeignKey('ContactNetworkNodes', on_delete=models.DO_NOTHING)
     label = models.CharField(max_length=32)
     dashes = models.CharField(max_length=32)
 

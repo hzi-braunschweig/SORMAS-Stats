@@ -11,6 +11,7 @@ class Stats(ABC):
     def crunch_numbers(self):
         self.fetch()
         self.compute()
+        self.flush()
         self.store()
 
     @abstractmethod
@@ -20,6 +21,13 @@ class Stats(ABC):
     @abstractmethod
     def compute(self):
         pass
+
+    @abstractmethod
+    def flush(self):
+        """
+        Cleanup old entries from table.
+        :return:
+        """
 
     @abstractmethod
     def store(self):
