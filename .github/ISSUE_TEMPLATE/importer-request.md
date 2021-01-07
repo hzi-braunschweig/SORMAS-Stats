@@ -2,7 +2,7 @@
 name: Importer Request
 about: Suggest a new data importer for this project
 title: New Importer
-labels: ''
+labels: refine
 assignees: ''
 
 ---
@@ -11,7 +11,7 @@ assignees: ''
 A clear and concise description of what you propose. Describe data/variables/formats you want to consume or what queries you need to fetch this data.
 
 **What are the necessary computations?**
-Do you need special libraries? Do you want to use Python or R? Are the computations time intensive?
+Do you need special libraries? Are the computations time intensive?
 
 **What schedule do you propose for the import and computation?**
 Once an hour, once per day, every Monday at 02:00?
