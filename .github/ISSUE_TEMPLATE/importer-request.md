@@ -2,7 +2,7 @@
 name: Importer Request
 about: Suggest a new data importer for this project
 title: New Importer
-labels: refine
+labels: ''
 assignees: ''
 
 ---

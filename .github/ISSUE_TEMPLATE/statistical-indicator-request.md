@@ -2,7 +2,7 @@
 name: Statistical Indicator Request
 about: Suggest a new statistical indicator for this project
 title: New Indicator
-labels: ''
+labels: refine
 assignees: ''
 
 ---
