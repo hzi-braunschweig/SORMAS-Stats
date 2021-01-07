@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from networks.transmission_chain.vis_js import make_vis_net
+from networks.contact_network.vis_js import make_vis_net
 
 
 def index(request):

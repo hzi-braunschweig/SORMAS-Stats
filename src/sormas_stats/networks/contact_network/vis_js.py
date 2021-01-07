@@ -1,6 +1,6 @@
 import pandas as pd
 
-from stats.models import TransmissionChainNodes, TransmissionChainEdges
+from stats.models import ContactNetworkNodes, ContactNetworkEdges
 
 
 def _gen_group(color):
@@ -32,8 +32,8 @@ def make_vis_net():
     }
 
     # FIXME
-    nodes = pd.DataFrame.from_records(TransmissionChainNodes.objects.all().values())
-    edges = pd.DataFrame.from_records(TransmissionChainEdges.objects.all().values())
+    nodes = pd.DataFrame.from_records(ContactNetworkNodes.objects.all().values())
+    edges = pd.DataFrame.from_records(ContactNetworkEdges.objects.all().values())
 
     edges.rename(columns={'source_id': 'from', 'target_id': 'to'}, inplace=True)
 

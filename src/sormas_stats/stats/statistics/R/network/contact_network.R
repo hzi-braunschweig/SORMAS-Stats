@@ -133,7 +133,7 @@ contact_network <- function(sormas_db) {
     dplyr::left_join(., person, c("id" = "person_id"))
 
   # At this point, we have buit the nodeLineList and elist objects using only contact data as base.
-  # We will now do the same thing for events and then stack them to have the complate transmission chain 
+  # We will now do the same thing for events and then stack them to have the complete contact network
   # of cases, contacts and events
   # in this transformation, we map source case person  node to event, contacts to event participants and 
   # resulting  case node to resulting case node
