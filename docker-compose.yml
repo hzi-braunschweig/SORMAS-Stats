@@ -124,3 +124,17 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  grafana:
+    restart: unless-stopped
+    build: grafana/
+    environment:
+      - SORMAS_STATS_POSTGRES_READONLY_USER=${SORMAS_STATS_POSTGRES_READONLY_USER}
+      - SORMAS_POSTGRES_PASSWORD=${SORMAS_POSTGRES_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME_STATS=${DB_NAME_STATS}
+    ports:
+      - 3000:3000
+    depends_on:
+      sormas:
+        condition: service_healthy
