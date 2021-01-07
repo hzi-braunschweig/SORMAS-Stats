@@ -39,6 +39,13 @@ class ContactNetwork(Stats):
 
         self.computed = vis_nodes, vis_edges
 
+    def flush(self):
+        # todo there might be a better way but right now
+        #  edges cannot be update by save b/c of unique_together
+        #  and cases and contacts might get stale
+        ContactNetworkEdges.objects.all().delete()
+        ContactNetworkNodes.objects.all().delete()
+
     def store(self):
         vis_nodes, vis_edges = self.computed
         for node in vis_nodes:

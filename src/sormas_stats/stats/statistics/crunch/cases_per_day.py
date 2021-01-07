@@ -19,6 +19,9 @@ class CasesPerDay(Stats):
     def compute(self):
         self.computed = self.fetched
 
+    def flush(self):
+        pass
+
     def store(self):
         results = self.computed
         for result in results:
