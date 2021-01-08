@@ -14,7 +14,7 @@ WORKDIR /srv
 RUN mkdir src
 
 # [cache] install R packages not available as deb package
-COPY sormas_stats/stats/statistics/R/install_packages.R src/R/
+COPY sormas_stats/stats/statistics/r_sormas_stats/install_packages.R src/R/
 RUN Rscript src/R/install_packages.R
 
 # FIXME(@JonasCir) python3-rpy2 is to old
@@ -27,6 +27,11 @@ RUN python3 -m venv src/python/venv && \
 
 # copy everything
 COPY . src/
+
+
+
+# todo cache properly
+RUN R -e 'install.packages("/srv/src/sormas_stats/stats/statistics/r_sormas_stats", repos = NULL, type = "source")'
 
 # run migration, start cron, and start python dash
 CMD [ "/srv/src/config/setup_and_run.sh" ]

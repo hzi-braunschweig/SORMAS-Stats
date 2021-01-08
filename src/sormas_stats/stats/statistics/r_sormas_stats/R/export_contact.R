@@ -7,7 +7,7 @@
 
 contact_export <- function(sormas_db) {
   # load cases
-  case <- dbGetQuery(
+  case <- DBI::dbGetQuery(
     sormas_db,
     "SELECT uuid AS case_uuid, id AS case_id, person_id AS person_id_case, region_id AS region_id_case, 
     district_id AS district_id_case, caseclassification AS case_classification, disease AS disease_case
@@ -17,7 +17,7 @@ contact_export <- function(sormas_db) {
 
   # load contacts
   # caze_id IS NOT NULL required b/c returning travelers are mapped as contacts without source case
-  contact <- dbGetQuery(
+  contact <- DBI::dbGetQuery(
     sormas_db,
     "SELECT uuid AS contact_uuid, id AS contact_id, caze_id AS case_id, district_id AS district_id_contact,
     disease AS disease_contact, region_id AS region_id_contact, person_id AS person_id_contact, 
@@ -28,7 +28,7 @@ contact_export <- function(sormas_db) {
   )
 
   # load regions
-  region <- dbGetQuery(
+  region <- DBI::dbGetQuery(
     sormas_db,
     "SELECT id AS region_id, name AS region_name
     FROM public.region
@@ -36,7 +36,7 @@ contact_export <- function(sormas_db) {
   )
 
   # load districts
-  district <- dbGetQuery(
+  district <- DBI::dbGetQuery(
     sormas_db,
     "SELECT id AS district_id, name AS district_name
     FROM district
