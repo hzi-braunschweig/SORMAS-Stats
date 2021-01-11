@@ -10,4 +10,4 @@ def index(request):
         'edges': edges,
         'options': options
     }
-    return render(request, 'networks/vis.html', context)
+    return render(request, 'networks/index.html', context)
