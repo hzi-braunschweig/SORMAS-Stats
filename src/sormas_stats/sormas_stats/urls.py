@@ -22,5 +22,7 @@ urlpatterns = [
     path('dashboards/', include('dashboards.urls')),
     path('reporting/', include('reporting.urls')),
     path('networks/', include('networks.urls')),
-    path('stats/', include('stats.urls'))
+    path('stats/', include('stats.urls')),
+    path('alerting/', include('alerting.urls')),
+    path('analysis/', include('analysis.urls'))
 ]

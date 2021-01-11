@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_results',
     'django_celery_beat',
+    'alerting.apps.AlertingConfig',
+    'analysis.apps.AnalysisConfig',
     'dashboards.apps.DashboardsConfig',
     'reporting.apps.ReportingConfig',
     'networks.apps.NetworksConfig',
