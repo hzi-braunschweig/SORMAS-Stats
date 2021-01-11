@@ -23,6 +23,14 @@
             <li class="nav-item {% if request.get_full_path == reporting %}active{% endif %}">
                 <a class="nav-link" href="{% url 'reporting' %}">Reporting</a>
             </li>
+            {% url 'analysis' as analysis %}
+            <li class="nav-item {% if request.get_full_path == analysis %}active{% endif %}">
+                <a class="nav-link" href="{% url 'analysis' %}">Analysis</a>
+            </li>
+            {% url 'alerting' as alerting %}
+            <li class="nav-item {% if request.get_full_path == alerting %}active{% endif %}">
+                <a class="nav-link" href="{% url 'alerting' %}">Alerting</a>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
