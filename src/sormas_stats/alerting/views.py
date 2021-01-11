@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
-def alerting(request):
+def index(request):
     context = {}
     return render(request, 'alerting/index.html', context)
+    
