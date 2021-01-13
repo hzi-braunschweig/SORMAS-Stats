@@ -1,11 +1,12 @@
-# this function connects to the sormas db and generates the data specified
-# by issue https://github.com/hzi-braunschweig/SORMAS-Stats/issues/88
-# the data will be usfull for further statistics ralated to contacts
-
+#' This function connects to the sormas db and generates the data specified
+#' by issue https://github.com/hzi-braunschweig/SORMAS-Stats/issues/88
+#' the data will be usfull for further statistics ralated to contacts
+#' @export
+#' @import dplyr
 contact_network <- function(sormas_db) {
 
   # load cases
-  case <- dbGetQuery(
+  case <- DBI::dbGetQuery(
     sormas_db,
     "SELECT uuid AS case_uuid, id AS case_id, person_id AS person_id_case, region_id AS region_id_case, 
     district_id AS district_id_case, caseclassification AS case_classification, disease AS disease_case
@@ -14,14 +15,14 @@ contact_network <- function(sormas_db) {
   )
 
   # load person data
-  person <- dbGetQuery(
+  person <- DBI::dbGetQuery(
     sormas_db,
     "SELECT uuid AS person_uuid, id AS person_id
     FROM person"
   )
 
   # load events
-  events <- dbGetQuery(
+  events <- DBI::dbGetQuery(
     sormas_db,
     "SELECT uuid AS event_uuid, id AS event_id, reportdatetime AS report_date_event, eventstatus,
     disease AS disease_event, typeofplace, eventlocation_id
@@ -30,7 +31,7 @@ contact_network <- function(sormas_db) {
   )
 
   # load event participants
-  eventsParticipant <- dbGetQuery(
+  eventsParticipant <- DBI::dbGetQuery(
     sormas_db,
     "SELECT uuid AS event_part_uuid, id as eventPart_id, event_id, person_id AS person_id_eventPart, 
     resultingcase_id AS resultingcaseid_eventPart
@@ -39,7 +40,7 @@ contact_network <- function(sormas_db) {
   )
 
   # load regions
-  region <- dbGetQuery(
+  region <- DBI::dbGetQuery(
     sormas_db,
     "SELECT id AS region_id, name AS region_name
     FROM public.region
@@ -47,7 +48,7 @@ contact_network <- function(sormas_db) {
   )
 
   # load districts
-  district <- dbGetQuery(
+  district <- DBI::dbGetQuery(
     sormas_db,
     "SELECT id AS district_id, name AS district_name
     FROM district

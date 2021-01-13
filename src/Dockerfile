@@ -14,12 +14,17 @@ WORKDIR /srv
 RUN mkdir src
 
 # [cache] install R packages not available as deb package
-COPY sormas_stats/stats/statistics/R/install_packages.R src/R/
+COPY sormas_stats/stats/statistics/r_sormas_stats/install_packages.R src/R/
 RUN Rscript src/R/install_packages.R
+
+# [cache] installl sormas R package
+COPY sormas_stats/stats/statistics/r_sormas_stats src/sormas_stats/stats/statistics/r_sormas_stats
+RUN R -e 'install.packages("/srv/src/sormas_stats/stats/statistics/r_sormas_stats", repos = NULL, type = "source")'
+
 
 # FIXME(@JonasCir) python3-rpy2 is to old
 # FIXME(@JonasCir) https://github.com/unbit/uwsgi/issues/1126
-# switch back to Debian version once landed
+#  switch back to Debian version once landed
 # [cache] install python packages we want to fetch via pip
 COPY requirements-prod.txt src/python/
 RUN python3 -m venv src/python/venv && \

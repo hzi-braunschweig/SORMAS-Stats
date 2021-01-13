@@ -1,8 +1,7 @@
-from rpy2 import robjects
 from rpy2.rinterface_lib import openrlib
 from rpy2.robjects import pandas2ri
+from rpy2.robjects.packages import importr
 
-from stats.apps import StatsConfig
 from stats.models import ContactNetworkNodes, ContactNetworkEdges
 from stats.statistics.crunch.base import Stats
 
@@ -15,12 +14,10 @@ class ContactNetwork(Stats):
             # see https://rpy2.github.io/doc/v3.3.x/html/rinterface.html#multithreading
             # (put interactions with R that should not be interrupted by thread switching here).
             pandas2ri.activate()
-            robjects.r(f"source('{StatsConfig.R_SOURCE}/env_setup.R')")
-            r_do_connect = robjects.globalenv['do_connect']
-            r_contact_network = robjects.globalenv['contact_network']
-            # FIXME use env
-            connection = r_do_connect('sormas', 'sormas_reader', 'password')
-            n_e_list = r_contact_network(connection)
+            lib = importr('RSormasStats')
+
+            connection = lib.do_connect('sormas', 'sormas_reader', 'password')
+            n_e_list = lib.contact_network(connection)
 
             nodes = n_e_list[0]
             edges = n_e_list[1]

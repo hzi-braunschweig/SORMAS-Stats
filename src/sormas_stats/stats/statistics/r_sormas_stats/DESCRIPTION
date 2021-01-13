@@ -1,0 +1,8 @@
+Package: RSormasStats
+Version: 0.1
+Date: 2021-01-08
+Title: R for SORMAS-Stats
+Description: Collection of R functions for SORMAS-Stats
+RoxygenNote: 7.1.1
+Encoding: UTF-8
+Imports: DBI, RPostgres, dplyr
