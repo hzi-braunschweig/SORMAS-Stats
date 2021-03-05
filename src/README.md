@@ -1,7 +1,8 @@
 # Statistic Docker Container for SORMAS
 
-The statistics docker container for SORMAS runs a Django webserver to display dashboards with statistics and to offer downloadable reports, both based on SORMAS live data.  
-Realtime monitoring is provided by the Grafana data visualisation platform.
+The statistics docker container for SORMAS runs a Django webserver to display dashboards with statistics 
+and to offer downloadable reports, both based on SORMAS live data.  
+Realtime monitoring is provided by the Grafana data visualisation platform, see [here](../grafana/README.md).
 
 # Development Quick Start
 Requirements: python3, docker, docker-compose, postgres, virtualenv, R, JDK 11.
@@ -22,9 +23,10 @@ cd src/sormas-stats
 python3 manage.py runserver
 ``` 
 
-# Development Setup
+# Detailed Development Setup
 This guide shows how to prepare a clean development setup in detail.  
-It was produced on a clean Ubuntu 20.04.1 LTS ("focal") installation and (with small adaptations) can be used for other Linux- / Unix-based operating systems as well.
+It was produced on a clean Ubuntu 20.04.1 LTS ("focal") installation and (with small adaptations)
+can be used for other Linux- / Unix-based operating systems as well.
 
 Install system packages for python, postgres and R:
 ``` 
@@ -69,7 +71,7 @@ cd SORMAS-Stats
 python3 -m venv src/venv
 source src/venv/bin/activate
 ``` 
-(Always use the python interpreter and pip from the virtual environment from now on.)
+**Always use the python interpreter and pip from the virtual environment from now on.**
 
 Install required python packages:
 ``` 
