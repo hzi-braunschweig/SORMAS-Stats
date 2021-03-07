@@ -1,6 +1,5 @@
 from django.db import connections
 
-from stats.models import CasesPerDay as CasesPerDayModel
 from stats.statistics.crunch.base import Stats
 
 
@@ -23,6 +22,7 @@ class CasesPerDay(Stats):
         pass
 
     def store(self):
+        from stats.models import CasesPerDay as CasesPerDayModel
         results = self.computed
         for result in results:
             store = CasesPerDayModel(*result)

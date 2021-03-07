@@ -17,7 +17,7 @@ RUN mkdir src
 COPY sormas_stats/stats/statistics/r_sormas_stats/install_packages.R src/R/
 RUN Rscript src/R/install_packages.R
 
-# [cache] installl sormas R package
+# [cache] installl SORMAS R package
 COPY sormas_stats/stats/statistics/r_sormas_stats src/sormas_stats/stats/statistics/r_sormas_stats
 RUN R -e 'install.packages("/srv/src/sormas_stats/stats/statistics/r_sormas_stats", repos = NULL, type = "source")'
 

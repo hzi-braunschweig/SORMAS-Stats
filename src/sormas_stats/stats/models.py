@@ -3,7 +3,8 @@ from django.db import models
 
 class SormasModel(models.Model):
     """
-    Super class of all models which are imported from SORMAS DB.
+    Abstract class, just for naming and clarification.
+    Parent of all models that are acquired from the main SORMAS DB.
     See `sormas_models.py` for details.
     """
     id = models.BigIntegerField(primary_key=True)
@@ -16,6 +17,7 @@ class SormasModel(models.Model):
 
 class SormasRouter:
     """
+    A router to control all database operations on models in the SORMAS DB.
     A router to control all database operations on models in the SORMAS DB.
     Enforces read only access to main SORMAS DB.
     """
@@ -32,7 +34,8 @@ class SormasRouter:
 
 class StatsModel(models.Model):
     """
-    Super class for all DB models of SORMAS-Stats.
+    Abstract class, just for naming and clarification.
+    Parent of all models in SORMAS-Stats DB.
     """
 
     class Meta:
@@ -86,3 +89,28 @@ class ContactNetworkEdges(StatsModel):
 
     class Meta:
         unique_together = (("source", "target"),)
+
+
+class Contacts(StatsModel):
+    id_contact = models.BigIntegerField()
+    caze_id = models.BigIntegerField()
+    disease_contact = models.CharField(max_length=32)
+    person_id_contact = models.BigIntegerField()
+    lastcontactdate = models.DateField(null=True)
+    contactproximity = models.CharField(max_length=32, null=True)
+    resultingcase_id = models.BigIntegerField(null=True)
+    contactstatus = models.CharField(max_length=32, null=True)
+    contactclassification = models.CharField(max_length=32)
+    followupstatus = models.CharField(max_length=32)
+    relationtocase = models.CharField(max_length=32, null=True)
+    reportdate = models.DateField()
+    id_cases = models.BigIntegerField()
+    person_id_cases = models.BigIntegerField()
+    region_id_cases = models.BigIntegerField()
+    district_id_cases = models.BigIntegerField()
+    caseclassification = models.CharField(max_length=32)
+    disease_cases = models.CharField(max_length=32)
+    region_id = models.BigIntegerField(null=True)
+    region_name = models.CharField(max_length=32, null=True)
+    district_id = models.BigIntegerField(null=True)
+    district_name = models.CharField(max_length=32, null=True)
