@@ -15,7 +15,7 @@ class ContactNetwork(Stats):
             # (put interactions with R that should not be interrupted by thread switching here).
             pandas2ri.activate()
             lib = importr('RSormasStats')
-
+            # FIXME DB from settings.py
             connection = lib.do_connect('sormas', 'sormas_reader', 'password')
             n_e_list = lib.contact_network(connection)
 
