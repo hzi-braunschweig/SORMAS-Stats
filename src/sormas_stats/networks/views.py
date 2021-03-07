@@ -4,10 +4,8 @@ from networks.contact_network.vis_js import make_vis_net
 
 
 def index(request):
-    nodes, edges, options = make_vis_net()
-    context = {
-        'nodes': nodes,
-        'edges': edges,
-        'options': options
-    }
+    """
+    The index page for /networks. Currently only displays the contact network.
+    """
+    context = make_vis_net()
     return render(request, 'networks/index.html', context)

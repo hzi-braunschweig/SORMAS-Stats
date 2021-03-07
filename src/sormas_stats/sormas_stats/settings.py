@@ -147,6 +147,7 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_SERIALIZER = 'json'
 
+# SCHEDULING
 CELERY_BEAT_SCHEDULE = {
     'sormas_import': {
         'task': 'stats.tasks.scheduled_sormas_import',

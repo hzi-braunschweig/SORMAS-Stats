@@ -1,3 +1,4 @@
 # Index
 
-Just the module housing the `index.html`. This should be absorbed by the main app.
+Just the module housing the `index.html` and responding to everything routed under
+`/`.

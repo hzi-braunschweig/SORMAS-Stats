@@ -27,3 +27,6 @@ Run import tasks on schedule.
 ## statistics
 
 Statistic and importer scripts. See [here](statistics/README.md).
+
+## REST endpoint
+For raw data access, every statistical indicator provides an REST [endpoint](urls.py).
