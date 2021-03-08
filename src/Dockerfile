@@ -17,11 +17,6 @@ RUN mkdir src
 COPY sormas_stats/stats/statistics/r_sormas_stats/install_packages.R src/R/
 RUN Rscript src/R/install_packages.R
 
-# [cache] installl SORMAS R package
-COPY sormas_stats/stats/statistics/r_sormas_stats src/sormas_stats/stats/statistics/r_sormas_stats
-RUN R -e 'install.packages("/srv/src/sormas_stats/stats/statistics/r_sormas_stats", repos = NULL, type = "source")'
-
-
 # FIXME(@JonasCir) python3-rpy2 is to old
 # FIXME(@JonasCir) https://github.com/unbit/uwsgi/issues/1126
 #  switch back to Debian version once landed
@@ -29,6 +24,10 @@ RUN R -e 'install.packages("/srv/src/sormas_stats/stats/statistics/r_sormas_stat
 COPY requirements-prod.txt src/python/
 RUN python3 -m venv src/python/venv && \
     pip3 install -r src/python/requirements-prod.txt
+
+# [cache] installl SORMAS R package
+COPY sormas_stats/stats/statistics/r_sormas_stats src/sormas_stats/stats/statistics/r_sormas_stats
+RUN R -e 'install.packages("/srv/src/sormas_stats/stats/statistics/r_sormas_stats", repos = NULL, type = "source")'
 
 # copy everything
 COPY . src/

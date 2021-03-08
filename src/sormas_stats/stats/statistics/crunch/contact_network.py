@@ -1,3 +1,5 @@
+import os
+
 from rpy2.rinterface_lib import openrlib
 from rpy2.robjects import pandas2ri
 from rpy2.robjects.packages import importr
@@ -16,8 +18,10 @@ class ContactNetwork(Stats):
             pandas2ri.activate()
             lib = importr('RSormasStats')
             # FIXME DB from settings.py
-            connection = lib.do_connect('sormas', 'sormas_reader', 'password')
-            n_e_list = lib.contact_network(connection)
+            sormas_db = lib.do_connect(os.environ.get('DB_HOST'), 'sormas', 'sormas_reader', 'password')
+
+            sormas_stats_db = lib.do_connect(os.environ.get('DB_HOST'), 'sormas_stats', 'stats_user', 'password')
+            n_e_list = lib.contact_network(sormas_db, sormas_stats_db)
 
             nodes = n_e_list[0]
             edges = n_e_list[1]

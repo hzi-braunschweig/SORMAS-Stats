@@ -92,25 +92,18 @@ class ContactNetworkEdges(StatsModel):
 
 
 class Contacts(StatsModel):
-    id_contact = models.BigIntegerField()
-    caze_id = models.BigIntegerField()
-    disease_contact = models.CharField(max_length=32)
-    person_id_contact = models.BigIntegerField()
-    lastcontactdate = models.DateField(null=True)
-    contactproximity = models.CharField(max_length=32, null=True)
-    resultingcase_id = models.BigIntegerField(null=True)
-    contactstatus = models.CharField(max_length=32, null=True)
-    contactclassification = models.CharField(max_length=32)
-    followupstatus = models.CharField(max_length=32)
-    relationtocase = models.CharField(max_length=32, null=True)
-    reportdate = models.DateField()
-    id_cases = models.BigIntegerField()
     person_id_cases = models.BigIntegerField()
-    region_id_cases = models.BigIntegerField()
-    district_id_cases = models.BigIntegerField()
-    caseclassification = models.CharField(max_length=32)
-    disease_cases = models.CharField(max_length=32)
-    region_id = models.BigIntegerField(null=True)
+    person_id_contact = models.BigIntegerField()
+    caze_id = models.BigIntegerField()
+    id_contact = models.BigIntegerField()
+    resultingcase_id = models.BigIntegerField(null=True)
     region_name = models.CharField(max_length=32, null=True)
-    district_id = models.BigIntegerField(null=True)
     district_name = models.CharField(max_length=32, null=True)
+    contactproximity = models.CharField(max_length=32, null=True)
+    reportdate = models.DateField()
+    disease_contact = models.CharField(max_length=32)
+    caseclassification = models.CharField(max_length=32)
+    relationtocase = models.CharField(max_length=32, null=True)
+
+
+
