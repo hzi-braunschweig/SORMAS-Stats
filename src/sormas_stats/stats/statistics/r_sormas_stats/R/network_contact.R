@@ -55,8 +55,26 @@ contact_network <- function(sormas_db) {
     WHERE archived = FALSE"
   )
 
+  con <- DBI::dbConnect(
+    RPostgres::Postgres(),
+    dbname = 'sormas_stats',
+    host = 'localhost',
+    port = 5432,
+    user = 'stats_user',
+    password = 'password'
+  )
+
   # load contacts
-  contCaseRegionDist <- contact_export(sormas_db)
+  contCaseRegionDist <- DBI::dbGetQuery(
+    con,
+    "SELECT person_id_cases AS person_id_case, person_id_contact,
+    caze_id as case_id, id as contact_id, resultingcase_id,
+    region_name as region_name_contact, district_name as district_name_contact,
+    contactproximity as contact_proximity, reportdate as report_date_contact,
+    disease_contact, caseclassification as case_classification_infector,
+    relationtocase
+    FROM stats_contacts"
+  )
 
   # clean-up tables
   # fix date formats
@@ -94,7 +112,9 @@ contact_network <- function(sormas_db) {
       ),
       smooth = TRUE,
       arrows = "to", .keep = "unused"
-    )
+    ) %>%
+    dplyr::mutate(from = as.character(from), .keep = "unused") %>%
+    dplyr::mutate(to = as.character(to), .keep = "unused")
 
   # Defining nodes data and their attributes 
   contConvertedCase <- elist %>%
