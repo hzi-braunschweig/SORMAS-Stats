@@ -3,7 +3,7 @@
 #' the data will be usfull for further statistics ralated to contacts
 #' @export
 #' @import dplyr
-contact_network <- function(sormas_db) {
+contact_network <- function(sormas_db, sormas_stats_db) {
 
   # load cases
   case <- DBI::dbGetQuery(
@@ -55,23 +55,21 @@ contact_network <- function(sormas_db) {
     WHERE archived = FALSE"
   )
 
-  con <- DBI::dbConnect(
-    RPostgres::Postgres(),
-    dbname = 'sormas_stats',
-    host = 'localhost',
-    port = 5432,
-    user = 'stats_user',
-    password = 'password'
-  )
-
   # load contacts
   contCaseRegionDist <- DBI::dbGetQuery(
-    con,
-    "SELECT person_id_cases AS person_id_case, person_id_contact,
-    caze_id as case_id, id as contact_id, resultingcase_id,
-    region_name as region_name_contact, district_name as district_name_contact,
-    contactproximity as contact_proximity, reportdate as report_date_contact,
-    disease_contact, caseclassification as case_classification_infector,
+    sormas_stats_db,
+    "SELECT
+    person_id_cases AS person_id_case,
+    person_id_contact,
+    caze_id as case_id,
+    id_contact as contact_id,
+    resultingcase_id,
+    region_name as region_name_contact,
+    district_name as district_name_contact,
+    contactproximity as contact_proximity,
+    reportdate as report_date_contact,
+    disease_contact,
+    caseclassification as case_classification_infector,
     relationtocase
     FROM stats_contacts"
   )
@@ -233,3 +231,4 @@ contact_network <- function(sormas_db) {
 
   return(list(nodeLineList = nodeListCombined, elist = elistCombined))
 }
+
