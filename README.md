@@ -15,7 +15,7 @@ accessible from SORMAS either by navigating to them through a button click or by
 
 # FAQ
 
-* Does it work (yet): Reasonable well
+* Does it work (yet): Reasonably well
 * Should I use it in production: Absolutely not
 * Will it eat my laundry: Yes
 
